@@ -1,0 +1,26 @@
+{
+  "name": "painel-administrativo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --detectOpenHandles"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "concurrently": "^8.2.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jest": "^29.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.9",
+    "react-scripts": "^5.0.1",
+    "sequelize": "^6.37.3",
+    "supertest": "^7.0.0"
+  }
+}
