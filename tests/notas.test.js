@@ -9,7 +9,7 @@ let mainNote = {
     matricula: "0106225", // MATRICULA DO PRODUTOR/ATACADISTA
     produtor: "Belebas",
     cidade: '056623', // CÓDIGO DO MUNICIPIO
-    num_produto: '256632', // CÓDIGO DO PROTUDO
+    num_produto: '256632', // CÓDIGO DO PRODUTO
     produto: "Batata Doce",
     qtd: 23, // QUANTIDADE
     un: 'CX', // UNIDADE
@@ -26,7 +26,7 @@ describe("Servidor", function () {
                 throw err;
             });
     });
-})
+});
 
 describe("Notas", function () {
     it("Deve registrar uma nota fiscal", async () => {
@@ -36,10 +36,10 @@ describe("Notas", function () {
                 expect(res.body.msg).toEqual("Nota registrada com sucesso!");
             }).catch(err => {
                 throw err;
-            })
+            });
     });
     it("Deve impedir o registro uma nota fiscal com valores vazios", async () => {
-        let note = { data: '', codigo_nf: '', matricula: '', cidade: '', produto: '', qtd: '', un: '', peso: '' };
+        let note = { data: '', codigo_nf: '', matricula: '', produtor: '', cidade: '', num_produto: '', produto: '', qtd: '', un: '', peso: '' };
 
         return request.post("/register_note").send(note)
             .then(res => {
@@ -47,9 +47,9 @@ describe("Notas", function () {
                 expect(res.body.msg).toEqual("Por favor, preencha todos os dados para registro!");
             }).catch(err => {
                 throw err;
-            })
+            });
     });
-})
+});
 
 afterAll((done) => {
     server.close(done);
