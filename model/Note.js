@@ -8,23 +8,36 @@ module.exports = db.define("notes", {
         autoIncrement: true,
         allowNull: false,
     },
-    produtor: {
+    data: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    codigo_nf: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    matricula: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    cidade: {
         type: Sequelize.STRING,
         allowNull: false,
     },
     produto: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
     },
     qtd: {
-        type: Sequelize.INTEGER, // Assuming qtd is an integer value
+        type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true,
     },
     un: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
     },
+    peso: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    }
 });

@@ -26,7 +26,7 @@ if (process.env.NODE_ENV != "development") {
             if (err) return res.status(500).send(err);
         });
     });
-}
+};
 
 db.sync(() => console.log(`Banco de dados conectado: ${process.env.DB_NAME}`));
 

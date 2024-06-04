@@ -19,7 +19,6 @@ router.delete("/user/:email", userController.deleteController);
 
 router.get("/test_note", noteController.testController);
 
-
 router.post("/register_note", noteController.registerController);
 
 module.exports = router;
