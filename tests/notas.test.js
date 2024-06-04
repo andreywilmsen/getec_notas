@@ -7,8 +7,10 @@ let mainNote = {
     data: '24/06/2022', // DATA DO LANÇAMENTO DA NOTA
     codigo_nf: '31205', // NUMERO DA NF
     matricula: "0106225", // MATRICULA DO PRODUTOR/ATACADISTA
+    produtor: "Belebas",
     cidade: '056623', // CÓDIGO DO MUNICIPIO
-    produto: '256632', // CÓDIGO DO PROTUDO
+    num_produto: '256632', // CÓDIGO DO PROTUDO
+    produto: "Batata Doce",
     qtd: 23, // QUANTIDADE
     un: 'CX', // UNIDADE
     peso: 98 // SEMPRE EM KILOS

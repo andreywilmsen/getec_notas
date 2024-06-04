@@ -20,7 +20,15 @@ module.exports = db.define("notes", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    produtor: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
     cidade: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    num_produto: {
         type: Sequelize.STRING,
         allowNull: false,
     },
