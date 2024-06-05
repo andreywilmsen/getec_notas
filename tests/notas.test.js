@@ -29,6 +29,20 @@ describe("Servidor", function () {
 });
 
 describe("Notas", function () {
+    describe("Leitura de notas", function () {
+        it("Deve ler todas as notas registradas pelo mês", async () => {
+            let searchDate = { searchDate: "2023" };
+
+            return request.get("/get_notes").send(searchDate)
+                .then(res => {
+                    expect(res.statusCode).toEqual(200);
+                    expect(res.body.msg).toEqual("Notas capturadas com sucesso!");
+                }).catch(err => {
+                    throw err;
+                });
+        });
+    });
+
     describe("Registro de notas", function () {
         it("Deve registrar uma nota fiscal", async () => {
             return request.post("/register_note").send(mainNote)
@@ -50,20 +64,21 @@ describe("Notas", function () {
                     throw err;
                 });
         });
-    })
+    });
+
     describe("Edição de notas", function () {
         it("Deve editar uma nota fiscal", async () => {
 
             let note = {
-                data: 'xx/xx/xxxx', // DATA DO LANÇAMENTO DA NOTA
+                data: '.', // DATA DO LANÇAMENTO DA NOTA
                 codigo_nf: '2', // NUMERO DA NF
-                matricula: "0000000", // MATRICULA DO PRODUTOR/ATACADISTA
-                produtor: "1111111",
-                cidade: '2222222', // CÓDIGO DO MUNICIPIO
-                num_produto: '987654', // CÓDIGO DO PRODUTO
-                produto: "xxxxxxxx-xxxxxxxx",
+                matricula: ".", // MATRICULA DO PRODUTOR/ATACADISTA
+                produtor: ".",
+                cidade: '.', // CÓDIGO DO MUNICIPIO
+                num_produto: '.', // CÓDIGO DO PRODUTO
+                produto: ".",
                 qtd: 2, // QUANTIDADE
-                un: 'SACO', // UNIDADE
+                un: '.', // UNIDADE
                 peso: 23 // SEMPRE EM KILOS
             };
 
@@ -74,7 +89,8 @@ describe("Notas", function () {
                 }).catch(err => {
                     throw err;
                 });
-        })
+        });
+
         it("Deve impedir que edite uma nota fiscal com valores vazios", async () => {
             let note = { data: "", codigo_nf: "2", matricula: "", produtor: "", cidade: "", num_produto: "", produto: "", qtd: "", un: '', peso: "" };
 
@@ -85,22 +101,21 @@ describe("Notas", function () {
                 }).catch(err => {
                     throw err;
                 })
-        })
-        it("Deve impedir que edite uma nota fiscal não econtrada na base de dados", async () => {
+        });
 
+        it("Deve impedir que edite uma nota fiscal não econtrada na base de dados", async () => {
             let note = {
-                data: 'dd/mm/aaaa', // DATA DO LANÇAMENTO DA NOTA
-                codigo_nf: '1', // NUMERO DA NF
-                matricula: "2", // MATRICULA DO PRODUTOR/ATACADISTA
-                produtor: "3",
-                cidade: '4', // CÓDIGO DO MUNICIPIO
-                num_produto: '5', // CÓDIGO DO PRODUTO
-                produto: "6",
+                data: ".", // DATA DO LANÇAMENTO DA NOTA
+                codigo_nf: "1", // NUMERO DA NF
+                matricula: ".", // MATRICULA DO PRODUTOR/ATACADISTA
+                produtor: ".",
+                cidade: ".", // CÓDIGO DO MUNICIPIO
+                num_produto: ".", // CÓDIGO DO PRODUTO
+                produto: ".",
                 qtd: 7, // QUANTIDADE
-                un: '8', // UNIDADE
+                un: ".", // UNIDADE
                 peso: 9 // SEMPRE EM KILOS
             };
-
             return request.put("/edit_note").send(note)
                 .then(res => {
                     expect(res.statusCode).toEqual(400)
@@ -108,9 +123,8 @@ describe("Notas", function () {
                 }).catch(err => {
                     throw err;
                 })
-        })
-    })
-
+        });
+    });
 });
 
 // describe("Produtores", function () {

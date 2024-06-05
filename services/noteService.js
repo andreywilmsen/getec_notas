@@ -1,6 +1,7 @@
 require('dotenv').config();
 const sequelize = require('sequelize');
 const Note = require('../model/Note');
+const { Op } = require('sequelize');
 
 const noteService = {
     testService: (req, res) => {
@@ -17,6 +18,17 @@ const noteService = {
         });
 
         return { status: success, msg: "Nota de teste excluida com sucesso!" };
+    },
+    getService: async (req, res) => {
+        let searchDate = req.body.searchDate;
+
+        try {
+            let result = await Note.findAll({ where: { data: { [Op.like]: `%${searchDate}%` } } });
+            console.log('OPLIKE ', result);
+            return { success: true, response: result, msg: "Notas capturadas com sucesso!" };
+        } catch (err) {
+            return { success: false, msg: "Erro na captura de notas!" }
+        }
     },
     registerService: async (req, res) => {
         let data = req.body.data;
