@@ -19,6 +19,10 @@ router.delete("/user/:email", userController.deleteController);
 
 router.get("/test_note", noteController.testController);
 
+router.delete("/delete_note_test/:codigo_nf", noteController.deleteTestController);
+
 router.post("/register_note", noteController.registerController);
+
+router.put("/edit_note", noteController.editController);
 
 module.exports = router;
