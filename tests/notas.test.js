@@ -31,12 +31,35 @@ describe("Servidor", function () {
 describe("Notas", function () {
     describe("Leitura de notas", function () {
         it("Deve ler todas as notas registradas pelo mês", async () => {
-            let searchDate = { searchDate: "2023" };
+            let searchDate = { searchDate: "." };
 
             return request.get("/get_notes").send(searchDate)
                 .then(res => {
                     expect(res.statusCode).toEqual(200);
                     expect(res.body.msg).toEqual("Notas capturadas com sucesso!");
+                }).catch(err => {
+                    throw err;
+                });
+        });
+
+        it("Deve retornar um erro ao efetuar uma busca com dados vazios", async () => {
+            let searchDate = { searchDate: "" };
+
+            return request.get("/get_notes").send(searchDate)
+                .then(res => {
+                    expect(res.statusCode).toEqual(400);
+                    expect(res.body.msg).toEqual("Por favor, insira algum elemento para pesquisa!");
+                }).catch(err => {
+                    throw err;
+                });
+        });
+        it("Deve retornar um erro quando não achar notas fiscais com parametros de busca", async () => {
+            let searchDate = { searchDate: "     " };
+
+            return request.get("/get_notes").send(searchDate)
+                .then(res => {
+                    expect(res.statusCode).toEqual(400);
+                    expect(res.body.msg).toEqual("Não foram encontradas notas nesse período!");
                 }).catch(err => {
                     throw err;
                 });
@@ -116,6 +139,7 @@ describe("Notas", function () {
                 un: ".", // UNIDADE
                 peso: 9 // SEMPRE EM KILOS
             };
+
             return request.put("/edit_note").send(note)
                 .then(res => {
                     expect(res.statusCode).toEqual(400)
@@ -127,22 +151,10 @@ describe("Notas", function () {
     });
 });
 
-// describe("Produtores", function () {
-//     it("Deve registrar um novo produtor", async () => {
-//         return request.post("/register_producer").send(mainProducer)
-//             .then(res => {
-//                 expect(res.statusCode).toEqual(200);
-//             }).catch(err => {
-//                 throw err;
-//             })
-//     })
-// })
-
 afterAll(() => {
     return request.delete("/delete_note_test/21855").then(res => {
-        console.log(res.msg);
     }).catch(err => {
-        console.log(err);
+        throw err;
     })
 })
 

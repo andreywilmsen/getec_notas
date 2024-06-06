@@ -22,9 +22,13 @@ const noteService = {
     getService: async (req, res) => {
         let searchDate = req.body.searchDate;
 
+        if (searchDate === "") return { success: false, isEmpty: true, msg: "Por favor, insira algum elemento para pesquisa!" };
+
         try {
             let result = await Note.findAll({ where: { data: { [Op.like]: `%${searchDate}%` } } });
-            console.log('OPLIKE ', result);
+
+            if (result.length === 0) return { success: false, emptySearch: true, msg: "Não foram encontradas notas nesse período!" };
+
             return { success: true, response: result, msg: "Notas capturadas com sucesso!" };
         } catch (err) {
             return { success: false, msg: "Erro na captura de notas!" }
@@ -59,7 +63,6 @@ const noteService = {
             });
             return { status: 'success', response: newNote, msg: "Nota registrada com sucesso!" };
         } catch (err) {
-            console.log(err)
             return { status: 'failed', erro: err, msg: "Falha no registro de nota" };
         }
     },
@@ -99,7 +102,6 @@ const noteService = {
             return { status: 'success', response: responseNote, msg: "Nota editada com sucesso!" };
 
         } catch (err) {
-            console.log(err)
             return { status: 'failed', erro: err, msg: "Falha na edição de nota" };
         }
     }

@@ -20,7 +20,8 @@ const noteController = {
     getController: async (req, res) => {
         try {
             let response = await noteService.getService(req, res);
-            // if (response.isEmpty === true) return res.status(400).json({ msg: response.msg });
+            if (response.isEmpty === true) return res.status(400).json({ msg: response.msg });
+            if (response.emptySearch === true) return res.status(400).json({ msg: response.msg });
             if (response) return res.status(200).json({ msg: response.msg });
         } catch (err) {
             res.status(500).json({ msg: "Ocorreu um erro no register controller" })
