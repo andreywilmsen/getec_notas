@@ -16,9 +16,11 @@ const userService = {
         let name = req.body.name;
         let email = req.body.email;
         let password = await bcrypt.hash(req.body.password, salt);
+        let permission = "READER";
+        let admin = false;
         let confirmPassword = req.body.confirmPassword;
 
-        let userFinded = await User.findOne({ email });
+        let userFinded = await User.findOne({ where: { email } });
 
         // Impede que insira um usuário que já está cadastrado
         if (userFinded) return { success: false, userFinded: true };
@@ -32,7 +34,7 @@ const userService = {
         if (confirmPassword != req.body.password) return { success: false, confirmPassword: false };
 
         // Caso esteja tudo correto, cria o usuário
-        let response = await User.create({ name, email, password });
+        let response = await User.create({ name, email, password, permission, admin });
 
         return { user: response, success: true };
 
@@ -42,7 +44,7 @@ const userService = {
         let password = req.body.password;
 
         // Verifica se o usuário está cadastrado
-        let userFinded = await User.findOne({ email });
+        let userFinded = await User.findOne({ where: { email } });
 
         // Caso não, retorna como usuário não encontrado com status 400
         if (!userFinded) return ({ success: false, userFinded: false });
@@ -81,7 +83,7 @@ const userService = {
     deleteService: async (req, res) => {
         let email = req.params.email;
 
-        let response = await User.deleteOne({ email });
+        let response = await User.destroy({ where: { email } });
 
         if (response) return { user: response, success: true };
 

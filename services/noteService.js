@@ -25,6 +25,7 @@ const noteService = {
         if (searchDate === "") return { success: false, isEmpty: true, msg: "Por favor, insira algum elemento para pesquisa!" };
 
         try {
+            
             let result = await Note.findAll({ where: { data: { [Op.like]: `%${searchDate}%` } } });
 
             if (result.length === 0) return { success: false, emptySearch: true, msg: "Não foram encontradas notas nesse período!" };

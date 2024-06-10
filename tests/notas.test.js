@@ -53,8 +53,9 @@ describe("Notas", function () {
                     throw err;
                 });
         });
-        it("Deve retornar um erro quando não achar notas fiscais com parametros de busca", async () => {
-            let searchDate = { searchDate: "     " };
+
+        it("Deve retornar um erro quando não achar notas fiscais correspondente com a busca", async () => {
+            let searchDate = { searchDate: "asd" };
 
             return request.get("/get_notes").send(searchDate)
                 .then(res => {
@@ -76,6 +77,7 @@ describe("Notas", function () {
                     throw err;
                 });
         });
+
         it("Deve impedir o registro uma nota fiscal com valores vazios", async () => {
             let note = { data: '', codigo_nf: '', matricula: '', produtor: '', cidade: '', num_produto: '', produto: '', qtd: '', un: '', peso: '' };
 
