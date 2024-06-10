@@ -30,8 +30,8 @@ const usuariosController = {
     editController: async (req, res) => {
         try {
             let response = await usuariosService.editService(req, res);
-            // if (response.isFinded === false) return res.status(400).json({ msg: response.msg });
-            // if (response.isEmpty === true) return res.status(400).json({ msg: response.msg });
+            if (response.isFinded === false) return res.status(400).json({ msg: response.msg });
+            if (response.isEmpty === true) return res.status(400).json({ msg: response.msg });
             if (response) return res.status(200).json({ msg: response.msg });
         } catch (err) {
             res.status(500).json({ msg: "Ocorreu um erro no edit controller" })

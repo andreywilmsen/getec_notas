@@ -70,6 +70,28 @@ describe("Edição de produtores / atacadistas", function () {
                 throw err;
             });
     });
+    it("Deve impedir a edição de um usuário não encontrado", async () => {
+        let usuario = { matricula: "508875", nome: "João Barbosa", culturas: ["Bergamota", "Pinhão", "Laranja"] }
+
+        return request.put("/edit_usuarios").send(usuario)
+            .then(res => {
+                expect(res.statusCode).toEqual(400);
+                expect(res.body.msg).toEqual("Usuário não encontrado!");
+            }).catch(err => {
+                throw err;
+            });
+    });
+    it("Deve impedir inserção de dados vazios na edição", async () => {
+        let usuario = { matricula: "508874", nome: "", culturas: "" };
+
+        return request.put("/edit_usuarios").send(usuario)
+            .then(res => {
+                expect(res.statusCode).toEqual(400);
+                expect(res.body.msg).toEqual("Por favor, preencha todos os dados para a edição!");
+            }).catch(err => {
+                throw err;
+            });
+    });
 });
 
 // afterAll(() => {
