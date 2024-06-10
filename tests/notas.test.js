@@ -29,9 +29,34 @@ describe("Servidor", function () {
 });
 
 describe("Notas", function () {
+
+    describe("Registro de notas", function () {
+        it("Deve registrar uma nota fiscal", async () => {
+            return request.post("/register_note").send(mainNote)
+                .then(res => {
+                    expect(res.statusCode).toEqual(200);
+                    expect(res.body.msg).toEqual("Nota registrada com sucesso!");
+                }).catch(err => {
+                    throw err;
+                });
+        });
+
+        it("Deve impedir o registro uma nota fiscal com valores vazios", async () => {
+            let note = { data: '', codigo_nf: '', matricula: '', produtor: '', cidade: '', num_produto: '', produto: '', qtd: '', un: '', peso: '' };
+
+            return request.post("/register_note").send(note)
+                .then(res => {
+                    expect(res.statusCode).toEqual(400);
+                    expect(res.body.msg).toEqual("Por favor, preencha todos os dados para registro!");
+                }).catch(err => {
+                    throw err;
+                });
+        });
+    });
+
     describe("Leitura de notas", function () {
         it("Deve ler todas as notas registradas pelo mês", async () => {
-            let searchDate = { searchDate: "." };
+            let searchDate = { searchDate: "2022" };
 
             return request.get("/get_notes").send(searchDate)
                 .then(res => {
@@ -66,37 +91,13 @@ describe("Notas", function () {
                 });
         });
     });
-
-    describe("Registro de notas", function () {
-        it("Deve registrar uma nota fiscal", async () => {
-            return request.post("/register_note").send(mainNote)
-                .then(res => {
-                    expect(res.statusCode).toEqual(200);
-                    expect(res.body.msg).toEqual("Nota registrada com sucesso!");
-                }).catch(err => {
-                    throw err;
-                });
-        });
-
-        it("Deve impedir o registro uma nota fiscal com valores vazios", async () => {
-            let note = { data: '', codigo_nf: '', matricula: '', produtor: '', cidade: '', num_produto: '', produto: '', qtd: '', un: '', peso: '' };
-
-            return request.post("/register_note").send(note)
-                .then(res => {
-                    expect(res.statusCode).toEqual(400);
-                    expect(res.body.msg).toEqual("Por favor, preencha todos os dados para registro!");
-                }).catch(err => {
-                    throw err;
-                });
-        });
-    });
-
+    
     describe("Edição de notas", function () {
         it("Deve editar uma nota fiscal", async () => {
 
             let note = {
                 data: '.', // DATA DO LANÇAMENTO DA NOTA
-                codigo_nf: '2', // NUMERO DA NF
+                codigo_nf: '21855', // NUMERO DA NF
                 matricula: ".", // MATRICULA DO PRODUTOR/ATACADISTA
                 produtor: ".",
                 cidade: '.', // CÓDIGO DO MUNICIPIO
@@ -117,7 +118,7 @@ describe("Notas", function () {
         });
 
         it("Deve impedir que edite uma nota fiscal com valores vazios", async () => {
-            let note = { data: "", codigo_nf: "2", matricula: "", produtor: "", cidade: "", num_produto: "", produto: "", qtd: "", un: '', peso: "" };
+            let note = { data: "", codigo_nf: "21855", matricula: "", produtor: "", cidade: "", num_produto: "", produto: "", qtd: "", un: '', peso: "" };
 
             return request.put("/edit_note").send(note)
                 .then(res => {

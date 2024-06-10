@@ -17,7 +17,6 @@ const userController = {
             if (response.confirmPassword === false) return res.status(400).json({ message: "As senhas não são identicas" });
             if (response) return res.status(200).send(response.user);
         } catch (err) {
-            console.log("erro " + err);
             res.status(500).send("Ocorreu um erro na rota register");
         }
     },
