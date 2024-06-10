@@ -1,6 +1,14 @@
 const usuariosService = require('../services/usuariosService');
 
 const usuariosController = {
+    deleteTestController: async (req, res) => {
+        try {
+            let response = await usuariosService.deleteTestService(req, res);
+            if (response) return res.status(200).json({ msg: response.msg });
+        } catch (err) {
+            res.status(500).send("Ocorreu um erro ao deletar o usuario");
+        }
+    },
     registerController: async (req, res) => {
         try {
             let response = await usuariosService.registerService(req, res);

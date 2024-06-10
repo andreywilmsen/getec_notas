@@ -2,7 +2,18 @@ require('dotenv').config();
 const Usuarios = require('../model/Usuarios'); // Supondo que o modelo seja definido em Usuario.js
 const { Op } = require('sequelize');
 
-const userService = {
+const usuariosService = {
+    deleteTestService: async (req, res) => {
+        let matricula = req.params.matricula;
+
+        let notFindedAndDeleted = await Usuarios.destroy({
+            where: {
+                matricula
+            }
+        });
+
+        return { status: success, msg: "Nota de teste excluida com sucesso!" };
+    },
     registerService: async (req, res) => {
         let matricula = req.body.matricula;
         let nome = req.body.nome;
@@ -51,5 +62,4 @@ const userService = {
         }
     },
 }
-
-module.exports = userService;
+module.exports = usuariosService;

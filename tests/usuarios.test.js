@@ -31,7 +31,7 @@ describe("Registro de produtor / atacadista", function () {
             }).catch(err => {
                 throw err;
             });
-    })
+    });
 });
 describe("Leitura de produtores / atacadistas", function () {
     it("Deve buscar um produtor / atacadista pelo nome", async () => {
@@ -56,8 +56,15 @@ describe("Leitura de produtores / atacadistas", function () {
             }).catch(err => {
                 throw err;
             });
-    })
+    });
 })
+
+afterAll(() => {
+    return request.delete("/delete_usuario_test/508874").then(res => {
+    }).catch(err => {
+        throw err;
+    });
+});
 
 afterAll((done) => {
     server.close(done);

@@ -34,4 +34,7 @@ router.get("/get_usuarios", usuariosController.getController);
 
 router.post("/register_usuario", usuariosController.registerController);
 
+router.delete("/delete_usuario_test/:matricula", usuariosController.deleteTestController);
+
+
 module.exports = router;
