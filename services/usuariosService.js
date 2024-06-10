@@ -56,10 +56,38 @@ const usuariosService = {
                 return { success: true, response: result, msg: "Busca efetuada com sucesso!" };
             }
         } catch (err) {
-            console.log('erro ' + err)
             return { success: false, msg: "Erro na captura de produtores / atacadistas!" }
-
         }
     },
+    editService: async (req, res) => {
+        let searchMatricula = req.body.matricula;
+        let usuarioFinded = await Usuarios.findOne({ where: { matricula: searchMatricula } });
+
+        if (!usuarioFinded) return { success: false, isFinded: false, msg: "Usuário não encontrado!" };
+
+        let matricula = req.body.matricula;
+        let nome = req.body.nome;
+        let culturas = req.body.culturas;
+
+        if (culturas && Array.isArray(culturas)) {
+            culturas = culturas.join(',');
+        }
+
+        if (matricula === "" || nome === "" || culturas === "") return { success: false, isEmpty: true, msg: "Por favor, preencha todos os dados para a edição!" };
+
+        try {
+            usuarioFinded.matricula = matricula;
+            usuarioFinded.nome = nome;
+            usuarioFinded.culturas = culturas;
+
+            let responseUsuarios = await usuarioFinded.save();
+
+            return { success: true, response: responseUsuarios, msg: "Usuario editado com sucesso!" };
+
+        } catch (err) {
+            console.log('erro: ' + err);
+            return { success: false, erro: err, msg: "Falha na edição de usuario" };
+        }
+    }
 }
 module.exports = usuariosService;

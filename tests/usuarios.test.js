@@ -57,14 +57,27 @@ describe("Leitura de produtores / atacadistas", function () {
                 throw err;
             });
     });
-})
+});
+describe("Edição de produtores / atacadistas", function () {
+    it("Deve editar um usuario mediante matricula", async () => {
+        let usuario = { matricula: "508874", nome: "João Barbosa", culturas: ["Bergamota", "Pinhão", "Laranja"] }
 
-afterAll(() => {
-    return request.delete("/delete_usuario_test/508874").then(res => {
-    }).catch(err => {
-        throw err;
+        return request.put("/edit_usuarios").send(usuario)
+            .then(res => {
+                expect(res.statusCode).toEqual(200);
+                expect(res.body.msg).toEqual("Usuario editado com sucesso!");
+            }).catch(err => {
+                throw err;
+            });
     });
 });
+
+// afterAll(() => {
+//     return request.delete("/delete_usuario_test/508874").then(res => {
+//     }).catch(err => {
+//         throw err;
+//     });
+// });
 
 afterAll((done) => {
     server.close(done);

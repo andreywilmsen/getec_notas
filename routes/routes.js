@@ -36,5 +36,8 @@ router.post("/register_usuario", usuariosController.registerController);
 
 router.delete("/delete_usuario_test/:matricula", usuariosController.deleteTestController);
 
+router.put("/edit_usuarios", usuariosController.editController);
+
+
 
 module.exports = router;
