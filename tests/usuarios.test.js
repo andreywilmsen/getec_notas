@@ -21,15 +21,43 @@ describe("Registro de produtor / atacadista", function () {
     });
 
     it("Deve impedir registrar um produtor / atacadista com dados vazios", async () => {
+
+        let usuario = { matricula: "", nome: "", culturas: "" };
+
         return request.post("/register_usuario").send(usuario)
             .then(res => {
-                expect(res.statusCode).toEqual(200);
+                expect(res.statusCode).toEqual(400);
                 expect(res.body.msg).toEqual("Não é permitido inserir dados vazios!")
             }).catch(err => {
                 throw err;
             });
     })
 });
+describe("Leitura de produtores / atacadistas", function () {
+    it("Deve buscar um produtor / atacadista pelo nome", async () => {
+        let search = { searchMechanism: "name", search: "Andrey Wilmsen" };
+
+        return request.get("/get_usuarios").send(search)
+            .then(res => {
+                expect(res.statusCode).toEqual(200);
+                expect(res.body.msg).toEqual("Busca efetuada com sucesso!");
+            }).catch(err => {
+                throw err;
+            });
+    });
+
+    it("Deve impedir que seja feita uma busca com dados vazios", async () => {
+        let search = { searchMechanism: "", search: "" };
+
+        return request.get("/get_usuarios").send(search)
+            .then(res => {
+                expect(res.statusCode).toEqual(400);
+                expect(res.body.msg).toEqual("Não é permitido efetuar busca com dados vazios!");
+            }).catch(err => {
+                throw err;
+            });
+    })
+})
 
 afterAll((done) => {
     server.close(done);
