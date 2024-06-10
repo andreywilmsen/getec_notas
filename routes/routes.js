@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controller/userController');
+const usuarioController = require('../controller/usuariosController');
 const noteController = require('../controller/noteController');
 
 // ROTAS DE LOGIN
@@ -26,5 +27,9 @@ router.get("/get_notes", noteController.getController);
 router.post("/register_note", noteController.registerController);
 
 router.put("/edit_note", noteController.editController);
+
+// ROTAS DE USUÁRIO (PERMISSIONÁRIOS / ATACADISTAS)
+
+router.post("/register_usuario", usuarioController.registerController);
 
 module.exports = router;
