@@ -44,5 +44,7 @@ router.put("/edit_usuarios", usuariosController.editController);
 
 router.post("/register_products", productsController.registerController);
 
+router.get("/get_products", productsController.getController);
+
 
 module.exports = router;

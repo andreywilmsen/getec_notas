@@ -42,6 +42,27 @@ describe("Registro de produto", function () {
     });
 });
 
+describe("Leitura de produtos", function () {
+    it("Deve ler todos os produtos registrados", async () => {
+        return request.get("/get_products").send()
+            .then(res => {
+                expect(res.statusCode).toEqual(200);
+                expect(res.body.msg).toEqual("Leitura concluida!");
+            }).catch(err => {
+                throw err;
+            });
+    });
+    it("Deve disparar um erro ao não encontrar uma referencia com os parametros de busca", async () => {
+        return request.get("/get_products").send({ name: "W" })
+            .then(res => {
+                expect(res.statusCode).toEqual(400);
+                expect(res.body.msg).toEqual("Produtos não encontrados!");
+            }).catch(err => {
+                throw err;
+            });
+    });
+});
+
 // afterAll(() => {
 //     return request.delete("/delete_usuario_test/508874").then(res => {
 //     }).catch(err => {
