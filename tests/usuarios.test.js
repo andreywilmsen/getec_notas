@@ -94,12 +94,12 @@ describe("Edição de produtores / atacadistas", function () {
     });
 });
 
-// afterAll(() => {
-//     return request.delete("/delete_usuario_test/508874").then(res => {
-//     }).catch(err => {
-//         throw err;
-//     });
-// });
+afterAll(() => {
+    return request.delete("/delete_usuario_test/508874").then(res => {
+    }).catch(err => {
+        throw err;
+    });
+});
 
 afterAll((done) => {
     server.close(done);

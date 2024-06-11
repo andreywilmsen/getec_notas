@@ -3,6 +3,8 @@ const router = express.Router();
 const userController = require('../controller/userController');
 const usuariosController = require('../controller/usuariosController');
 const noteController = require('../controller/noteController');
+const productsController = require('../controller/productsController');
+
 
 // ROTAS DE LOGIN
 
@@ -38,6 +40,9 @@ router.delete("/delete_usuario_test/:matricula", usuariosController.deleteTestCo
 
 router.put("/edit_usuarios", usuariosController.editController);
 
+// ROTAS DE PRODUTOS
+
+router.post("/register_products", productsController.registerController);
 
 
 module.exports = router;
