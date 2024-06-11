@@ -40,6 +40,35 @@ const productsService = {
             return { success: false, err, msg: "Erro no cadastramento do produto!" };
         }
     },
+    editService: async (req, res) => {
+
+        let searchCodigo = req.body.codigo;
+        let productFinded = await Products.findOne({ where: { codigo: searchCodigo } });
+
+        if (!productFinded) return { success: false, isFinded: false, msg: "Usuário não encontrado!" };
+
+        let codigo = req.body.codigo;
+        let nome = req.body.nome;
+        let und = req.body.und;
+        let peso = req.body.peso;
+
+        if (codigo === "" || nome === "" || und === "" || peso === "") return { success: false, isEmptyFields: true, msg: "Por favor, preencha todos os dados para a edição!" };
+
+        try {
+            productFinded.codigo = codigo;
+            productFinded.nome = nome;
+            productFinded.und = und;
+            productFinded.peso = peso;
+
+            let responseProducts = await productFinded.save();
+
+            return { success: true, response: responseProducts, msg: "Produto editado com sucesso!" };
+
+        } catch (err) {
+            console.log('erro: ' + err);
+            return { success: false, erro: err, msg: "Falha na edição de produto" };
+        }
+    },
     getService: async (req, res) => {
         try {
             if (Object.keys(req.body).length === 0) {

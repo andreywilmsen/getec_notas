@@ -42,11 +42,12 @@ router.put("/edit_usuarios", usuariosController.editController);
 
 // ROTAS DE PRODUTOS
 
-router.delete("/delete_products_test/:codigo", productsController.deleteTestController);
-
 router.post("/register_products", productsController.registerController);
 
 router.get("/get_products", productsController.getController);
 
+router.put("/edit_products", productsController.editController);
+
+router.delete("/delete_products_test/:codigo", productsController.deleteTestController);
 
 module.exports = router;

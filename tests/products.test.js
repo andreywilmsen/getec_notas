@@ -40,13 +40,6 @@ describe("Registro de produto", function () {
                 throw err;
             });
     });
-
-    afterAll(() => {
-        return request.delete("/delete_products_test/5268746").then(res => {
-        }).catch(err => {
-            throw err;
-        });
-    });
 });
 
 describe("Leitura de produtos", function () {
@@ -67,6 +60,41 @@ describe("Leitura de produtos", function () {
             }).catch(err => {
                 throw err;
             });
+    });
+});
+describe("Edição de produtos", function () {
+    it("Deve editar um produto", async () => {
+        let newProduct = {
+            codigo: "5268746",
+            nome: "Beterraba",
+            und: "SC",
+            peso: 12
+        }
+
+        return request.put("/edit_products").send(newProduct)
+            .then(res => {
+                expect(res.statusCode).toEqual(200);
+                expect(res.body.msg).toEqual("Produto editado com sucesso!");
+            }).catch(err => {
+                throw err;
+            });
+    });
+    it("Deve impedir que insira dados vazios", async () => {
+        let newProduct = { codigo: "5268746", nome: "", und: "", peso: "" }
+        return request.put("/edit_products").send(newProduct)
+            .then(res => {
+                expect(res.statusCode).toEqual(400);
+                expect(res.body.msg).toEqual("Por favor, preencha todos os dados para a edição!")
+            }).catch(err => {
+                throw err;
+            });
+    });
+});
+
+afterAll(() => {
+    return request.delete("/delete_products_test/5268746").then(res => {
+    }).catch(err => {
+        throw err;
     });
 });
 
