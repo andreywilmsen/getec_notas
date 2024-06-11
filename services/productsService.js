@@ -4,6 +4,17 @@ const Products = require('../model/Products');
 const { Op } = require('sequelize');
 
 const productsService = {
+    deleteTestService: async (req, res) => {
+        let codigo = req.params.codigo;
+
+        let notFindedAndDeleted = await Products.destroy({
+            where: {
+                codigo
+            }
+        });
+
+        return { status: success, msg: "Produto de teste excluido com sucesso!" };
+    },
     registerService: async (req, res) => {
         let codigo = req.body.codigo;
         let nome = req.body.nome;

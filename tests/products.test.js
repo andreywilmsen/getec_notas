@@ -40,6 +40,13 @@ describe("Registro de produto", function () {
                 throw err;
             });
     });
+
+    afterAll(() => {
+        return request.delete("/delete_products_test/5268746").then(res => {
+        }).catch(err => {
+            throw err;
+        });
+    });
 });
 
 describe("Leitura de produtos", function () {
@@ -62,13 +69,6 @@ describe("Leitura de produtos", function () {
             });
     });
 });
-
-// afterAll(() => {
-//     return request.delete("/delete_usuario_test/508874").then(res => {
-//     }).catch(err => {
-//         throw err;
-//     });
-// });
 
 afterAll((done) => {
     server.close(done);
