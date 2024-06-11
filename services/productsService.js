@@ -15,6 +15,14 @@ const productsService = {
             return { success: false, isEmptyFields: true, msg: "Por favor, preencha todos os dados para o cadastramento!" };
         }
 
+        let findedProduct = await Products.findOne({ where: { codigo, nome, und, peso } });
+
+        console.log(findedProduct);
+
+        if (findedProduct !== null)
+            return { success: false, isFinded: true, msg: "Produto já cadastrado!" };
+
+
         try {
             let result = await Products.create({ codigo, nome, und, peso });
 

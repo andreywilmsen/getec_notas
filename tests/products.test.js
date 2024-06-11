@@ -31,6 +31,15 @@ describe("Registro de produto", function () {
                 throw err;
             });
     });
+    it("Deve impedir o cadastramento de um produto com dados iguais", async () => {
+        return request.post("/register_products").send(mainProduct)
+            .then(res => {
+                expect(res.statusCode).toEqual(400);
+                expect(res.body.msg).toEqual("Produto já cadastrado!")
+            }).catch(err => {
+                throw err;
+            });
+    });
 });
 
 // afterAll(() => {
