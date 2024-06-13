@@ -1,12 +1,17 @@
 /* Container geral LOGIN */
 
 .Login {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(to top, #005331 0%, #006F42 60%);
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Define a cor de fundo com opacidade */
+        /* background: linear-gradient(to top, #005331 0%, #006F42 60%), url('../../public/ceasaPanoramica.jpg'); */
+        background-image: url('../../public/ceasaPanoramica.png');
+        /* Posiciona a imagem de fundo */
+        background-size: cover;
+        background-position: center;
 }
 
 /* Container com conteúdos do Login */
