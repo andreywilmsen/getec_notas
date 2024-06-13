@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(to bottom, #014D54 0%, #0B2230 60%);
+    background: linear-gradient(to top, #005331 0%, #006F42 60%);
 }
 
 /* Container com conteúdos do Login */

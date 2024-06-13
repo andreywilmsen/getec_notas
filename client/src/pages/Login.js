@@ -25,7 +25,7 @@ function Login() {
                     {/* Passa props para o Logotipo para renderizar no componente
                     a informações conforme o estado atual de register */}
                     <div className="loginContainerLogo">
-                        <Logotipo register={register} />
+                        <Logotipo />
                     </div>
                     <div className="loginContainerInputField">
                         {!register && (

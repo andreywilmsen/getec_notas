@@ -5,7 +5,9 @@ import '../styles/Logo.css'
 
 function Logotipo(props) {
     return (
-        <h1 className="Logotipo">Free-Work</h1>
+        <div className='LogotipoCeasa'>
+            <img src='./logoceasa.PNG'></img>
+        </div>
     )
 }
 

@@ -3,7 +3,7 @@
 /* Botão de sucesso */
 
 .buttonSuccess {
-    background-color: #0A8282;
+    background: linear-gradient(to top, #005331 0%, #006F42 100%);
     width: 150px;
     height: 40px;
     border: 1px solid rgb(189, 189, 189, 0.7);
