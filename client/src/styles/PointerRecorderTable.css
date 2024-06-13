@@ -1,0 +1,43 @@
+.tableRecorderCard {
+    border-radius: 15px;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    padding: 15px 0px;
+}
+
+.showRecorder {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    max-width: 300px;
+}
+
+.showRecorder>a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-weight: 600;
+}
+
+.showRecorder>a:hover {
+    cursor: pointer;
+    transform: scale(1.02, 1.02);
+    transition: 0.4s;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .tableRecorderCard {
+        width: 95%;
+    }
+
+    .showRecorder {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        max-width: 95%;
+    }
+}

@@ -1,0 +1,40 @@
+.inputGeneral {
+    border: 1px solid rgb(189, 189, 189, 0.7);
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0, 0.1);
+}
+
+/* Span */
+
+.spanInput {
+    width: 100%;
+    text-align: start;
+}
+
+
+/* Tipos de input */
+
+.inputDisabled {
+    background-color: rgb(221, 221, 221);
+    border-color: rgba(185, 185, 185, 0.534);
+    color: rgb(99, 99, 99);
+}
+
+
+/* Sizes */
+
+.inputSmall {
+    width: 100px;
+    height: 20px;
+}
+
+.inputMedium {
+    width: 250px;
+    height: 30px;
+}
+
+.inputBig {
+    width: 350px;
+    height: 30px;
+}
+
+/* Arrumar responsividade de inputBig */

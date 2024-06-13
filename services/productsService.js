@@ -77,7 +77,7 @@ const productsService = {
             }
 
             let listProducts = await Products.findAll({ where: { nome: { [Op.like]: `%${req.body.nome}%` } } });
-            console.log(listProducts.length)
+
             if (listProducts.length == 0) return { success: false, isEmpty: true, msg: "Produtos não encontrados!" };
 
             return { success: true, listProducts, msg: "Leitura concluida!" };

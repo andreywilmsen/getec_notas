@@ -1,0 +1,156 @@
+/* Estilos específicos para telas menores */
+@media (max-width: 800px) {
+    /* Largura máxima e altura mínima para a lista de tarefas */
+    .toDoList {
+        border-radius: 0px !important;
+        box-shadow: none !important;
+        max-width: 100%;
+        min-height: 100vh; /* Definindo altura mínima como 100% da altura da viewport */
+        overflow-y: auto; /* Adicionando barra de rolagem vertical quando necessário */
+    }
+}
+
+/* Lista de tarefas */
+.toDoList {
+    width: 800px;
+    height: 80%;
+    box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+}
+
+/* Linha divisória */
+.ToDo hr {
+    width: 70%;
+    border: 1px solid rgba(128, 128, 128, 0.048);
+    margin: 5px 0px 25px;
+}
+
+/* Cabeçalho do item da lista de tarefas */
+.toDoListItem {
+    margin: 20px auto;
+}
+
+.toDoListItem>hr {
+    max-width: 90%;
+    margin: auto;
+    border: 1px solid rgba(128, 128, 128, 0.078);
+}
+
+/* Estilos para os cabeçalhos dos itens da lista */
+.toDoListItemHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    width: 100%;
+    height: 50px;
+}
+
+@media (max-width: 800px) {
+    /* Ajustes para telas menores */
+    .toDoListItemHead {
+        height: 100%;
+        flex-direction: column;
+    }
+
+    /* Estilos para os títulos, tags e datas em telas menores */
+    .toDoListItemHeadTitle,
+    .toDoListItemHeadTag,
+    .toDoListItemHeadDate {
+        justify-content: center;
+        margin: 5px;
+        align-items: center !important;
+        height: 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Título do item da lista de tarefas */
+.toDoListItemHeadTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    width: 60%;
+    height: 50px;
+    color: #014D54;
+    font-weight: 400;
+}
+
+/* Tag do item da lista de tarefas */
+.toDoListItemHeadTag {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    width: 20%;
+    height: 50px;
+}
+
+/* Data do item da lista de tarefas */
+.toDoListItemHeadDate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    width: 20%;
+    height: 50px;
+}
+
+/* Corpo do item da lista de tarefas */
+.toDoListItemBody {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    width: 100%;
+    height: 50px;
+}
+
+/* Estilos para o texto de descrição do item da lista */
+.toDoListItemBodyDescription {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 5px;
+    width: 75%;
+    height: 50px;
+}
+
+@media (max-width: 800px) {
+    /* Ajustes para telas menores */
+    .toDoListItemBody {
+        height: 100%;
+        flex-direction: column;
+    }
+
+    /* Alinhamento do texto de descrição em telas menores */
+    .toDoListItemBodyDescription {
+        justify-content: center !important;
+    }
+}
+
+/* Botões do item da lista de tarefas */
+.toDoListItemBodyButtons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    width: 25%;
+    height: 50px;
+}
+
+@media (max-width: 800px) {
+    /* Ajustes para telas menores */
+    .toDoListItemBodyButtons {
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+    }
+
+    /* Margem para os botões em telas menores */
+    .toDoListItemBodyButtons>* {
+        margin: 8px 0px;
+    }
+}

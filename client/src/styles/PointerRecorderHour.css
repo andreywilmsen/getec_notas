@@ -1,0 +1,20 @@
+.pointerRecorderCard {
+    border-radius: 15px;
+    width: 320px;
+    height: 400px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    padding: 15px 0px;
+}
+
+/* Botão de registro */
+
+.recorderHourButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 200px;
+}

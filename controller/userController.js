@@ -25,8 +25,9 @@ const userController = {
             let response = await userService.loginService(req, res);
             if (response.userFinded === false) return res.status(400).json({ message: "Usuário ou senha incorretos" });
             if (response.passwordVerified === false) return res.status(400).json({ message: "Usuário ou senha incorretos" });
-            if (response.userFinded === true) return res.status(200).json({ message: "Usuário logado com sucesso", token: response.token });
+            if (response.userFinded === true) return res.status(200).json({ message: "Usuário logado com sucesso", token: response.token, name: response.name });
         } catch (err) {
+            console.log(err);
             res.status(500).send("Ocorreu um erro na rota login")
         }
     },

@@ -1,0 +1,84 @@
+/* Container geral LOGIN */
+
+.Login {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #014D54 0%, #0B2230 60%);
+}
+
+/* Container com conteúdos do Login */
+
+.loginContainer {
+    width: 500px;
+    min-height: 400px;
+    height: 100%;
+    background: linear-gradient(to bottom, #FFFF 0%, #E0E4E7 50%);
+    box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 2px 40px 2px 40px;
+}
+
+/* Responsividade container */
+
+@media (max-width: 600px) {
+    .loginContainer {
+        margin: auto;
+        max-width: 320px;
+        border-radius: 20px;
+    }
+}
+
+.loginContainerLogo {
+    height: 20%;
+}
+
+/* Campo de inputs  */
+
+.loginContainerInputField {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Margin geral componentes do campo de inputs */
+
+.loginContainerInputField>* {
+    margin-top: 10px;
+}
+
+/* Campo de registro de usuários */
+
+.loginContainerInputFieldRegisterAccount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 5px;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.loginContainerInputFieldRegisterAccount>* {
+    margin: 5px 0px;
+}
+
+.loginContainerInputFieldRegisterAccount>a {
+    color: #014D54;
+    font-weight: 600;
+}
+
+.loginContainerInputFieldRegisterAccount>a:hover {
+    cursor: pointer;
+    transform: scale(1.02, 1.02);
+    transition: 0.4s;
+    color: #003236;
+    font-weight: 600;
+}

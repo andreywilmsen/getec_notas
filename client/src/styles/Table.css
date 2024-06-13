@@ -1,0 +1,41 @@
+/* Pré definições para a tabela se ajustar tanto em desktop quanto em smartphone */
+.Table {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto; /* Adicionando rolagem horizontal para telas pequenas */
+}
+
+/* Estilos da tabela */
+.Table table {
+    width: 100%; /* Tornando a largura da tabela 100% para se ajustar ao contêiner */
+    max-width: 1000px; /* Limitando a largura máxima da tabela */
+}
+
+/* Estilos das células da tabela */
+.Table th,
+.Table td {
+    border: 1px solid #dddddd52;
+    text-align: left;
+    padding: 8px;
+}
+
+/* Estilos do cabeçalho da tabela */
+.Table th {
+    background-color: #014D54;
+    color: #FFFFFF;
+}
+
+/* Estilos das linhas pares da tabela */
+.Table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+    color: #014D54;
+}
+
+/* Estilos das linhas ímpares da tabela */
+.Table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}

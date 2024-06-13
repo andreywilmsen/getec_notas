@@ -1,0 +1,79 @@
+/* Pré definições */
+
+/* Botão de sucesso */
+
+.buttonSuccess {
+    background-color: #0A8282;
+    width: 150px;
+    height: 40px;
+    border: 1px solid rgb(189, 189, 189, 0.7);
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0, 0.1);
+    border-radius: 5px;
+    color: #E0E4E7;
+    font-weight: 600;
+}
+
+.buttonSuccess:hover {
+    cursor: pointer;
+    transform: scale(1.03, 1.03);
+    transition: 0.4s;
+}
+
+/* Botão light geral */
+
+.buttonLight {
+    border: 1px solid #0A8282;
+    color: #0A8282;
+    width: 150px;
+    height: 20px;
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0, 0.1);
+    border-radius: 5px;
+    font-weight: 400;
+}
+
+.buttonGenericToDo {
+    border: 1px solid rgba(128, 128, 128, 0.11);
+    text-align: center;
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0, 0.1);
+    padding: 6px;
+    border-radius: 8px;
+}
+.buttonDelete {
+    background: linear-gradient(to bottom, rgb(230, 88, 84) 0%, rgb(191, 56, 49) 100%);
+    color: white;
+}
+
+.buttonEdit {
+    background: linear-gradient(to bottom, rgb(84, 185, 215) 0%, rgb(42, 152, 182) 100%);
+    color: white;
+}
+
+.buttonCheck {}
+
+/* Sizes */
+
+.buttonSmall {
+    width: 100px;
+    height: 30px;
+    font-size: 12px;
+
+}
+
+.buttonMedium {
+    width: 150px;
+    height: 40px;
+    font-size: 14px;
+
+}
+
+.buttonBig {
+    width: 250px;
+    height: 40px;
+    font-size: 16px;
+}
+
+.buttonExtraBig {
+    width: 350px;
+    height: 60px;
+    font-size: 18px;
+}

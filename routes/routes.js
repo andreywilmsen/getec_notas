@@ -10,9 +10,9 @@ const productsController = require('../controller/productsController');
 
 router.get("/", userController.testController);
 
-router.post("/register", userController.registerController);
+router.post("/login/register", userController.registerController);
 
-router.get("/login", userController.loginController);
+router.post("/login", userController.loginController);
 
 router.post("/auth", userController.authController);
 

@@ -1,0 +1,84 @@
+/* Pagina geral */
+
+.PointerRecorder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
+.PointerRecorder>h1 {
+    color: rgb(39, 39, 39);
+}
+
+/* Título da pagina */
+
+.titlePointerRecorder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: #014D54;
+    font-weight: 400;
+}
+
+/* Container dos botões */
+
+.pointerRecorderContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 90%;
+    gap: 0;
+}
+
+/* Card de registro */
+
+.pointerRecorderContainer h1 {
+    text-decoration: none;
+    color: #014D54;
+    font-weight: 600;
+    font-size: 92px;
+
+}
+
+.pointerRecorderContainer h3 {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    margin-bottom: 30px;
+
+}
+
+@media (max-width:600px) {
+    .pointerRecorderContainer h1 {
+        text-decoration: none;
+        color: #014D54;
+        font-weight: 600;
+        font-size: 64px;
+    }
+
+    .pointerRecorderContainer h3 {
+        text-decoration: none;
+        color: black;
+        font-weight: 600;
+        margin-bottom: 30px;
+        font-size: 18px;
+    }
+}
+
+/* Botão para visualizar tabela */
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}

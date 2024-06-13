@@ -1,0 +1,67 @@
+/* Container geral */
+
+.Menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-height: 100%;
+}
+
+/* Responsividade */
+
+/* Telas médias */
+
+@media (max-width:1000px) {
+    .Menu {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        width: 70%;
+        height: 100%;
+    }
+
+    .Menu ul {
+        display: flex;
+    }
+}
+
+/* Telas pequenas */
+
+@media (max-width:800px) {
+    .Menu ul {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+}
+
+.Menu ul {
+    margin: 0;
+    padding-left: 0;
+}
+
+.Menu ul a li {
+    list-style-type: none;
+    margin: 10px auto;
+    margin-left: 0;
+    padding: 10px;
+}
+
+.Menu ul a {
+    text-decoration: none;
+    color: #E0E4E7;
+}
+
+.Menu ul a li:hover {
+    cursor: pointer;
+    transition: 0.4s;
+    background-color: rgba(128, 128, 128, 0.247);
+}
+
+.Menu hr {
+    width: 90%;
+    border: 1px solid rgba(128, 128, 128, 0.158);
+}

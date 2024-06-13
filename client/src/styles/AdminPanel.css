@@ -1,0 +1,35 @@
+.AdminPanel {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Reponsividade */
+
+/* Tela média */
+
+@media (max-width: 1000px) {
+    .AdminPanel {
+        min-width: 100%;
+        flex-direction: column;
+        min-height: 100%;
+        background-color: green;
+    }
+
+    .contentDashboard {
+        min-width: 100%;
+        max-height: 100%;
+
+    }
+}
+
+/* Área de conteúdos (dashboards) */
+
+.contentDashboard {
+    width: 100%;
+    border: 1px solid purple;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #FFFF 0%, #E0E4E7 50%);
+}

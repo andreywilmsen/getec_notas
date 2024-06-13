@@ -56,11 +56,11 @@ const userService = {
         let token = jwt.sign({ email, id: userFinded._id }, process.env.TOKEN_SECRET, { expiresIn: '48h' });
 
         // Retorna o usuário como autorizado, com o token válido gerado
-        if (userFinded) return ({ success: true, userFinded: true, token, user: userFinded });
+        if (userFinded) return ({ success: true, userFinded: true, token, user: userFinded, name: userFinded.name });
 
     },
     authService: async (req, res) => {
-        let token = req.body.token;
+        let token = req.headers["authorization-token"];
 
         try {
             // Verifica se o token recebido é válido com o segredo no back-end

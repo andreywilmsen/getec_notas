@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles",
+    "build_client": "npm run build --prefix client",
+    "build": "npm build",
+    "start_client": "npm start --prefix client",
+    "start_node": "node index.js",
+    "start_dev": "npm run --prefix client build && concurrently \"npm run start_node\" \"npm run start_client\"",
+    "postinstall": "npm i --prefix client && npm run build_client"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +18,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jest": "^29.7.0",
