@@ -1,0 +1,35 @@
+.LancarNotas{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.LancarNotas hr{
+    width: 90%;
+}
+.LancarNotas input{
+    margin: 10px;
+}
+.inputFieldNotes{
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.person{
+    width: 100%;
+    /* background-color: blue; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.extractList{
+    margin: 20px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
