@@ -24,7 +24,7 @@ describe("Conexão com servidor", function () {
 describe("Registro de usuário", function () {
 
     it("Deve registrar um usuário", async () => {
-        return request.post("/register").send(mainUser)
+        return request.post("/login/register").send(mainUser)
             .then(res => {
                 expect(res.statusCode).toEqual(200);
             }).catch(err => {
@@ -34,7 +34,7 @@ describe("Registro de usuário", function () {
     it("Deve impedir que um usuário cadastre dados vazios", async () => {
         let user = { name: "", email: "", password: "", confirmPassword: "" };
 
-        return request.post("/register").send(user)
+        return request.post("/login/register").send(user)
             .then(res => {
                 expect(res.statusCode).toEqual(400);
                 expect(res.body.message).toEqual("Não é permitido inserir dados vazios")
@@ -43,7 +43,7 @@ describe("Registro de usuário", function () {
             })
     });
     it("Deve impedir que cadastre um email já cadastrado", async () => {
-        return request.post("/register").send(mainUser)
+        return request.post("/login/register").send(mainUser)
             .then(res => {
                 expect(res.statusCode).toEqual(400);
                 expect(res.body.message).toEqual("Usuário já cadastrado");
@@ -60,7 +60,7 @@ describe("Registro de usuário", function () {
             confirmPassword: "123456"
         }
 
-        return request.post("/register").send(user)
+        return request.post("/login/register").send(user)
             .then(res => {
                 expect(res.statusCode).toEqual(400);
                 expect(res.body.message).toEqual("As senhas não são identicas");
@@ -73,7 +73,7 @@ describe("Registro de usuário", function () {
 
 describe("Login", function () {
     it("Deve efetuar o login do usuário", async () => {
-        return request.get("/login").send(mainUser)
+        return request.post("/login").send(mainUser)
             .then(res => {
                 expect(res.statusCode).toEqual(200);
                 expect(res.body.message).toEqual("Usuário logado com sucesso")
@@ -88,7 +88,7 @@ describe("Login", function () {
             password: "123456"
         };
 
-        return request.get("/login").send(user)
+        return request.post("/login").send(user)
             .then(res => {
                 expect(res.statusCode).toEqual(400);
                 expect(res.body.message).toEqual("Usuário ou senha incorretos");
@@ -103,7 +103,7 @@ describe("Login", function () {
             password: "1234567"
         };
 
-        return request.get("/login").send(user)
+        return request.post("/login").send(user)
             .then(res => {
                 expect(res.statusCode).toEqual(400);
                 expect(res.body.message).toEqual("Usuário ou senha incorretos")
@@ -113,7 +113,7 @@ describe("Login", function () {
     })
 
     it("Deve gerar um token de acesso ao efetuar o login", async () => {
-        return request.get("/login").send(mainUser)
+        return request.post("/login").send(mainUser)
             .then(res => {
                 expect(res.statusCode).toEqual(200);
                 expect(res.body.token).toBeDefined()
@@ -124,11 +124,13 @@ describe("Login", function () {
 })
 
 describe("Autenticação", function () {
-    it("Deve verificar se o token fornecido é valido e retornar o usuário referente ao token", async () => {
-        let token = { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFuZHJleXdpbG1zZW5kZXBhdWxhQGdtYWlsLmNvbSIsImlkIjoiNjY0YTI1ZDMzNTg4MWM4MzNiYmRiYzViIiwiaWF0IjoxNzE2MTM1Mzg1fQ.9xaDBbJBYzM-vS_uWs_jbDrAH4-UdH1Ej-Ji0lBXOvQ" };
+    it("Deve verificar se o token fornecido é válido e retornar o usuário referente ao token", async () => {
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFuZHJleXdpbG1zZW5kZXBhdWxhQGdtYWlsLmNvbSIsImlhdCI6MTcxODU1MzkxMSwiZXhwIjoxNzE4NzI2NzExfQ.xoCQ6DS2og_l1cs37GRZ89XOYlDoZlLPiDWSZDIxCTg";
 
-        return request.post("/auth").send(token)
+        return request.post("/auth")
+            .set("authorization-token", `${token}`)
             .then(res => {
+                console.log(res);
                 expect(res.statusCode).toEqual(200);
                 expect(res.body.user).toBeDefined();
             }).catch(err => {

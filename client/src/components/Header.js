@@ -20,9 +20,11 @@ function Header() {
 
     return (
         <header className="Header">
-            <Logotipo />
-            <Menu links={[{ name: "Registrar Ponto", link: "pointerrecorder" }, { name: "Tarefas", link: "todo" }, { name: "Calcular hora/trabalho", link: "hoursworked" }, { name: "Relatórios", link: "reports" }]} />
-            <button onClick={dispatchLogout}>Logout</button>
+            <Logotipo image="logoceasabranco.png" />
+            <Menu links={[{ name: "Home", link: "" },{ name: "Lançar notas", link: "lancamentonotas" }, { name: "Relatórios", link: "relatorios" }]} />
+            <div className="buttonHeader">
+                <button onClick={dispatchLogout}>Logout</button>
+            </div>
         </header>
     )
 }

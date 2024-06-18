@@ -5,7 +5,7 @@ import './App.css';
 // Pages
 import Login from './pages/Login';
 import AdminPanel from './pages/AdminPanel';
-import PointerRecorder from './pages/PointerRecorder';
+import LancamentoNotas from './pages/LancamentoNotas';
 import ToDo from './pages/ToDo';
 import HoursWorked from './pages/HoursWorked';
 import Reports from './pages/Reports';
@@ -33,7 +33,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<PrivateRoute element={<AdminPanel />} />} />
-            <Route path="/pointerrecorder" element={<PrivateRoute element={<PointerRecorder />} />} />
+            <Route path="/lancamentonotas" element={<PrivateRoute element={<LancamentoNotas />} />} />
             <Route path="/todo" element={<PrivateRoute element={<ToDo />} />} />
             <Route path="/hoursworked" element={<PrivateRoute element={<HoursWorked />} />} />
             <Route path="/reports" element={<PrivateRoute element={<Reports />} />} />

@@ -21,7 +21,6 @@
     .contentDashboard {
         min-width: 100%;
         max-height: 100%;
-
     }
 }
 
@@ -29,7 +28,6 @@
 
 .contentDashboard {
     width: 100%;
-    border: 1px solid purple;
     min-height: 100vh;
     background: linear-gradient(to bottom, #FFFF 0%, #E0E4E7 50%);
 }
