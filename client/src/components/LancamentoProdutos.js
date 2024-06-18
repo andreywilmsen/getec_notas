@@ -17,7 +17,7 @@ import Button from '../components/Button';
 // Autocomplete para inputs
 import Autocomplete from '../services/Autocomplete';
 
-function LancamentoNotas() {
+function AdminPanel() {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
@@ -41,26 +41,6 @@ function LancamentoNotas() {
         setNotes(!notes);
     };
 
-    // Handle value Produtores / Atacadistas
-    function handleValue(event) {
-        switch (event.target.placeholder) {
-            case "Data": setDataNotes(event.target.value);
-                break;
-            case "N° Nota Fiscal": setNfNotes(event.target.value);
-                break;
-            case "Matricula": setMatriculaNotes(event.target.value);
-                break;
-            case "Produtor / Atacadista": setPersonNotes(event.target.value);
-                break;
-            case "Cidade": setCidadeNotes(event.target.value);
-                break;
-        }
-    }
-
-    function switchNotes() {
-
-    }
-
     function addProduct() {
 
     };
@@ -77,13 +57,13 @@ function LancamentoNotas() {
 
                     {!notes && (<div className="inputFieldNotes">
 
-                        <Input change={handleValue} valor={dataNote} placeholder="Data" size="inputMedium" />
-                        <Input change={handleValue} valor={nfNote} placeholder="N° Nota Fiscal" size="inputMedium" />
+                        <Input placeholder="Data" size="inputMedium" />
+                        <Input placeholder="N° Nota Fiscal" size="inputMedium" />
                         <div className="person">
-                            <Input change={handleValue} valor={matriculaNote} placeholder="Matricula" size="inputMedium" />
-                            <Input change={handleValue} valor={personNote} placeholder="Produtor / Atacadista" size="inputMedium" />
+                            <Input placeholder="Matricula" size="inputMedium" />
+                            <Input placeholder="Produtor / Atacadista" size="inputMedium" />
                         </div>
-                        <Input change={handleValue} valor={cidadeNote} placeholder="Cidade" size="inputMedium" />
+                        <Input placeholder="Cidade" size="inputMedium" />
                         <Button click={handleNotes} buttonType="buttonSuccess" name="Avançar" />
                     </div>)}
 
@@ -136,4 +116,4 @@ function LancamentoNotas() {
     );
 }
 
-export default LancamentoNotas;
+export default AdminPanel;

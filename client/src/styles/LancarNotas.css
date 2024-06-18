@@ -1,31 +1,34 @@
-.LancarNotas{
+.LancarNotas {
     width: 100%;
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.LancarNotas hr{
+
+.LancarNotas hr {
     width: 90%;
 }
-.LancarNotas input{
+
+.LancarNotas input {
     margin: 10px;
 }
-.inputFieldNotes{
-    /* background-color: red; */
+
+.inputFieldNotes {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.person{
+
+.person {
     width: 100%;
-    /* background-color: blue; */
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
 }
-.extractList{
+
+.extractList {
     margin: 20px 0px;
     display: flex;
     justify-content: center;

@@ -3,7 +3,8 @@ import '../styles/Header.css'
 
 // Components
 import Logotipo from './Logo';
-import Menu from './Menu'
+import Menu from './Menu';
+import Button from './Button';
 
 // Router
 import { Link } from 'react-router-dom';
@@ -21,9 +22,9 @@ function Header() {
     return (
         <header className="Header">
             <Logotipo image="logoceasabranco.png" />
-            <Menu links={[{ name: "Home", link: "" },{ name: "Lançar notas", link: "lancamentonotas" }, { name: "Relatórios", link: "relatorios" }]} />
+            <Menu links={[{ name: "Home", link: "" }, { name: "Lançar notas", link: "lancamentonotas" }, { name: "Relatórios", link: "relatorios" }]} />
             <div className="buttonHeader">
-                <button onClick={dispatchLogout}>Logout</button>
+                <Button click={dispatchLogout} buttonType="buttonLogout" name="Logout" />
             </div>
         </header>
     )
