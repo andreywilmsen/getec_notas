@@ -1,6 +1,6 @@
 .AdminPanel {
     min-width: 100vw;
-    min-height: 100vh;
+    min-height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,6 +28,8 @@
 
 .contentDashboard {
     width: 100%;
-    min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+    /* background-color: red; */
     background: linear-gradient(to bottom, #FFFF 0%, #E0E4E7 50%);
 }

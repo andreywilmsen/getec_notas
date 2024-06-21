@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/AdminPanel.css';
-import '../styles/LancarNotas.css';
+import '../styles/LancamentoProdutos.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,6 +10,7 @@ import AuthService from '../services/authService';
 // Components
 import Input from '../components/Input';
 import Button from '../components/Button';
+import Modal from '../components/Modal';
 
 // Actions para reducer
 import { showNoteFieldsAction } from '../actions/genericAction'; // Importe a ação corretamente
@@ -26,6 +27,8 @@ function LancamentoProdutos(props) {
     const [unidade, setUnidade] = useState('');
     const [quantidade, setQuantidade] = useState('');
     const [finalNote, setFinalNote] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+
 
     // Valores dos states de nota fiscal que contém os valores dos persons (produtores/atacadistas), e state para alterar entre os fields que vão ser mostrados no front-end (persons/products);
     const note = useSelector((state) => state.note);
@@ -69,15 +72,37 @@ function LancamentoProdutos(props) {
         dispatch(showNoteFieldsAction(!showNoteFields));
     }
 
+    function handleConcludeNote() {
+        // Mostrar o modal de confirmação
+        setShowModal(true);
+    }
+
+    function handleConcludeNote() {
+        // Mostrar o modal de confirmação
+        setShowModal(true);
+    }
+
+    function handleCloseModal() {
+        setShowModal(false);
+    }
+
+    function handleConfirmConcludeNote() {
+        // Lógica para concluir a nota
+        console.log('Nota concluída!');
+        setShowModal(false);
+    }
+
     return (
         <div className="inputFieldNotes">
-            <div className="person">
-                <Input change={handleValue} valor={nProduto} placeholder="N° Produto" size="inputMedium" />
-                <Input change={handleValue} valor={produto} placeholder="Produto" size="inputMedium" />
+            <div className="inputsLancarNotas">
+                <div className="person">
+                    <Input change={handleValue} valor={nProduto} placeholder="N° Produto" size="inputMedium" />
+                    <Input change={handleValue} valor={produto} placeholder="Produto" size="inputMedium" />
+                </div>
+                <Input change={handleValue} valor={unidade} placeholder="Unidade" size="inputMedium" />
+                <Input change={handleValue} valor={quantidade} placeholder="Quantidade" size="inputMedium" />
+                <Button click={addProduct} buttonType="buttonSuccess" name="+" />
             </div>
-            <Input change={handleValue} valor={unidade} placeholder="Unidade" size="inputMedium" />
-            <Input change={handleValue} valor={quantidade} placeholder="Quantidade" size="inputMedium" />
-            <Button click={addProduct} buttonType="buttonSuccess" name="+" />
             <div className="listProducts">
                 <div className="extractList">
                     <label><strong>Data:</strong> {note.dataNote}</label>
@@ -86,30 +111,43 @@ function LancamentoProdutos(props) {
                     <label><strong>Produtor / Atacadista:</strong> {note.personNote}</label>
                     <label><strong>Cidade:</strong> {note.cidadeNote}</label>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>N° PRODUTO</th>
-                            <th>PRODUTO</th>
-                            <th>UNIDADE</th>
-                            <th>QUANTIDADE</th>
-                            {/* <th>TOTAL</th> */}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {finalNote.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.nProduto}</td>
-                                <td>{item.produto}</td>
-                                <td>{item.unidade}</td>
-                                <td>{item.quantidade}</td>
-                                {/* <td>Data 5</td> */}
+                <div className='Table'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N° PRODUTO</th>
+                                <th>PRODUTO</th>
+                                <th>UNIDADE</th>
+                                <th>QUANTIDADE</th>
+                                {/* <th>TOTAL</th> */}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {finalNote.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.nProduto}</td>
+                                    <td>{item.produto}</td>
+                                    <td>{item.unidade}</td>
+                                    <td>{item.quantidade}</td>
+                                    {/* <td>Data 5</td> */}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <Button click={handleFields} buttonType="buttonSuccess" name="Concluir nota" />
+            <div className="buttonsLancamentoNotas">
+                <Button click={handleFields} buttonType="buttonLogout" name="Cancelar" />
+                <Button click={handleConcludeNote} buttonType="buttonSuccess" name="Concluir nota" />
+            </div>
+            <Modal
+                show={showModal}
+                onClose={handleCloseModal}
+                onConfirm={handleConfirmConcludeNote}
+                title="Confirmar Conclusão"
+            >
+                <p>Tem certeza que deseja concluir a nota?</p>
+            </Modal>
         </div>
     );
 }
