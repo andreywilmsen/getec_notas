@@ -104,9 +104,8 @@ function LancamentoProdutos(props) {
         <div className="inputFieldNotes">
             <div className="inputsLancarNotas">
                 <div className="person">
-                    <Input ref={nProdutoRef}
-                        change={handleValue} valor={nProduto} placeholder="N° Produto" size="inputMedium" />
-                    <Input change={handleValue} valor={produto} placeholder="Produto" size="inputMedium" />
+                    <Input ref={nProdutoRef} autocomplete change={handleValue} valor={produto} placeholder="Produto" size="inputMedium" />
+                    <Input change={handleValue} valor={nProduto} placeholder="N° Produto" size="inputMedium" />
                 </div>
                 <Input change={handleValue} valor={unidade} placeholder="Unidade" size="inputMedium" />
                 <Input change={handleValue} valor={quantidade} placeholder="Quantidade" size="inputMedium" />
