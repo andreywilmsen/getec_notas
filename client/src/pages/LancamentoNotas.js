@@ -3,6 +3,7 @@ import '../styles/AdminPanel.css';
 import '../styles/LancarNotas.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 // Autenticação de login
 
@@ -23,6 +24,17 @@ function LancamentoNotas() {
 
     useEffect(() => {
         AuthService(navigate, location, dispatch);
+
+        const getProducts = async () => {
+            try {
+                const response = await axios.post('http://10.0.11.230:8080/get_products');
+                localStorage.setItem("Produtos", JSON.stringify(response.data.products))
+            } catch (error) {
+                console.log(error)
+            }
+        };
+
+        getProducts();
     }, []);
 
     return (

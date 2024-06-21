@@ -1,27 +1,31 @@
-const { Sequelize } = require("sequelize");
-const db = require("../db/db"); // Assuming this is your Sequelize instance
+const { Sequelize, DataTypes } = require('sequelize');
+const db = require('../db/db'); // Supondo que este seja a sua instância do Sequelize
 
-module.exports = db.define("products", {
+const Produto = db.define('Produto', {
     id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
     },
     codigo: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     nome: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING, 
         allowNull: false,
     },
     und: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     peso: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
-    },
+    }
+}, {
+    timestamps: false // Desabilita createdAt e updatedAt
 });
+
+module.exports = Produto;

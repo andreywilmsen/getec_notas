@@ -71,6 +71,7 @@ const productsService = {
     },
     getService: async (req, res) => {
         try {
+            console.log(req.body)
             if (Object.keys(req.body).length === 0) {
                 let listProducts = await Products.findAll({});
                 return { success: true, listProducts, msg: "Leitura concluida!" };
@@ -83,6 +84,7 @@ const productsService = {
             return { success: true, listProducts, msg: "Leitura concluida!" };
 
         } catch (err) {
+            console.log(err);
             return { success: false, err, msg: "Erro na leitura dos produtos!" };
         }
     },
