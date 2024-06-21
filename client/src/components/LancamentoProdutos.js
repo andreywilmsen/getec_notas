@@ -72,13 +72,8 @@ function LancamentoProdutos(props) {
         dispatch(showNoteFieldsAction(!showNoteFields));
     }
 
+    // Mostrar o modal de confirmação
     function handleConcludeNote() {
-        // Mostrar o modal de confirmação
-        setShowModal(true);
-    }
-
-    function handleConcludeNote() {
-        // Mostrar o modal de confirmação
         setShowModal(true);
     }
 
@@ -86,8 +81,8 @@ function LancamentoProdutos(props) {
         setShowModal(false);
     }
 
+    // Lógica para concluir a nota
     function handleConfirmConcludeNote() {
-        // Lógica para concluir a nota
         console.log('Nota concluída!');
         setShowModal(false);
     }
