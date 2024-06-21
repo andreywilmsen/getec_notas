@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '../styles/AdminPanel.css';
 import '../styles/LancamentoProdutos.css';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -20,6 +20,9 @@ function LancamentoProdutos(props) {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
+
+    // Referência ao primeiro input
+    const nProdutoRef = useRef(null);
 
     // Variáveis com valores dos inputs dos produtos
     const [nProduto, setNproduto] = useState('');
@@ -63,6 +66,16 @@ function LancamentoProdutos(props) {
         let product = { nProduto, produto, unidade, quantidade };
         setFinalNote([...finalNote, product]);
         console.log(finalNote);
+        // Limpar os valores dos inputs
+        setNproduto('');
+        setProduto('');
+        setUnidade('');
+        setQuantidade('');
+
+        // Focar automaticamente no primeiro input
+        if (nProdutoRef.current) {
+            nProdutoRef.current.focus();
+        }
         // console.log(note.data, note.nfNote, note.matriculaNote, note.personNote, note.cidadeNote, nProduto, produto, unidade, quantidade)
     }
 
@@ -91,7 +104,8 @@ function LancamentoProdutos(props) {
         <div className="inputFieldNotes">
             <div className="inputsLancarNotas">
                 <div className="person">
-                    <Input change={handleValue} valor={nProduto} placeholder="N° Produto" size="inputMedium" />
+                    <Input ref={nProdutoRef}
+                        change={handleValue} valor={nProduto} placeholder="N° Produto" size="inputMedium" />
                     <Input change={handleValue} valor={produto} placeholder="Produto" size="inputMedium" />
                 </div>
                 <Input change={handleValue} valor={unidade} placeholder="Unidade" size="inputMedium" />
