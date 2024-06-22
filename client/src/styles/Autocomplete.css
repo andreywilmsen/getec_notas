@@ -1,30 +1,19 @@
-.autocomplete {
-    position: relative;
-    width: 300px;
-}
+/* Certifique-se de ajustar os estilos conforme necessário */
 
-.suggestions {
+.dropdown-menu {
     position: absolute;
-    border: 1px solid #ccc;
-    max-height: 150px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    max-height: 200px;
     overflow-y: auto;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    background-color: white;
-    width: 100%;
-    z-index: 1000;
 }
 
-.suggestions li {
-    padding: 10px;
+.dropdown-option {
+    padding: 12px 16px;
     cursor: pointer;
 }
 
-.suggestions li:hover {
-    background-color: #ddd;
-}
-
-.no-suggestions {
-    padding: 10px;
+.dropdown-option:hover {
+    background-color: #f1f1f1;
 }

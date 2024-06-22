@@ -1,14 +1,14 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import '../styles/Input.css';
 import '../styles/Autocomplete.css'; // Certifique-se de criar e importar um arquivo CSS para os estilos
 
 const Input = forwardRef((props, ref) => {
+    const [allSuggestions, setAllSuggestions] = useState([]);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('');
+    const dropdownMenuRef = useRef(null);
+    const customInputRef = useRef(null);
 
-    // FUNÇÕES PARA O AUTOCOMPLETE
-    const [allSuggestions, setAllSuggestions] = useState([]); // Armazena todas as sugestões
-    const [filteredSuggestions, setFilteredSuggestions] = useState([]);
-    const [showSuggestions, setShowSuggestions] = useState(false);
-    const [userInput, setUserInput] = useState('');
     // Carrega os produtos do localStorage na inicialização do componente
     useEffect(() => {
         const produtosFromStorage = localStorage.getItem('Produtos');
@@ -19,63 +19,39 @@ const Input = forwardRef((props, ref) => {
         }
     }, []);
 
-    const onChange = (e) => {
-        const userInput = e.currentTarget.value;
-        const filtered = allSuggestions.filter(
-            (suggestion) =>
-                suggestion.toLowerCase().includes(userInput.toLowerCase())
-        );
-
-        setFilteredSuggestions(filtered);
-        setShowSuggestions(true);
-        setUserInput(userInput);
-        if (props.change) {
-            props.change(e);
-        }
-    };
-
-    const onClick = (e) => {
-        const selectedSuggestion = e.currentTarget.innerText;
-        setFilteredSuggestions([]);
-        setShowSuggestions(false);
-        setUserInput(selectedSuggestion);
-        console.log('userInput: ', userInput, filteredSuggestions)
-        if (props.change) {
-            props.change({
-                target: { value: selectedSuggestion, name: props.name }
-            });
-        }
-    };
-
-    const onKeyDown = (e) => {
-        if (e.keyCode === 13 && filteredSuggestions.length > 0) { // Enter
-            const selectedSuggestion = filteredSuggestions[0];
-            setFilteredSuggestions([]);
-            setShowSuggestions(false);
-            setUserInput(selectedSuggestion);
-            if (props.change) {
-                props.change({
-                    target: { value: selectedSuggestion, name: props.name }
-                });
+    // Efeito para fechar o dropdown ao clicar fora
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownMenuRef.current &&
+                !dropdownMenuRef.current.contains(event.target) &&
+                !customInputRef.current.contains(event.target)
+            ) {
+                setDropdownOpen(false);
             }
-        }
+        };
+
+        window.addEventListener('click', handleClickOutside);
+        return () => {
+            window.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
+    const handleDropdownToggle = () => {
+        setDropdownOpen(!dropdownOpen);
     };
 
-    const suggestionsListComponent = showSuggestions && userInput && (
-        <ul className="suggestions">
-            {filteredSuggestions.length ? (
-                filteredSuggestions.map((suggestion, index) => (
-                    <li key={index} onClick={onClick}>
-                        {suggestion}
-                    </li>
-                ))
-            ) : (
-                <div className="no-suggestions">
-                    <em>No suggestions, you're on your own!</em>
-                </div>
-            )}
-        </ul>
-    );
+    const handleOptionSelect = (option) => {
+        setSelectedOption(option);
+        setDropdownOpen(false);
+        props.change({ target: { value: option, name: props.name } }); // Propaga a mudança para o componente pai
+    };
+
+    const handleInputChange = (event) => {
+        const value = event.target.value;
+        setSelectedOption(value);
+        props.change(event); // Propaga a mudança para o componente pai se necessário
+    };
 
     return (
         props.span ? (
@@ -84,39 +60,46 @@ const Input = forwardRef((props, ref) => {
                 <span className="spanInput">{props.span}</span>
                 <input
                     ref={ref}
-                    onChange={props.change}
-                    value={props.valor}
+                    onChange={handleInputChange}
+                    value={props.valor || selectedOption}
                     placeholder={props.placeholder}
                     name={props.name}
                     type={props.inputType}
                     className={'inputGeneral ' + props.size}
                 />
             </>
-        ) : (props.autocomplete ? (
-            <div className="autocomplete">
+        ) : (
+            props.autocomplete ? (
+                // Se houver a prop autocomplete, renderiza um input com datalist
+                <>
+                    <input
+                        ref={customInputRef}
+                        className={'inputGeneral ' + props.size}
+                        list="options"
+                        id="optionInput"
+                        name="produto"
+                        value={selectedOption}
+                        onChange={handleInputChange}
+                        onClick={handleDropdownToggle}
+                    />
+                    <datalist id="options">
+                        {allSuggestions.map((sugestao, index) => (
+                            <option key={index} value={sugestao} onClick={() => handleOptionSelect(sugestao)}></option>
+                        ))}
+                    </datalist>
+                </>
+            ) : (
+                // Caso contrário, renderiza um input sem span e sem autocomplete
                 <input
                     ref={ref}
+                    onChange={handleInputChange}
+                    value={props.valor}
+                    placeholder={props.placeholder}
+                    name={props.name}
+                    type={props.inputType}
                     className={'inputGeneral ' + props.size}
-                    type="text"
-                    onChange={onChange}
-                    onKeyDown={onKeyDown}
-                    value={userInput}
-                    placeholder="Type to search..."
                 />
-                {suggestionsListComponent}
-            </div>
-        ) : (
-            // Caso contrário, renderiza um input sem span
-            <input
-                ref={ref}
-                onChange={props.change}
-                value={props.valor}
-                placeholder={props.placeholder}
-                name={props.name}
-                type={props.inputType}
-                className={'inputGeneral ' + props.size}
-            />
-        )
+            )
         )
     );
 });

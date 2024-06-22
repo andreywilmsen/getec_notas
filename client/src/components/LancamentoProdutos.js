@@ -15,7 +15,6 @@ import Modal from '../components/Modal';
 // Actions para reducer
 import { showNoteFieldsAction } from '../actions/genericAction'; // Importe a ação corretamente
 
-
 function LancamentoProdutos(props) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -31,12 +30,11 @@ function LancamentoProdutos(props) {
     const [quantidade, setQuantidade] = useState('');
     const [finalNote, setFinalNote] = useState([]);
     const [showModal, setShowModal] = useState(false);
-
+    const [error, setError] = useState('');
 
     // Valores dos states de nota fiscal que contém os valores dos persons (produtores/atacadistas), e state para alterar entre os fields que vão ser mostrados no front-end (persons/products);
     const note = useSelector((state) => state.note);
     const showNoteFields = useSelector((state) => state.generic);
-
 
     useEffect(() => {
         AuthService(navigate, location, dispatch);
@@ -44,17 +42,17 @@ function LancamentoProdutos(props) {
 
     // Função para armazenar os valores dos inputs nas suas respectivas variáveis
     function handleValue(event) {
-        switch (event.target.placeholder) {
-            case 'N° Produto':
+        switch (event.target.name) {
+            case 'nProduto':
                 setNproduto(event.target.value);
                 break;
-            case 'Produto':
+            case 'produto':
                 setProduto(event.target.value);
                 break;
-            case 'Unidade':
+            case 'unidade':
                 setUnidade(event.target.value);
                 break;
-            case 'Quantidade':
+            case 'quantidade':
                 setQuantidade(event.target.value);
                 break;
             default:
@@ -63,22 +61,41 @@ function LancamentoProdutos(props) {
     }
 
     function addProduct() {
+        // Verifica se o produto está na lista de produtos no localStorage
+        const produtosFromStorage = localStorage.getItem('Produtos');
+        if (produtosFromStorage) {
+            const produtos = JSON.parse(produtosFromStorage);
+            const nomesProdutos = produtos.map((produto) => produto.nome);
+            if (!nomesProdutos.includes(produto)) {
+                setError('Por favor, selecione um produto válido da lista.');
+                return;
+            }
+        } else {
+            setError('Nenhum produto encontrado. Verifique a lista de produtos.');
+            return;
+        }
+
+        // Se passou na validação, adiciona o produto à nota final
         let product = { nProduto, produto, unidade, quantidade };
         setFinalNote([...finalNote, product]);
-        console.log(finalNote);
-        // Limpar os valores dos inputs
+
+        // Limpar os valores dos inputs e resetar o erro
         setNproduto('');
+        console.log(nProduto)
         setProduto('');
+        console.log(produto)
         setUnidade('');
+        console.log(unidade)
         setQuantidade('');
+        console.log(quantidade)
+        setError('');
+        console.log(error)
 
         // Focar automaticamente no primeiro input
         if (nProdutoRef.current) {
             nProdutoRef.current.focus();
         }
-        // console.log(note.data, note.nfNote, note.matriculaNote, note.personNote, note.cidadeNote, nProduto, produto, unidade, quantidade)
     }
-
 
     // Função para enviar os valores dos inputs dos produtores para o reducer dos produtores, para ser consumido no componente LancamentoProdutos
     function handleFields() {
@@ -104,13 +121,14 @@ function LancamentoProdutos(props) {
         <div className="inputFieldNotes">
             <div className="inputsLancarNotas">
                 <div className="person">
-                    <Input ref={nProdutoRef} autocomplete change={handleValue} valor={produto} placeholder="Produto" size="inputMedium" />
-                    <Input change={handleValue} valor={nProduto} placeholder="N° Produto" size="inputMedium" />
+                    <Input ref={nProdutoRef} autocomplete change={handleValue} valor={produto} name="produto" placeholder="Produto" size="inputMedium" />
+                    <Input change={handleValue} valor={nProduto} name="nProduto" placeholder="N° Produto" size="inputMedium" />
                 </div>
-                <Input change={handleValue} valor={unidade} placeholder="Unidade" size="inputMedium" />
-                <Input change={handleValue} valor={quantidade} placeholder="Quantidade" size="inputMedium" />
+                <Input change={handleValue} valor={unidade} name="unidade" placeholder="Unidade" size="inputMedium" />
+                <Input change={handleValue} valor={quantidade} name="quantidade" placeholder="Quantidade" size="inputMedium" />
                 <Button click={addProduct} buttonType="buttonSuccess" name="+" />
             </div>
+            {error && <p className="error-message">{error}</p>}
             <div className="listProducts">
                 <div className="extractList">
                     <label><strong>Data:</strong> {note.dataNote}</label>
@@ -127,7 +145,6 @@ function LancamentoProdutos(props) {
                                 <th>PRODUTO</th>
                                 <th>UNIDADE</th>
                                 <th>QUANTIDADE</th>
-                                {/* <th>TOTAL</th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -137,7 +154,6 @@ function LancamentoProdutos(props) {
                                     <td>{item.produto}</td>
                                     <td>{item.unidade}</td>
                                     <td>{item.quantidade}</td>
-                                    {/* <td>Data 5</td> */}
                                 </tr>
                             ))}
                         </tbody>
