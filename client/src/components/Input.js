@@ -13,6 +13,7 @@ const Input = forwardRef((props, ref) => {
     const dropdownMenuRef = useRef(null);
     const customInputRef = useRef(null);
 
+    // State para verificar se deve ou não limpar o input autocomplete
     const clear = useSelector((state) => state.clear);
 
     // Carrega os produtos do localStorage na inicialização do componente
@@ -43,26 +44,23 @@ const Input = forwardRef((props, ref) => {
         };
     }, []);
 
+    // Abre o dropdown com sugestões
     const handleDropdownToggle = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
-    const handleOptionSelect = (option) => {
-        setSelectedOption(option);
-        setDropdownOpen(false);
-        props.change({ target: { value: option, name: props.name } }); // Propaga a mudança para o componente pai
-    };
-
+    // Dispara para o componente pai o valor da sugestão
     const handleInputChange = (event) => {
         let value = event.target.value;
         setSelectedOption(value);
-        props.change(event); // Propaga a mudança para o componente pai se necessário
+        props.change(event);
     };
 
-    // Limpar o input quando clear for true
+    // Limpa o input de sugestões quando o state clear for true
     useEffect(() => {
         if (clear) {
             setSelectedOption('');
+
             // Disparar a ação para informar que o campo foi limpo
             dispatch(setClear(false));
         }
@@ -97,10 +95,11 @@ const Input = forwardRef((props, ref) => {
                         placeholder='Produto'
                         onChange={handleInputChange}
                         onClick={handleDropdownToggle}
+                        onBlur={props.onBlur} // Chama a função handleBlur ao perder o foco
                     />
                     <datalist id="options">
                         {allSuggestions.map((sugestao, index) => (
-                            <option key={index} value={sugestao} onClick={() => handleOptionSelect(sugestao)}></option>
+                            <option key={index} value={sugestao}></option>
                         ))}
                     </datalist>
                 </>

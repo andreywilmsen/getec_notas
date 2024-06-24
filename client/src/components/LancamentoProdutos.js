@@ -16,13 +16,10 @@ import Modal from '../components/Modal';
 import { setClear } from '../actions/clearAction';
 import { showNoteFieldsAction } from '../actions/genericAction'; // Importe a ação corretamente
 
-function LancamentoProdutos(props) {
+function LancamentoProdutos() {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
-
-    // Referência ao primeiro input
-    const nProdutoRef = useRef(null);
 
     // Variáveis com valores dos inputs dos produtos
     const [nProduto, setNproduto] = useState('');
@@ -33,11 +30,15 @@ function LancamentoProdutos(props) {
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState('');
 
-    // Valores dos states de nota fiscal que contém os valores dos persons (produtores/atacadistas), e state para alterar entre os fields que vão ser mostrados no front-end (persons/products);
+    // Referência ao primeiro input para puxar automaticamente para ele ao adicionar um produto na nota
+    const nProdutoRef = useRef(null);
+
+    // Valores dos states de nota fiscal que contém os valores dos persons (produtores/atacadistas), state para alterar entre os fields que vão ser mostrados no front-end (persons/products), e state para limpar o campo do autocomplete quando adicionar produto;
     const note = useSelector((state) => state.note);
     const clear = useSelector((state) => state.generic);
     const showNoteFields = useSelector((state) => state.generic);
 
+    // Autenticação se usuário está logado
     useEffect(() => {
         AuthService(navigate, location, dispatch);
     }, [navigate, location, dispatch]);
@@ -62,8 +63,23 @@ function LancamentoProdutos(props) {
         }
     }
 
+    const handleBlur = () => {
+        // nProduto.disabled = true
+        let productFinally = JSON.parse(localStorage.getItem("Produtos"));
+
+        // Encontrar o produto pelo nome (suponho que o produto seja identificado pelo nome)
+        const produtoEncontrado = productFinally.find(prod => prod.nome === produto);
+        setNproduto(produtoEncontrado.codigo)
+        setUnidade(produtoEncontrado.und)
+
+
+        console.log(nProduto); // Aqui você imprime o console log ao perder o foco
+        // Aqui você pode adicionar lógicas adicionais ao perder o foco, se necessário
+    };
+
+    // Função de adicionar o Produto
     function addProduct() {
-        // Verifica se o produto está na lista de produtos no localStorage
+        // Verifica se o valor do input é compativel com as sugestões de produtos, caso não, dispara um erro.
         const produtosFromStorage = localStorage.getItem('Produtos');
         if (produtosFromStorage) {
             const produtos = JSON.parse(produtosFromStorage);
@@ -90,7 +106,6 @@ function LancamentoProdutos(props) {
 
         // Foca automaticamente no primeiro input
         if (nProdutoRef.current) {
-            // console.log(nProdutoRef.current)
             clearInputProduto()
             nProdutoRef.current.focus();
         }
@@ -101,7 +116,7 @@ function LancamentoProdutos(props) {
         dispatch(showNoteFieldsAction(!showNoteFields));
     }
 
-    // FUNÇÕES DO MODAL
+    // Funções do modal
     function handleConcludeNote() {
         setShowModal(true);
     }
@@ -123,25 +138,10 @@ function LancamentoProdutos(props) {
         <div className="inputFieldNotes">
             <div className="inputsLancarNotas">
                 <div className="person">
-                    <Input
-                        ref={nProdutoRef}
-                        autocomplete
-                        change={handleValue}
-                        valor={produto}
-                        name="produto"
-                        placeholder="Produto"
-                        size="inputMedium"
-                        clearInput={clear} // Passando a função para limpar o input nProduto
-                    />
-                    <Input
-                        change={handleValue}
-                        valor={nProduto}
-                        name="nProduto"
-                        placeholder="N° Produto"
-                        size="inputMedium"
-                    />
+                    <Input onBlur={handleBlur} ref={nProdutoRef} autocomplete change={handleValue} valor={produto} name="produto" placeholder="Produto" size="inputMedium" clearInput={clear} />
+                    <Input disabled change={handleValue} valor={nProduto} name="nProduto" placeholder="N° Produto" size="inputMedium" />
                 </div>
-                <Input change={handleValue} valor={unidade} name="unidade" placeholder="Unidade" size="inputMedium" />
+                <Input disabled change={handleValue} valor={unidade} name="unidade" placeholder="Unidade" size="inputMedium" />
                 <Input change={handleValue} valor={quantidade} name="quantidade" placeholder="Quantidade" size="inputMedium" />
                 <Button click={addProduct} buttonType="buttonSuccess" name="+" />
             </div>
