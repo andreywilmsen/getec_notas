@@ -103,7 +103,17 @@ const Input = forwardRef((props, ref) => {
                         ))}
                     </datalist>
                 </>
-            ) : (
+            ) : (props.disabled ? (
+                <input
+                    disabled
+                    ref={ref}
+                    onChange={handleInputChange}
+                    value={props.valor}
+                    placeholder={props.placeholder}
+                    name={props.name}
+                    type={props.inputType}
+                    className={'inputGeneral ' + props.size}
+                />) : (
                 // Caso contrário, renderiza um input sem span e sem autocomplete
                 <input
                     ref={ref}
@@ -114,6 +124,7 @@ const Input = forwardRef((props, ref) => {
                     type={props.inputType}
                     className={'inputGeneral ' + props.size}
                 />
+            )
             )
         )
     );
