@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import '../styles/Input.css';
 import '../styles/Autocomplete.css'; // Certifique-se de criar e importar um arquivo CSS para os estilos
+import { useDispatch, useSelector } from 'react-redux';
+import { setClear } from '../actions/clearAction';
 
 const Input = forwardRef((props, ref) => {
+    const dispatch = useDispatch();
+
     const [allSuggestions, setAllSuggestions] = useState([]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
     const dropdownMenuRef = useRef(null);
     const customInputRef = useRef(null);
+
+    const clear = useSelector((state) => state.clear);
 
     // Carrega os produtos do localStorage na inicialização do componente
     useEffect(() => {
@@ -48,10 +54,19 @@ const Input = forwardRef((props, ref) => {
     };
 
     const handleInputChange = (event) => {
-        const value = event.target.value;
+        let value = event.target.value;
         setSelectedOption(value);
         props.change(event); // Propaga a mudança para o componente pai se necessário
     };
+
+    // Limpar o input quando clear for true
+    useEffect(() => {
+        if (clear) {
+            setSelectedOption('');
+            // Disparar a ação para informar que o campo foi limpo
+            dispatch(setClear(false));
+        }
+    }, [clear, dispatch]);
 
     return (
         props.span ? (
@@ -61,7 +76,7 @@ const Input = forwardRef((props, ref) => {
                 <input
                     ref={ref}
                     onChange={handleInputChange}
-                    value={props.valor || selectedOption}
+                    value={props.valor}
                     placeholder={props.placeholder}
                     name={props.name}
                     type={props.inputType}
@@ -73,12 +88,13 @@ const Input = forwardRef((props, ref) => {
                 // Se houver a prop autocomplete, renderiza um input com datalist
                 <>
                     <input
-                        ref={customInputRef}
+                        ref={ref}
                         className={'inputGeneral ' + props.size}
                         list="options"
                         id="optionInput"
                         name="produto"
                         value={selectedOption}
+                        placeholder='Produto'
                         onChange={handleInputChange}
                         onClick={handleDropdownToggle}
                     />

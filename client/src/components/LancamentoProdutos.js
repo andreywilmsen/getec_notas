@@ -13,6 +13,7 @@ import Button from '../components/Button';
 import Modal from '../components/Modal';
 
 // Actions para reducer
+import { setClear } from '../actions/clearAction';
 import { showNoteFieldsAction } from '../actions/genericAction'; // Importe a ação corretamente
 
 function LancamentoProdutos(props) {
@@ -34,6 +35,7 @@ function LancamentoProdutos(props) {
 
     // Valores dos states de nota fiscal que contém os valores dos persons (produtores/atacadistas), e state para alterar entre os fields que vão ser mostrados no front-end (persons/products);
     const note = useSelector((state) => state.note);
+    const clear = useSelector((state) => state.generic);
     const showNoteFields = useSelector((state) => state.generic);
 
     useEffect(() => {
@@ -81,18 +83,15 @@ function LancamentoProdutos(props) {
 
         // Limpar os valores dos inputs e resetar o erro
         setNproduto('');
-        console.log(nProduto)
         setProduto('');
-        console.log(produto)
         setUnidade('');
-        console.log(unidade)
         setQuantidade('');
-        console.log(quantidade)
         setError('');
-        console.log(error)
 
-        // Focar automaticamente no primeiro input
+        // Foca automaticamente no primeiro input
         if (nProdutoRef.current) {
+            // console.log(nProdutoRef.current)
+            clearInputProduto()
             nProdutoRef.current.focus();
         }
     }
@@ -102,27 +101,45 @@ function LancamentoProdutos(props) {
         dispatch(showNoteFieldsAction(!showNoteFields));
     }
 
-    // Mostrar o modal de confirmação
+    // FUNÇÕES DO MODAL
     function handleConcludeNote() {
         setShowModal(true);
     }
-
     function handleCloseModal() {
         setShowModal(false);
     }
-
-    // Lógica para concluir a nota
     function handleConfirmConcludeNote() {
         console.log('Nota concluída!');
         setShowModal(false);
+    }
+
+    // Função para limpar o input Produto quando uma opção for selecionada no autocomplete
+    function clearInputProduto() {
+        dispatch(setClear(true));
+        console.log(clear)
     }
 
     return (
         <div className="inputFieldNotes">
             <div className="inputsLancarNotas">
                 <div className="person">
-                    <Input ref={nProdutoRef} autocomplete change={handleValue} valor={produto} name="produto" placeholder="Produto" size="inputMedium" />
-                    <Input change={handleValue} valor={nProduto} name="nProduto" placeholder="N° Produto" size="inputMedium" />
+                    <Input
+                        ref={nProdutoRef}
+                        autocomplete
+                        change={handleValue}
+                        valor={produto}
+                        name="produto"
+                        placeholder="Produto"
+                        size="inputMedium"
+                        clearInput={clear} // Passando a função para limpar o input nProduto
+                    />
+                    <Input
+                        change={handleValue}
+                        valor={nProduto}
+                        name="nProduto"
+                        placeholder="N° Produto"
+                        size="inputMedium"
+                    />
                 </div>
                 <Input change={handleValue} valor={unidade} name="unidade" placeholder="Unidade" size="inputMedium" />
                 <Input change={handleValue} valor={quantidade} name="quantidade" placeholder="Quantidade" size="inputMedium" />

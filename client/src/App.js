@@ -12,6 +12,8 @@ import PrivateRoute from './components/PrivateRoute';
 import userReducer from './reducers/Users';
 import notesReducer from './reducers/Notes';
 import genericReducer from './reducers/Generic';
+import clearReducer from './reducers/Clear';
+
 
 
 // Redux
@@ -21,7 +23,7 @@ import { Provider } from 'react-redux'
 
 // Criação do store do redux;
 
-let allReducers = combineReducers({ user: userReducer, note: notesReducer, generic: genericReducer })
+let allReducers = combineReducers({ user: userReducer, note: notesReducer, generic: genericReducer, clear: clearReducer })
 let store = createStore(allReducers)
 
 
