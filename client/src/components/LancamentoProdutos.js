@@ -29,6 +29,7 @@ function LancamentoProdutos() {
     const [finalNote, setFinalNote] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState('');
+    const [focusedInput, setFocusedInput] = useState(null); // Estado para controlar o input focado atualmente
 
     // Referência ao primeiro input para puxar automaticamente para ele ao adicionar um produto na nota
     const nProdutoRef = useRef(null);
@@ -63,27 +64,32 @@ function LancamentoProdutos() {
         }
     }
 
-    const handleBlur = () => {
-        // nProduto.disabled = true
-        let productFinally = JSON.parse(localStorage.getItem("Produtos"));
+    // Handler para atualizar o estado do input focado
+    const handleFocus = (event) => {
+        setFocusedInput(event.target.name);
+    };
 
-        // Encontrar o produto pelo nome (suponho que o produto seja identificado pelo nome)
-        const produtoEncontrado = productFinally.find(prod => prod.nome === produto);
-        setNproduto(produtoEncontrado.codigo)
-        setUnidade(produtoEncontrado.und)
+    const handleBlur = (event) => {
+        // Verifica se o próximo elemento focado é outro input antes de realizar as operações
+        if (event.relatedTarget && event.relatedTarget.nodeName === 'INPUT') {
+            let productFinally = JSON.parse(localStorage.getItem('Produtos'));
 
-
-        console.log(nProduto); // Aqui você imprime o console log ao perder o foco
-        // Aqui você pode adicionar lógicas adicionais ao perder o foco, se necessário
+            // Encontrar o produto pelo nome (suponho que o produto seja identificado pelo nome)
+            const produtoEncontrado = productFinally.find((prod) => prod.nome === produto);
+            if (produtoEncontrado) {
+                setNproduto(produtoEncontrado.codigo);
+                setUnidade(produtoEncontrado.und);
+            }
+        }
     };
 
     // Função de adicionar o Produto
     function addProduct() {
-        // Verifica se o valor do input é compativel com as sugestões de produtos, caso não, dispara um erro.
+        // Verifica se o valor do input é compatível com as sugestões de produtos, caso não, dispara um erro.
         const produtosFromStorage = localStorage.getItem('Produtos');
         if (produtosFromStorage) {
             const produtos = JSON.parse(produtosFromStorage);
-            const nomesProdutos = produtos.map((produto) => produto.nome);
+            const nomesProdutos = produtos.map((prod) => prod.nome);
             if (!nomesProdutos.includes(produto)) {
                 setError('Por favor, selecione um produto válido da lista.');
                 return;
@@ -106,7 +112,7 @@ function LancamentoProdutos() {
 
         // Foca automaticamente no primeiro input
         if (nProdutoRef.current) {
-            clearInputProduto()
+            clearInputProduto();
             nProdutoRef.current.focus();
         }
     }
@@ -131,30 +137,74 @@ function LancamentoProdutos() {
     // Função para limpar o input Produto quando uma opção for selecionada no autocomplete
     function clearInputProduto() {
         dispatch(setClear(true));
-        console.log(clear)
+        console.log(clear);
     }
 
     return (
         <div className="inputFieldNotes">
             <div className="inputsLancarNotas">
                 <div className="person">
-                    <Input onBlur={handleBlur} ref={nProdutoRef} autocomplete change={handleValue} valor={produto} name="produto" placeholder="Produto" size="inputMedium" clearInput={clear} />
-                    <Input disabled change={handleValue} valor={nProduto} name="nProduto" placeholder="N° Produto" size="inputMedium" />
+                    <Input
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        ref={nProdutoRef}
+                        autocomplete
+                        change={handleValue}
+                        valor={produto}
+                        name="produto"
+                        placeholder="Produto"
+                        size="inputMedium"
+                        clearInput={clear}
+                    />
+                    <Input
+                        disabled
+                        onFocus={handleFocus}
+                        change={handleValue}
+                        valor={nProduto}
+                        name="nProduto"
+                        placeholder="N° Produto"
+                        size="inputMedium"
+                    />
                 </div>
-                <Input disabled change={handleValue} valor={unidade} name="unidade" placeholder="Unidade" size="inputMedium" />
-                <Input change={handleValue} valor={quantidade} name="quantidade" placeholder="Quantidade" size="inputMedium" />
+                <Input
+                    disabled
+                    onFocus={handleFocus}
+                    change={handleValue}
+                    valor={unidade}
+                    name="unidade"
+                    placeholder="Unidade"
+                    size="inputMedium"
+                />
+                <Input
+                    onFocus={handleFocus}
+                    change={handleValue}
+                    valor={quantidade}
+                    name="quantidade"
+                    placeholder="Quantidade"
+                    size="inputMedium"
+                />
                 <Button click={addProduct} buttonType="buttonSuccess" name="+" />
             </div>
             {error && <p className="error-message">{error}</p>}
             <div className="listProducts">
                 <div className="extractList">
-                    <label><strong>Data:</strong> {note.dataNote}</label>
-                    <label><strong>Nota fiscal:</strong> {note.nfNote}</label>
-                    <label><strong>Matricula:</strong> {note.matriculaNote}</label>
-                    <label><strong>Produtor / Atacadista:</strong> {note.personNote}</label>
-                    <label><strong>Cidade:</strong> {note.cidadeNote}</label>
+                    <label>
+                        <strong>Data:</strong> {note.dataNote}
+                    </label>
+                    <label>
+                        <strong>Nota fiscal:</strong> {note.nfNote}
+                    </label>
+                    <label>
+                        <strong>Matricula:</strong> {note.matriculaNote}
+                    </label>
+                    <label>
+                        <strong>Produtor / Atacadista:</strong> {note.personNote}
+                    </label>
+                    <label>
+                        <strong>Cidade:</strong> {note.cidadeNote}
+                    </label>
                 </div>
-                <div className='Table'>
+                <div className="Table">
                     <table>
                         <thead>
                             <tr>
