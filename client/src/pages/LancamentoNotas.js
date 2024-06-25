@@ -27,8 +27,10 @@ function LancamentoNotas() {
 
         const getProducts = async () => {
             try {
-                const response = await axios.post('http://localhost:8080/get_products');
-                localStorage.setItem("Produtos", JSON.stringify(response.data.products))
+                const responseProducts = await axios.post('http://localhost:8080/get_products');
+                localStorage.setItem("Produtos", JSON.stringify(responseProducts.data.products))
+                const responsePersons = await axios.post('http://localhost:8080/get_usuarios');
+                localStorage.setItem("Persons", JSON.stringify(responsePersons.data.search.response))
             } catch (error) {
                 console.log(error)
             }

@@ -20,4 +20,7 @@ module.exports = db.define("usuarios", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-});
+}, { 
+    timestamps: false 
+}
+);

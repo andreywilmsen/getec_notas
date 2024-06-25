@@ -23,18 +23,21 @@
 /* Sizes */
 
 .inputSmall {
+    font-size: 15px;
     width: 100px;
-    height: 20px;
+    height: 30px;
 }
 
 .inputMedium {
+    font-size: 18px;
     width: 250px;
-    height: 30px;
+    height: 40px;
 }
 
 .inputBig {
+    font-size: 18px;
     width: 350px;
-    height: 30px;
+    height: 50px;
 }
 
 /* Arrumar responsividade de inputBig */

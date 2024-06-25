@@ -155,6 +155,7 @@ function LancamentoProdutos() {
                         placeholder="Produto"
                         size="inputMedium"
                         clearInput={clear}
+                        typeAutocomplete="Produto"
                     />
                     <Input
                         disabled

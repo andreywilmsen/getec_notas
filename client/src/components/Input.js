@@ -18,12 +18,16 @@ const Input = forwardRef((props, ref) => {
 
     // Carrega os produtos do localStorage na inicialização do componente
     useEffect(() => {
-        const produtosFromStorage = localStorage.getItem('Produtos');
-        if (produtosFromStorage) {
-            const produtos = JSON.parse(produtosFromStorage);
-            const nomesProdutos = produtos.map((produto) => produto.nome);
-            setAllSuggestions(nomesProdutos);
+        let sugestionsStore;
+        if (props.typeAutocomplete === 'Persons') {
+            sugestionsStore = localStorage.getItem('Persons');
         }
+        else {
+            sugestionsStore = localStorage.getItem('Produtos');
+        }
+        const sugestions = JSON.parse(sugestionsStore);
+        const nameSugestions = sugestions.map((sugestion) => sugestion.nome);
+        setAllSuggestions(nameSugestions);
     }, []);
 
     // Efeito para fechar o dropdown ao clicar fora
@@ -92,7 +96,7 @@ const Input = forwardRef((props, ref) => {
                         id="optionInput"
                         name="produto"
                         value={selectedOption}
-                        placeholder='Produto'
+                        placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
                         onChange={handleInputChange}
                         onClick={handleDropdownToggle}
                         onBlur={props.onBlur} // Chama a função handleBlur ao perder o foco

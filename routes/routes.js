@@ -32,7 +32,7 @@ router.put("/edit_note", noteController.editController);
 
 // ROTAS DE USUÁRIO (PERMISSIONÁRIOS / ATACADISTAS)
 
-router.get("/get_usuarios", usuariosController.getController);
+router.post("/get_usuarios", usuariosController.getController);
 
 router.post("/register_usuario", usuariosController.registerController);
 

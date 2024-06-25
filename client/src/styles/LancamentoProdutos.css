@@ -44,6 +44,7 @@
 
 /* Estilos da tabela */
 .Table table {
+    font-size: 17px;
     width: 100%;
     /* Tornando a largura da tabela 100% para se ajustar ao contêiner */
     max-width: 700px;
@@ -68,6 +69,7 @@
 .Table tbody tr:nth-child(even) {
     background-color: #f2f2f2;
     color: #005331;
+    font-weight: 600;
 }
 
 /* Estilos das linhas ímpares da tabela */
