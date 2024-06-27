@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
-import '../styles/Input.css';
-import '../styles/Autocomplete.css'; // Certifique-se de criar e importar um arquivo CSS para os estilos
 import { useDispatch, useSelector } from 'react-redux';
 import { setClear } from '../actions/clearAction';
+import '../styles/Input.css';
+import '../styles/Autocomplete.css'; // Certifique-se de importar o arquivo CSS para os estilos
 
 const Input = forwardRef((props, ref) => {
     const dispatch = useDispatch();
 
-    const [allSuggestions, setAllSuggestions] = useState([]);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [suggestions, setSuggestions] = useState([]);
+    const [filteredSuggestions, setFilteredSuggestions] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
     const dropdownMenuRef = useRef(null);
     const customInputRef = useRef(null);
@@ -16,56 +16,46 @@ const Input = forwardRef((props, ref) => {
     // State para verificar se deve ou não limpar o input autocomplete
     const clear = useSelector((state) => state.clear);
 
-    // Carrega os produtos do localStorage na inicialização do componente
+    // Carregar sugestões do localStorage ou API na inicialização do componente
     useEffect(() => {
-        let sugestionsStore;
-        if (props.typeAutocomplete === 'Persons') {
-            sugestionsStore = localStorage.getItem('Persons');
-        } else {
-            sugestionsStore = localStorage.getItem('Produtos');
-        }
+        const loadSuggestions = () => {
+            let suggestionsStore;
+            if (props.typeAutocomplete === 'Persons') {
+                suggestionsStore = localStorage.getItem('Persons');
+            } else {
+                suggestionsStore = localStorage.getItem('Produtos');
+            }
 
-        // Verifica se sugestionsStore não é null antes de tentar fazer o parsing
-        if (sugestionsStore) {
-            const sugestions = JSON.parse(sugestionsStore);
-            const nameSugestions = sugestions.map((sugestion) => sugestion.nome);
+            if (suggestionsStore) {
+                const sugestions = JSON.parse(suggestionsStore);
+                const nameSuggestions = sugestions.map((sugestion) => sugestion.nome);
 
-            // Insere todas as sugestões de nomes ou produtos nas sugestões do campo de input
-            setAllSuggestions(nameSugestions);
-        } else {
-            console.log('Item não encontrado no localStorage');
-        }
-    }, []);
-
-
-    // Efeito para fechar o dropdown ao clicar fora
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                dropdownMenuRef.current &&
-                !dropdownMenuRef.current.contains(event.target) &&
-                !customInputRef.current.contains(event.target)
-            ) {
-                setDropdownOpen(false);
+                // Inicialmente, carrega apenas uma parte das sugestões
+                setSuggestions(nameSuggestions);
+                setFilteredSuggestions(nameSuggestions.slice(0, 10)); // Exemplo: carregar as 10 primeiras sugestões
+            } else {
+                console.log('Item não encontrado no localStorage');
             }
         };
 
-        window.addEventListener('click', handleClickOutside);
-        return () => {
-            window.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
+        loadSuggestions();
+    }, [props.typeAutocomplete]);
 
-    // Abre o dropdown com sugestões
-    const handleDropdownToggle = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
-
-    // Dispara para o componente pai o valor da sugestão
+    // Filtrar sugestões conforme o usuário digita
     const handleInputChange = (event) => {
-        let value = event.target.value;
+        const value = event.target.value;
         setSelectedOption(value);
-        props.change(event);
+
+        if (value.trim() === '') {
+            setFilteredSuggestions(suggestions.slice(0, 10)); // Mostra as 10 primeiras sugestões se o campo estiver vazio
+        } else {
+            const filtered = suggestions.filter(suggestion =>
+                suggestion.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredSuggestions(filtered.slice(0, 10)); // Mostra as 10 primeiras sugestões filtradas
+        }
+
+        props.change(event); // Dispara para o componente pai o valor da sugestão
     };
 
     // Limpa o input de sugestões quando o state clear for true
@@ -106,11 +96,10 @@ const Input = forwardRef((props, ref) => {
                         value={selectedOption}
                         placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
                         onChange={handleInputChange}
-                        onClick={handleDropdownToggle}
                         onBlur={props.onBlur}
                     />
                     <datalist id="options">
-                        {allSuggestions.map((sugestao, index) => (
+                        {filteredSuggestions.map((sugestao, index) => (
                             <option key={index} value={sugestao}></option>
                         ))}
                     </datalist>
