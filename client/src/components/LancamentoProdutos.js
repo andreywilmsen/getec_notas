@@ -86,44 +86,51 @@ function LancamentoProdutos() {
 
     // Função de adicionar o Produto
     // Função de adicionar o Produto
-function addProduct() {
-    // Verifica se todos os campos da nota estão preenchidos
-    if (!note.dataNote || !note.nfNote || !note.matriculaNote || !note.personNote || !note.cidadeNote) {
-        setError('Por favor, preencha todos os campos da nota antes de adicionar um produto.');
-        return;
-    }
-
-    // Verifica se o valor do input é compatível com as sugestões de produtos, caso não, dispara um erro.
-    const produtosFromStorage = localStorage.getItem('Produtos');
-    if (produtosFromStorage) {
-        const produtos = JSON.parse(produtosFromStorage);
-        const nomesProdutos = produtos.map((prod) => prod.nome);
-        if (!nomesProdutos.includes(produto)) {
-            setError('Por favor, selecione um produto válido da lista.');
+    function addProduct() {
+        // Verifica se todos os campos do novo produto estão preenchidos
+        if (!produto || !nProduto || !unidade || !quantidade) {
+            setError('Por favor, preencha todos os campos do produto antes de adicionar.');
             return;
         }
-    } else {
-        setError('Nenhum produto encontrado. Verifique a lista de produtos.');
-        return;
+
+        // Verifica se todos os campos da nota estão preenchidos
+        if (!note.dataNote || !note.nfNote || !note.matriculaNote || !note.personNote || !note.cidadeNote) {
+            setError('Por favor, preencha todos os campos da nota antes de adicionar um produto.');
+            return;
+        }
+
+        // Verifica se o valor do input é compatível com as sugestões de produtos, caso não, dispara um erro.
+        const produtosFromStorage = localStorage.getItem('Produtos');
+        if (produtosFromStorage) {
+            const produtos = JSON.parse(produtosFromStorage);
+            const nomesProdutos = produtos.map((prod) => prod.nome);
+            if (!nomesProdutos.includes(produto)) {
+                setError('Por favor, selecione um produto válido da lista.');
+                return;
+            }
+        } else {
+            setError('Nenhum produto encontrado. Verifique a lista de produtos.');
+            return;
+        }
+
+        // Se passou na validação, adiciona o produto à nota final
+        let product = { nProduto, produto, unidade, quantidade };
+        setFinalNote([...finalNote, product]);
+
+        // Limpar os valores dos inputs e resetar o erro
+        setNproduto('');
+        setProduto('');
+        setUnidade('');
+        setQuantidade('');
+        setError('');
+
+        // Foca automaticamente no primeiro input
+        if (nProdutoRef.current) {
+            clearInputProduto();
+            nProdutoRef.current.focus();
+        }
     }
 
-    // Se passou na validação, adiciona o produto à nota final
-    let product = { nProduto, produto, unidade, quantidade };
-    setFinalNote([...finalNote, product]);
-
-    // Limpar os valores dos inputs e resetar o erro
-    setNproduto('');
-    setProduto('');
-    setUnidade('');
-    setQuantidade('');
-    setError('');
-
-    // Foca automaticamente no primeiro input
-    if (nProdutoRef.current) {
-        clearInputProduto();
-        nProdutoRef.current.focus();
-    }
-}
 
 
     // Função para enviar os valores dos inputs dos produtores para o reducer dos produtores, para ser consumido no componente LancamentoProdutos
