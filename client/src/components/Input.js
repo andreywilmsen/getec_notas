@@ -21,14 +21,22 @@ const Input = forwardRef((props, ref) => {
         let sugestionsStore;
         if (props.typeAutocomplete === 'Persons') {
             sugestionsStore = localStorage.getItem('Persons');
-        }
-        else {
+        } else {
             sugestionsStore = localStorage.getItem('Produtos');
         }
-        const sugestions = JSON.parse(sugestionsStore);
-        const nameSugestions = sugestions.map((sugestion) => sugestion.nome);
-        setAllSuggestions(nameSugestions);
+
+        // Verifica se sugestionsStore não é null antes de tentar fazer o parsing
+        if (sugestionsStore) {
+            const sugestions = JSON.parse(sugestionsStore);
+            const nameSugestions = sugestions.map((sugestion) => sugestion.nome);
+
+            // Insere todas as sugestões de nomes ou produtos nas sugestões do campo de input
+            setAllSuggestions(nameSugestions);
+        } else {
+            console.log('Item não encontrado no localStorage');
+        }
     }, []);
+
 
     // Efeito para fechar o dropdown ao clicar fora
     useEffect(() => {
@@ -99,7 +107,7 @@ const Input = forwardRef((props, ref) => {
                         placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
                         onChange={handleInputChange}
                         onClick={handleDropdownToggle}
-                        onBlur={props.onBlur} // Chama a função handleBlur ao perder o foco
+                        onBlur={props.onBlur}
                     />
                     <datalist id="options">
                         {allSuggestions.map((sugestao, index) => (
@@ -108,6 +116,7 @@ const Input = forwardRef((props, ref) => {
                     </datalist>
                 </>
             ) : (props.disabled ? (
+                // Caso o input deverá ser desabilitado para edição
                 <input
                     disabled
                     ref={ref}

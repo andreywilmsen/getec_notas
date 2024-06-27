@@ -15,8 +15,6 @@ import Button from './Button';
 import { NoteAction } from '../actions/noteAction';
 import { showNoteFieldsAction } from '../actions/genericAction';
 
-import { setClear } from '../actions/clearAction';
-
 
 function LancamentoPersons(props) {
     const navigate = useNavigate();
@@ -24,10 +22,6 @@ function LancamentoPersons(props) {
     const dispatch = useDispatch();
 
     // Valores dos states de nota fiscal que contém os valores dos persons (produtores/atacadistas), state para alterar entre os fields que vão ser mostrados no front-end (persons/products), e state para limpar o campo do autocomplete quando adicionar produto;
-    const clear = useSelector((state) => state.generic);
-
-    const personsRef = useRef(null);
-
 
     // Variáveis com valores dos inputs dos produtores / atacadistas
     const [dataNote, setDataNotes] = useState('');
@@ -35,8 +29,7 @@ function LancamentoPersons(props) {
     const [matriculaNote, setMatriculaNotes] = useState('');
     const [personNote, setPersonNotes] = useState('');
     const [cidadeNote, setCidadeNotes] = useState('');
-    const [focusedInput, setFocusedInput] = useState(null); // Estado para controlar o input focado atualmente
-
+    const [error, setError] = useState('');
 
     // State para gerenciar a variavel de mostrar campo de produtores, e campo de notas
     const showNoteFields = useSelector((state) => state.generic);
@@ -70,6 +63,12 @@ function LancamentoPersons(props) {
 
     // Função para enviar os valores dos inputs dos produtores para o reducer dos produtores, para ser consumido no componente LancamentoProdutos
     function handleFields() {
+        // Verifica se algum dos campos está vazio
+        if (!dataNote || !nfNote || !matriculaNote || !personNote || !cidadeNote) {
+            setError('Por favor, preencha todos os dados para prosseguir.');
+            return;
+        }
+
         const noteData = {
             dataNote,
             nfNote,
@@ -77,16 +76,16 @@ function LancamentoPersons(props) {
             personNote,
             cidadeNote
         };
+
         // Envia para o reducer das notas os valores dos produtores / atacadistas
         dispatch(NoteAction(noteData));
+
         // Altera no reducer qual campo irá aparecer no front-end (Campo das notas ao invés dos produtores / atacadistas)
         dispatch(showNoteFieldsAction(!showNoteFields));
     }
-    // Handler para atualizar o estado do input focado
-    const handleFocus = (event) => {
-        setFocusedInput(event.target.name);
-    };
 
+
+    // Função criada para incluir a matricula do produtor / atacadista ao selecionar o nome dele.
     const handleBlur = (event) => {
         // Verifica se o próximo elemento focado é outro input antes de realizar as operações
         if (event.relatedTarget && event.relatedTarget.nodeName === 'INPUT') {
@@ -106,20 +105,18 @@ function LancamentoPersons(props) {
             <Input change={handleValue} valor={nfNote} placeholder="N° Nota Fiscal" size="inputMedium" />
             <div className="person">
                 <Input
-                    onFocus={handleFocus}
                     onBlur={handleBlur}
-                    ref={personsRef}
                     autocomplete
                     change={handleValue}
                     valor={personNote}
                     name="person"
                     size="inputMedium"
-                    clearInput={clear}
                     typeAutocomplete="Persons"
                 />
                 <Input disabled change={handleValue} valor={matriculaNote} placeholder="Matricula" size="inputMedium" />
             </div>
             <Input change={handleValue} valor={cidadeNote} placeholder="Cidade" size="inputMedium" />
+            {error && <p className="error-message">{error}</p>}
             <Button click={handleFields} buttonType="buttonSuccess" name="Avançar" />
         </div>
     );
