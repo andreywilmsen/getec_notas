@@ -89,13 +89,15 @@ function LancamentoProdutos() {
     function addProduct() {
         // Verifica se todos os campos do novo produto estão preenchidos
         if (!produto || !nProduto || !unidade || !quantidade) {
-            setError('Por favor, preencha todos os campos do produto antes de adicionar.');
+            alert('Por favor, preencha todos os campos do produto antes de adicionar.');
+            // setError('Por favor, preencha todos os campos do produto antes de adicionar.');
             return;
         }
 
         // Verifica se todos os campos da nota estão preenchidos
         if (!note.dataNote || !note.nfNote || !note.matriculaNote || !note.personNote || !note.cidadeNote) {
-            setError('Por favor, preencha todos os campos da nota antes de adicionar um produto.');
+            alert('Por favor, preencha todos os campos da nota antes de adicionar um produto.');
+            // setError('Por favor, preencha todos os campos da nota antes de adicionar um produto.');
             return;
         }
 
@@ -105,6 +107,7 @@ function LancamentoProdutos() {
             const produtos = JSON.parse(produtosFromStorage);
             const nomesProdutos = produtos.map((prod) => prod.nome);
             if (!nomesProdutos.includes(produto)) {
+                alert('Por favor, selecione um produto válido da lista.');
                 setError('Por favor, selecione um produto válido da lista.');
                 return;
             }
@@ -202,7 +205,7 @@ function LancamentoProdutos() {
                 />
                 <Button click={addProduct} buttonType="buttonSuccess" name="+" />
             </div>
-            {error && <p className="error-message">{error}</p>}
+            {/* {error && <p className="error-message">{error}</p>} */}
             <div className="listProducts">
                 <div className="extractList">
                     <label>

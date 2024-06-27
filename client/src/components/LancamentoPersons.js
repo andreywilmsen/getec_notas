@@ -65,6 +65,7 @@ function LancamentoPersons(props) {
     function handleFields() {
         // Verifica se algum dos campos está vazio
         if (!dataNote || !nfNote || !matriculaNote || !personNote || !cidadeNote) {
+            alert('Por favor, preencha todos os dados para prosseguir.');
             setError('Por favor, preencha todos os dados para prosseguir.');
             return;
         }
@@ -116,7 +117,7 @@ function LancamentoPersons(props) {
                 <Input disabled change={handleValue} valor={matriculaNote} placeholder="Matricula" size="inputMedium" />
             </div>
             <Input change={handleValue} valor={cidadeNote} placeholder="Cidade" size="inputMedium" />
-            {error && <p className="error-message">{error}</p>}
+            {/* {error && <p className="error-message">{error}</p>} */}
             <Button click={handleFields} buttonType="buttonSuccess" name="Avançar" />
         </div>
     );
