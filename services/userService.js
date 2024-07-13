@@ -14,19 +14,18 @@ const userService = {
         let salt = await bcrypt.genSalt(saltRounds);
 
         let name = req.body.name;
-        let email = req.body.email;
         let password = await bcrypt.hash(req.body.password, salt);
-        let permission = "READER";
+        let permission = "LEITOR";
         let admin = false;
         let confirmPassword = req.body.confirmPassword;
 
-        let userFinded = await User.findOne({ where: { email } });
+        let userFinded = await User.findOne({ where: { name } });
 
         // Impede que insira um usuário que já está cadastrado
         if (userFinded) return { success: false, userFinded: true };
 
         // Impede que insira um usuário com dados vazios
-        if (name === "" || email === "" || password === "" || confirmPassword === "") {
+        if (name === "" || password === "" || confirmPassword === "") {
             return { success: false, verifyEmptyFields: false };
         }
 
@@ -34,17 +33,17 @@ const userService = {
         if (confirmPassword != req.body.password) return { success: false, confirmPassword: false };
 
         // Caso esteja tudo correto, cria o usuário
-        let response = await User.create({ name, email, password, permission, admin });
+        let response = await User.create({ name, password, permission, admin });
 
         return { user: response, success: true };
 
     },
     loginService: async (req, res) => {
-        let email = req.body.email;
+        let name = req.body.name;
         let password = req.body.password;
 
         // Verifica se o usuário está cadastrado
-        let userFinded = await User.findOne({ where: { email } });
+        let userFinded = await User.findOne({ where: { name } });
 
         // Caso não, retorna como usuário não encontrado com status 400
         if (!userFinded) return ({ success: false, userFinded: false });
@@ -53,7 +52,7 @@ const userService = {
         if (await bcrypt.compareSync(password, userFinded.password) === false) return { passwordVerified: false };
 
         // Gera token de acesso
-        let token = jwt.sign({ email, id: userFinded._id }, process.env.TOKEN_SECRET, { expiresIn: '48h' });
+        let token = jwt.sign({ name, id: userFinded._id }, process.env.TOKEN_SECRET, { expiresIn: '48h' });
 
         // Retorna o usuário como autorizado, com o token válido gerado
         if (userFinded) return ({ success: true, userFinded: true, token, user: userFinded, name: userFinded.name });

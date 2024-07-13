@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 function LoginForm() {
 
     // Eventos
-    const [email, setEmail] = useState("");
+    const [nome, setNome] = useState("");
     const [password, setPassword] = useState("");
 
     // Métodos de routes    
@@ -29,8 +29,8 @@ function LoginForm() {
     function setValue(event) {
         const { name, value } = event.target;
         switch (name) {
-            case 'email':
-                setEmail(value);
+            case 'name':
+                setNome(value);
                 break;
             case 'senha':
                 setPassword(value);
@@ -43,7 +43,7 @@ function LoginForm() {
     // FAZ LOGIN NA API
     async function loginUser() {
         const data = {
-            email: email,
+            name: nome,
             password: password,
         };
         try {
@@ -55,7 +55,7 @@ function LoginForm() {
             // Acessa o reducer de login, setando o token no local Storage e mudando o valor de state para true
             dispatch(LoginAction(token, name));
             // Limpa os valores dos inputs
-            setEmail("");
+            setNome("");
             setPassword("");
             // Faz o get para a url de autenticação
             const authRes = await axios.post("http://localhost:8080/auth", null, {
@@ -75,7 +75,7 @@ function LoginForm() {
     return (
         <div className="loginContainerInputField">
             <>
-                <Input change={setValue} span="Email" valor={email} name="email" size="inputMedium" inputType="" placeholder="" />
+                <Input change={setValue} span="Nome" valor={nome} name="name" size="inputMedium" inputType="" placeholder="" />
                 <Input change={setValue} span="Senha" valor={password} name="senha" size="inputMedium" inputType="password" placeholder="" />
                 <Button click={loginUser} buttonType="buttonSuccess" name="Fazer login" />
             </>

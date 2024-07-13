@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 const db = require("../db/db"); // Assuming this is your Sequelize instance
 
-module.exports = db.define("users", {
+module.exports = db.define("cad_login", {
     id: {
         type: Sequelize.INTEGER.UNSIGNED,
         primaryKey: true,
@@ -12,15 +12,11 @@ module.exports = db.define("users", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    email: {
+    permission: {
         type: Sequelize.STRING,
         allowNull: false,
     },
     password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    permission: {
         type: Sequelize.STRING,
         allowNull: false,
     },
