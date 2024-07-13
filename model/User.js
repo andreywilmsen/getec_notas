@@ -1,27 +1,33 @@
-const { Sequelize } = require("sequelize");
-const db = require("../db/db"); // Assuming this is your Sequelize instance
+const { Sequelize, DataTypes } = require("sequelize");
+const db = require("../db/db"); // Sua instância do Sequelize
 
-module.exports = db.define("cad_login", {
+const CadLogin = db.define("cad_login", {
     id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
     },
     name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     permission: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     password: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     admin: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
     },
+}, {
+    tableName: "cad_login", // Nome da tabela no banco de dados
+    freezeTableName: true, // Impede que o Sequelize modifique o nome da tabela
+    timestamps: false, // Se não houver colunas createdAt e updatedAt
 });
+
+module.exports = CadLogin;
