@@ -112,7 +112,7 @@ function LancamentoPersons(props) {
             <Input inputType="date" change={handleValue} valor={dataNote} placeholder="Data" size="inputMedium" />
             <Input change={handleValue} valor={nfNote} placeholder="N° Nota Fiscal" size="inputMedium" />
             <div className="person">
-                {/* <InputAutocomplete
+                <InputAutocomplete
                     onBlur={handleBlur}
                     autocomplete
                     change={handleValue}
@@ -120,16 +120,6 @@ function LancamentoPersons(props) {
                     name="person"
                     size="inputMedium"
                     typeAutocomplete="Persons"
-                /> */}
-                <DropdownAutocomplete
-                    onBlur={handleBlur}
-                    autocomplete
-                    change={handleValue}
-                    valor={personNote}
-                    name="person"
-                    size="inputMedium"
-                    typeAutocomplete="Persons"
-                    setDisabledValue={setDisabledValue}
                 />
                 <Input disabled change={handleValue} valor={matriculaNote} placeholder="Matricula" size="inputMedium" />
             </div>

@@ -58,8 +58,16 @@ const InputAutocomplete = forwardRef((props, ref) => {
         // Atualiza o estado do input com o nome da sugestão selecionada
         setSelectedOption(suggestion);
     
-        // Atualiza o valor no componente pai
-        props.change({ target: { value: suggestion, name: props.name } });
+        // Cria um evento simulado para o componente pai
+        const event = {
+            target: {
+                value: suggestion,
+                name: props.name // Certifique-se de que 'name' está sendo passado corretamente
+            }
+        };
+    
+        // Chama a função de mudança do componente pai
+        props.change(event);
     
         // Mover o foco para o input de cidade
         const cityInput = document.querySelector('input[name="cidade"]');
@@ -72,8 +80,6 @@ const InputAutocomplete = forwardRef((props, ref) => {
         setIsDropdownVisible(false);
     };
     
-
-
 
     const handleInputFocus = () => {
         setIsDropdownVisible(true); // Abre o dropdown ao focar
