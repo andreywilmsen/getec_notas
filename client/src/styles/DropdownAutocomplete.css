@@ -1,0 +1,24 @@
+.autocomplete-container {
+    position: relative;
+}
+
+.suggestions-dropdown {
+    position: absolute;
+    border: 1px solid #ccc;
+    background-color: white;
+    max-height: 150px; /* Ajuste conforme necessário */
+    overflow-y: auto;
+    z-index: 1000; /* Certifique-se de que o dropdown aparece acima de outros elementos */
+    width: 100%; /* Para garantir que o dropdown se alinhe com o input */
+}
+
+.suggestions-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    list-style-type: none;
+    margin: auto;
+}
+
+.suggestions-dropdown li:hover {
+    background-color: #f0f0f0; /* Destaque ao passar o mouse */
+}

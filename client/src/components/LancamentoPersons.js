@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import '../styles/AdminPanel.css';
 import '../styles/LancarNotas.css';
+import '../styles/DropdownAutocomplete.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -8,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import AuthService from '../services/authService';
 
 // Components
+import InputAutocomplete from './InputAutocomplete';
+import DropdownAutocomplete from './DropdownAutocomplete';
 import Input from './Input';
 import Button from './Button';
 
@@ -100,12 +103,16 @@ function LancamentoPersons(props) {
         }
     };
 
+    const setDisabledValue = (matricula) => {
+        setMatriculaNotes(matricula); // Atualiza o estado da matrícula
+    };
+
     return (
         <div className="inputFieldNotes">
             <Input inputType="date" change={handleValue} valor={dataNote} placeholder="Data" size="inputMedium" />
             <Input change={handleValue} valor={nfNote} placeholder="N° Nota Fiscal" size="inputMedium" />
             <div className="person">
-                <Input
+                {/* <InputAutocomplete
                     onBlur={handleBlur}
                     autocomplete
                     change={handleValue}
@@ -113,10 +120,20 @@ function LancamentoPersons(props) {
                     name="person"
                     size="inputMedium"
                     typeAutocomplete="Persons"
+                /> */}
+                <DropdownAutocomplete
+                    onBlur={handleBlur}
+                    autocomplete
+                    change={handleValue}
+                    valor={personNote}
+                    name="person"
+                    size="inputMedium"
+                    typeAutocomplete="Persons"
+                    setDisabledValue={setDisabledValue}
                 />
                 <Input disabled change={handleValue} valor={matriculaNote} placeholder="Matricula" size="inputMedium" />
             </div>
-            <Input change={handleValue} valor={cidadeNote} placeholder="Cidade" size="inputMedium" />
+            <Input change={handleValue} valor={cidadeNote} placeholder="Cidade" name="cidade" size="inputMedium" />
             {/* {error && <p className="error-message">{error}</p>} */}
             <Button click={handleFields} buttonType="buttonSuccess" name="Avançar" />
         </div>

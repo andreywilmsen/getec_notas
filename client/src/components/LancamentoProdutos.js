@@ -9,6 +9,7 @@ import AuthService from '../services/authService';
 
 // Components
 import Input from '../components/Input';
+import InputAutocomplete from '../components/InputAutocomplete';
 import Button from '../components/Button';
 import Modal from '../components/Modal';
 
@@ -22,7 +23,6 @@ function LancamentoProdutos() {
     const dispatch = useDispatch();
 
     // Variáveis com valores dos inputs dos produtos
-    const [nProduto, setNproduto] = useState('');
     const [produto, setProduto] = useState('');
     const [unidade, setUnidade] = useState('');
     const [quantidade, setQuantidade] = useState('');
@@ -48,9 +48,6 @@ function LancamentoProdutos() {
     // Função para armazenar os valores dos inputs nas suas respectivas variáveis
     function handleValue(event) {
         switch (event.target.name) {
-            case 'nProduto':
-                setNproduto(event.target.value);
-                break;
             case 'produto':
                 setProduto(event.target.value);
                 break;
@@ -78,17 +75,15 @@ function LancamentoProdutos() {
             // Encontrar o produto pelo nome (suponho que o produto seja identificado pelo nome)
             const produtoEncontrado = productFinally.find((prod) => prod.nome === produto);
             if (produtoEncontrado) {
-                setNproduto(produtoEncontrado.codigo);
                 setUnidade(produtoEncontrado.und);
             }
         }
     };
 
     // Função de adicionar o Produto
-    // Função de adicionar o Produto
     function addProduct() {
         // Verifica se todos os campos do novo produto estão preenchidos
-        if (!produto || !nProduto || !unidade || !quantidade) {
+        if (!produto || !unidade || !quantidade) {
             alert('Por favor, preencha todos os campos do produto antes de adicionar.');
             // setError('Por favor, preencha todos os campos do produto antes de adicionar.');
             return;
@@ -105,7 +100,7 @@ function LancamentoProdutos() {
         const produtosFromStorage = localStorage.getItem('Produtos');
         if (produtosFromStorage) {
             const produtos = JSON.parse(produtosFromStorage);
-            const nomesProdutos = produtos.map((prod) => prod.nome);
+            const nomesProdutos = produtos.map((prod) => prod.produto);
             if (!nomesProdutos.includes(produto)) {
                 alert('Por favor, selecione um produto válido da lista.');
                 setError('Por favor, selecione um produto válido da lista.');
@@ -117,11 +112,10 @@ function LancamentoProdutos() {
         }
 
         // Se passou na validação, adiciona o produto à nota final
-        let product = { nProduto, produto, unidade, quantidade };
+        let product = { produto, unidade, quantidade };
         setFinalNote([...finalNote, product]);
 
         // Limpar os valores dos inputs e resetar o erro
-        setNproduto('');
         setProduto('');
         setUnidade('');
         setQuantidade('');
@@ -163,7 +157,7 @@ function LancamentoProdutos() {
         <div className="inputFieldNotes">
             <div className="inputsLancarNotas">
                 <div className="person">
-                    <Input
+                    <InputAutocomplete
                         onFocus={handleFocus}
                         onBlur={handleBlur}
                         ref={nProdutoRef}
@@ -176,18 +170,8 @@ function LancamentoProdutos() {
                         clearInput={clear}
                         typeAutocomplete="Produto"
                     />
-                    <Input
-                        disabled
-                        onFocus={handleFocus}
-                        change={handleValue}
-                        valor={nProduto}
-                        name="nProduto"
-                        placeholder="N° Produto"
-                        size="inputMedium"
-                    />
                 </div>
                 <Input
-                    disabled
                     onFocus={handleFocus}
                     change={handleValue}
                     valor={unidade}
@@ -228,7 +212,6 @@ function LancamentoProdutos() {
                     <table>
                         <thead>
                             <tr>
-                                <th>N° PRODUTO</th>
                                 <th>PRODUTO</th>
                                 <th>UNIDADE</th>
                                 <th>QUANTIDADE</th>
@@ -237,7 +220,6 @@ function LancamentoProdutos() {
                         <tbody>
                             {finalNote.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{item.nProduto}</td>
                                     <td>{item.produto}</td>
                                     <td>{item.unidade}</td>
                                     <td>{item.quantidade}</td>
