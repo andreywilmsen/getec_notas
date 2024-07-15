@@ -77,13 +77,14 @@ const productsService = {
                 return { success: true, listProducts, msg: "Leitura concluida!" };
             }
 
-            let listProducts = await Products.findAll({ where: { nome: { [Op.like]: `%${req.body.nome}%` } } });
+            let listProducts = await Products.findAll({ where: { produto: { [Op.like]: `%${req.body.nome}%` } } });
 
             if (listProducts.length == 0) return { success: false, isEmpty: true, msg: "Produtos não encontrados!" };
 
             return { success: true, listProducts, msg: "Leitura concluida!" };
 
         } catch (err) {
+            console.log('DEU RUIM AQUI VEY !!!!!!!!')
             console.log(err);
             return { success: false, err, msg: "Erro na leitura dos produtos!" };
         }

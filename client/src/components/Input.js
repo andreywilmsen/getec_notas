@@ -27,12 +27,12 @@ const Input = forwardRef((props, ref) => {
             }
 
             if (suggestionsStore) {
-                const sugestions = JSON.parse(suggestionsStore);
-                const nameSuggestions = sugestions.map((sugestion) => sugestion.nome);
+                // const sugestions = JSON.parse(suggestionsStore);
+                // const nameSuggestions = sugestions.map((sugestion) => sugestion.nome);
 
                 // Inicialmente, carrega apenas uma parte das sugestões
-                setSuggestions(nameSuggestions);
-                setFilteredSuggestions(nameSuggestions.slice(0, 10)); // Exemplo: carregar as 10 primeiras sugestões
+                // setSuggestions(nameSuggestions);
+                // setFilteredSuggestions(nameSuggestions.slice(0, 10)); // Exemplo: carregar as 10 primeiras sugestões
             } else {
                 console.log('Item não encontrado no localStorage');
             }

@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 const db = require("../db/db"); // Assuming this is your Sequelize instance
 
-module.exports = db.define("usuarios", {
+module.exports = db.define("cad_usuarios", {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -16,11 +16,9 @@ module.exports = db.define("usuarios", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    culturas: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-}, { 
-    timestamps: false 
+}, {
+    tableName: "cad_usuarios", // Nome da tabela no banco de dados
+    freezeTableName: true, // Impede que o Sequelize modifique o nome da tabela
+    timestamps: false, // Se não houver colunas createdAt e updatedAt 
 }
 );

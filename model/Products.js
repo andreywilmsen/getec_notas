@@ -1,31 +1,33 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../db/db'); // Supondo que este seja a sua instância do Sequelize
 
-const Produto = db.define('Produto', {
+const Produto = db.define('divtec_pesosprodutos', {
     id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
     },
-    codigo: {
+    produto: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    nome: {
-        type: DataTypes.STRING, 
+    tipo: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
-    und: {
+    peso_equivalente_kg: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    unidades_texto: {
         type: DataTypes.STRING,
-        allowNull: false,
-    },
-    peso: {
-        type: DataTypes.INTEGER,
         allowNull: false,
     }
 }, {
-    timestamps: false // Desabilita createdAt e updatedAt
+    tableName: "divtec_pesosprodutos", // Nome da tabela no banco de dados
+    freezeTableName: true, // Impede que o Sequelize modifique o nome da tabela
+    timestamps: false, // Se não houver colunas createdAt e updatedAt 
 });
 
 module.exports = Produto;
