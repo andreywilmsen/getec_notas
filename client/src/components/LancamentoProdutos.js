@@ -92,29 +92,14 @@ function LancamentoProdutos() {
         }
     }
 
-
     // Handler para atualizar o estado do input focado
     const handleFocus = (event) => {
         setFocusedInput(event.target.name);
     };
-
-    const handleBlur = (event) => {
-        // Verifica se o próximo elemento focado é outro input antes de realizar as operações
-        if (event.relatedTarget && event.relatedTarget.nodeName === 'INPUT') {
-            let productFinally = JSON.parse(localStorage.getItem('Produtos'));
-
-            // Encontrar o produto pelo nome (suponho que o produto seja identificado pelo nome)
-            const produtoEncontrado = productFinally.find((prod) => prod.nome === produto);
-            if (produtoEncontrado) {
-                setUnidade(produtoEncontrado.und);
-            }
-        }
-    };
-
-    // Função de adicionar o Produto
     // Função de adicionar o Produto
     function addProduct() {
         // Verifica se todos os campos do novo produto estão preenchidos
+        console.log(produto, unidade, quantidade)
         if (!produto || !unidade || !quantidade) {
             alert('Por favor, preencha todos os campos do produto antes de adicionar.');
             return;
@@ -190,7 +175,6 @@ function LancamentoProdutos() {
                 <div className="person">
                     <DropdownAutocomplete
                         onFocus={handleFocus}
-                        onBlur={handleBlur}
                         ref={nProdutoRef}
                         autocomplete
                         change={handleValue}
@@ -217,10 +201,10 @@ function LancamentoProdutos() {
                 <Input
                     inputOptions
                     options={selectOptions}
-                    change={handleValue}
-                    valor={selectOptions}
+                    change={handleValue} // Chama a mesma função para lidar com mudanças
                     placeholder="Unidade"
                     size="inputMedium"
+                    valor={unidade} // Ligação correta com a variável unidade
                 />
 
                 <Input
