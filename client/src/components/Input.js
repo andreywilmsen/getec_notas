@@ -20,7 +20,6 @@ const Input = forwardRef((props, ref) => {
         props.change(event); // Trigger the change event to the parent component
     };
 
-
     // Limpa o input de sugestões quando o state clear for true
     useEffect(() => {
         if (clear) {
@@ -59,22 +58,38 @@ const Input = forwardRef((props, ref) => {
                 type={props.inputType}
                 className={'inputGeneral ' + props.size}
                 autoComplete="off"
-            />) : (
-            // Caso contrário, renderiza um input sem span e sem autocomplete
-            <input
-                ref={ref}
-                onChange={handleInputChange}
-                value={props.valor}
-                placeholder={props.placeholder}
-                name={props.name}
-                type={props.inputType}
-                className={'inputGeneral ' + props.size}
-                autoComplete="off"
-            />
-        )
+            />) : (props.inputOptions ? (
+                <select
+    ref={ref}
+    onChange={props.change}
+    value={props.valor}
+    name={props.name}
+    className={'inputGeneral ' + props.size}
+>
+    <option value="" disabled>{props.placeholder}</option>
+    {Object.entries(props.options || {}).map(([key]) => (
+        <option key={key} value={key}>
+            {key.toUpperCase()} {/* Exibe o nome da chave */}
+        </option>
+    ))}
+</select>
+
+            ) : (
+                // Caso contrário, renderiza um input sem span e sem autocomplete
+                <input
+                    ref={ref}
+                    onChange={handleInputChange}
+                    value={props.valor}
+                    placeholder={props.placeholder}
+                    name={props.name}
+                    type={props.inputType}
+                    className={'inputGeneral ' + props.size}
+                    autoComplete="off"
+                />
+            )
 
         )
-    );
+        ));
 });
 
 export default Input;

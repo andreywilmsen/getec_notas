@@ -96,7 +96,7 @@ function LancamentoPersons(props) {
         <div className="inputFieldNotes">
             <Input inputType="date" change={handleValue} valor={dataNote} placeholder="Data" size="inputMedium" />
             <Input change={handleValue} valor={nfNote} placeholder="N° Nota Fiscal" size="inputMedium" />
-            <Input change={handleValue} valor={cidadeNote} placeholder="Cidade" name="cidade" size="inputMedium" />
+            <Input change={handleValue} valor={cidadeNote} placeholder="Procedência" name="cidade" size="inputMedium" />
             {/* <InputAutocomplete
                 autocomplete
                 change={handleValue}

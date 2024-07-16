@@ -28,6 +28,7 @@ function LancamentoProdutos() {
     const [quantidade, setQuantidade] = useState('');
     const [finalNote, setFinalNote] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [selectOptions, setSelectOptions] = useState()
     const [error, setError] = useState('');
     // Estado para controlar o input focado atualmente
     const [focusedInput, setFocusedInput] = useState(null);
@@ -44,6 +45,35 @@ function LancamentoProdutos() {
     useEffect(() => {
         AuthService(navigate, location, dispatch);
     }, [navigate, location, dispatch]);
+
+
+    const buscarProdutoNoLocalStorage = (nomeProduto) => {
+        const produtosStorage = localStorage.getItem('Produtos');
+        if (!produtosStorage) return null; // Retorna null se não houver produtos
+
+        const produtos = JSON.parse(produtosStorage);
+        return produtos.find(prod => prod.produto === nomeProduto) || null; // Retorna o produto encontrado ou null
+    };
+
+    const gerarObjetoComValoresMaioresQueZero = (data) => {
+        const { id, ...resto } = data; // Remove o 'id'
+        return Object.entries(resto).reduce((acc, [key, value]) => {
+            if (value > 0) acc[key] = value.toString(); // Adiciona se maior que 0
+            return acc;
+        }, {});
+    };
+
+    useEffect(() => {
+        const produtoEncontrado = buscarProdutoNoLocalStorage(produto); // 'produto' é o nome que você procura
+        if (produtoEncontrado) {
+            const novoObjeto = gerarObjetoComValoresMaioresQueZero(produtoEncontrado);
+            console.log(novoObjeto);
+            setSelectOptions(novoObjeto);
+
+        } else {
+            console.log('Produto não encontrado no localStorage.');
+        }
+    }, [produto]);
 
     // Função para armazenar os valores dos inputs nas suas respectivas variáveis
     function handleValue(event) {
@@ -185,13 +215,14 @@ function LancamentoProdutos() {
                     /> */}
                 </div>
                 <Input
-                    onFocus={handleFocus}
+                    inputOptions
+                    options={selectOptions}
                     change={handleValue}
-                    valor={unidade}
-                    name="unidade"
+                    valor={selectOptions}
                     placeholder="Unidade"
                     size="inputMedium"
                 />
+
                 <Input
                     onFocus={handleFocus}
                     change={handleValue}
