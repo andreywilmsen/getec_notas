@@ -9,6 +9,7 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
     const [suggestions, setSuggestions] = useState([]);
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
+    const [highlightedIndex, setHighlightedIndex] = useState(-1);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const clear = useSelector((state) => state.clear);
     const dropdownRef = useRef(null);
@@ -30,6 +31,7 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
     const handleInputChange = (event) => {
         const value = event.target.value;
         setSelectedOption(value);
+        setHighlightedIndex(-1);
 
         if (value.trim() === '') {
             setFilteredSuggestions(suggestions.slice(0, 10));
@@ -40,34 +42,44 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
             setFilteredSuggestions(filtered.slice(0, 10));
         }
 
-        // Notify parent component of the change
         props.change(event);
     };
 
     const handleSuggestionClick = (suggestion) => {
         setSelectedOption(suggestion);
-        setFilteredSuggestions([]); // Fecha o dropdown após a seleção
+        setFilteredSuggestions([]);
         setIsDropdownVisible(false);
-    
-        // Enviar o valor selecionado para o componente pai
-        props.change({
-            target: {
-                value: suggestion,
-                placeholder: props.placeholder,
-            },
-        });
+        props.change({ target: { value: suggestion, placeholder: props.placeholder } });
     };
-    
 
     useEffect(() => {
         if (clear) {
             setSelectedOption('');
+            setHighlightedIndex(-1);
             dispatch(setClear(false));
         }
     }, [clear, dispatch]);
 
     const handleInputFocus = () => {
         setIsDropdownVisible(true);
+    };
+
+    const handleInputBlur = () => {
+        setIsDropdownVisible(false); // Fecha o dropdown ao perder o foco
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            setHighlightedIndex((prevIndex) => Math.min(prevIndex + 1, filteredSuggestions.length - 1));
+        } else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            setHighlightedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+        } else if (event.key === 'Enter') {
+            if (highlightedIndex >= 0) {
+                handleSuggestionClick(filteredSuggestions[highlightedIndex]);
+            }
+        }
     };
 
     const handleClickOutside = (event) => {
@@ -91,15 +103,18 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
                 value={selectedOption}
                 placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
                 onChange={handleInputChange}
-                onFocus={handleInputFocus} // Show suggestions on focus
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur} // Fecha o dropdown ao perder o foco
+                onKeyDown={handleKeyDown}
                 name={props.typeAutocomplete === 'Persons' ? 'produtor/atacadista' : 'produto'}
+                autoComplete="off"
             />
             {isDropdownVisible && filteredSuggestions.length > 0 && (
                 <div className="dropdown-menu">
                     {filteredSuggestions.map((suggestion, index) => (
                         <div
                             key={index}
-                            className="dropdown-item"
+                            className={`dropdown-item ${highlightedIndex === index ? 'highlighted' : ''}`}
                             onClick={() => handleSuggestionClick(suggestion)}
                         >
                             {suggestion}

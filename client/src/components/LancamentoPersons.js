@@ -29,7 +29,6 @@ function LancamentoPersons(props) {
     // Variáveis com valores dos inputs dos produtores / atacadistas
     const [dataNote, setDataNotes] = useState('');
     const [nfNote, setNfNotes] = useState('');
-    const [matriculaNote, setMatriculaNotes] = useState('');
     const [personNote, setPersonNotes] = useState('');
     const [cidadeNote, setCidadeNotes] = useState('');
     const [error, setError] = useState('');
@@ -38,7 +37,6 @@ function LancamentoPersons(props) {
     const showNoteFields = useSelector((state) => state.generic);
 
     const suggestions = JSON.parse(localStorage.getItem('Persons')) || []; // Obter sugestões de 'Persons'
-
 
     useEffect(() => {
         AuthService(navigate, location, dispatch);
@@ -53,11 +51,7 @@ function LancamentoPersons(props) {
             case 'N° Nota Fiscal':
                 setNfNotes(event.target.value);
                 break;
-            case 'Matricula':
-                setMatriculaNotes(event.target.value);
-                break;
             case 'Produtor / Atacadista':
-                console.log('Entrou no produtor/atacadista')
                 setPersonNotes(event.target.value);
                 break;
             case 'Cidade':
@@ -86,7 +80,6 @@ function LancamentoPersons(props) {
         const noteData = {
             dataNote,
             nfNote,
-            matriculaNote,
             personNote,
             cidadeNote
         };
@@ -97,6 +90,7 @@ function LancamentoPersons(props) {
         // Altera no reducer qual campo irá aparecer no front-end (Campo das notas ao invés dos produtores / atacadistas)
         dispatch(showNoteFieldsAction(!showNoteFields));
     }
+    
 
     return (
         <div className="inputFieldNotes">

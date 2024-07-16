@@ -18,3 +18,7 @@
 .dropdown-item:hover {
     background: #f0f0f0;
 }
+
+.dropdown-item.highlighted {
+    background-color: #e0e0e0; /* Cor de fundo quando destacado */
+}

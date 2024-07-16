@@ -44,6 +44,7 @@ const Input = forwardRef((props, ref) => {
                     name={props.name}
                     type={props.inputType}
                     className={'inputGeneral ' + props.size}
+                    autoComplete="off"
                 />
             </>
         ) : (props.disabled ? (
@@ -57,6 +58,7 @@ const Input = forwardRef((props, ref) => {
                 name={props.name}
                 type={props.inputType}
                 className={'inputGeneral ' + props.size}
+                autoComplete="off"
             />) : (
             // Caso contrário, renderiza um input sem span e sem autocomplete
             <input
@@ -67,6 +69,7 @@ const Input = forwardRef((props, ref) => {
                 name={props.name}
                 type={props.inputType}
                 className={'inputGeneral ' + props.size}
+                autoComplete="off"
             />
         )
 

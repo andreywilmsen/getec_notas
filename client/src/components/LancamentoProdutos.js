@@ -9,7 +9,6 @@ import AuthService from '../services/authService';
 
 // Components
 import Input from '../components/Input';
-import InputAutocomplete from '../components/InputAutocomplete';
 import Button from '../components/Button';
 import Modal from '../components/Modal';
 
@@ -40,9 +39,6 @@ function LancamentoProdutos() {
     const note = useSelector((state) => state.note);
     const clear = useSelector((state) => state.generic);
     const showNoteFields = useSelector((state) => state.generic);
-
-    const suggestions = JSON.parse(localStorage.getItem('Products')) || []; // Obter sugestões de 'Persons'
-
 
     // Autenticação se usuário está logado
     useEffect(() => {
@@ -91,7 +87,6 @@ function LancamentoProdutos() {
     function addProduct() {
         // Verifica se todos os campos do novo produto estão preenchidos
         if (!produto || !unidade || !quantidade) {
-            console.log(produto, unidade, quantidade);
             alert('Por favor, preencha todos os campos do produto antes de adicionar.');
             return;
         }
@@ -137,10 +132,6 @@ function LancamentoProdutos() {
             nProdutoRef.current.focus();
         }
     }
-
-
-
-
 
     // Função para enviar os valores dos inputs dos produtores para o reducer dos produtores, para ser consumido no componente LancamentoProdutos
     function handleFields() {
@@ -220,9 +211,6 @@ function LancamentoProdutos() {
                     </label>
                     <label>
                         <strong>Nota fiscal:</strong> {note.nfNote}
-                    </label>
-                    <label>
-                        <strong>Matricula:</strong> {note.matriculaNote}
                     </label>
                     <label>
                         <strong>Produtor / Atacadista:</strong> {note.personNote}
