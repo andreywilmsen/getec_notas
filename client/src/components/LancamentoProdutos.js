@@ -16,6 +16,7 @@ import Modal from '../components/Modal';
 // Actions para reducer
 import { setClear } from '../actions/clearAction';
 import { showNoteFieldsAction } from '../actions/genericAction'; // Importe a ação corretamente
+import DropdownAutocomplete from './DropdownAutocomplete';
 
 function LancamentoProdutos() {
     const navigate = useNavigate();
@@ -40,6 +41,9 @@ function LancamentoProdutos() {
     const clear = useSelector((state) => state.generic);
     const showNoteFields = useSelector((state) => state.generic);
 
+    const suggestions = JSON.parse(localStorage.getItem('Products')) || []; // Obter sugestões de 'Persons'
+
+
     // Autenticação se usuário está logado
     useEffect(() => {
         AuthService(navigate, location, dispatch);
@@ -47,20 +51,22 @@ function LancamentoProdutos() {
 
     // Função para armazenar os valores dos inputs nas suas respectivas variáveis
     function handleValue(event) {
-        switch (event.target.name) {
-            case 'produto':
+        console.log(event.target.name, event.target.value); // Adicione este log
+        switch (event.target.placeholder) {
+            case 'Produto':
                 setProduto(event.target.value);
                 break;
-            case 'unidade':
+            case 'Unidade':
                 setUnidade(event.target.value);
                 break;
-            case 'quantidade':
+            case 'Quantidade':
                 setQuantidade(event.target.value);
                 break;
             default:
                 break;
         }
     }
+
 
     // Handler para atualizar o estado do input focado
     const handleFocus = (event) => {
@@ -81,52 +87,56 @@ function LancamentoProdutos() {
     };
 
     // Função de adicionar o Produto
+    // Função de adicionar o Produto
     function addProduct() {
         // Verifica se todos os campos do novo produto estão preenchidos
         if (!produto || !unidade || !quantidade) {
+            console.log(produto, unidade, quantidade);
             alert('Por favor, preencha todos os campos do produto antes de adicionar.');
-            // setError('Por favor, preencha todos os campos do produto antes de adicionar.');
             return;
         }
 
         // Verifica se todos os campos da nota estão preenchidos
-        if (!note.dataNote || !note.nfNote || !note.matriculaNote || !note.personNote || !note.cidadeNote) {
+        if (!note.dataNote || !note.nfNote || !note.personNote || !note.cidadeNote) {
             alert('Por favor, preencha todos os campos da nota antes de adicionar um produto.');
-            // setError('Por favor, preencha todos os campos da nota antes de adicionar um produto.');
             return;
         }
 
-        // Verifica se o valor do input é compatível com as sugestões de produtos, caso não, dispara um erro.
+        // Verifica se o valor do input é compatível com as sugestões de produtos
         const produtosFromStorage = localStorage.getItem('Produtos');
         if (produtosFromStorage) {
             const produtos = JSON.parse(produtosFromStorage);
             const nomesProdutos = produtos.map((prod) => prod.produto);
+
+            // Verifica se o produto digitado está na lista de produtos válidos
             if (!nomesProdutos.includes(produto)) {
                 alert('Por favor, selecione um produto válido da lista.');
                 setError('Por favor, selecione um produto válido da lista.');
                 return;
             }
         } else {
+            alert('Nenhum produto encontrado. Verifique a lista de produtos.');
             setError('Nenhum produto encontrado. Verifique a lista de produtos.');
             return;
         }
 
         // Se passou na validação, adiciona o produto à nota final
-        let product = { produto, unidade, quantidade };
-        setFinalNote([...finalNote, product]);
+        const product = { produto, unidade, quantidade };
+        setFinalNote(prevFinalNote => [...prevFinalNote, product]);
 
-        // Limpar os valores dos inputs e resetar o erro
-        setProduto('');
-        setUnidade('');
-        setQuantidade('');
-        setError('');
+        // Limpar os valores dos inputs
+        setProduto(''); // Limpa o campo do produto
+        setUnidade(''); // Limpa o campo da unidade
+        setQuantidade(''); // Limpa o campo da quantidade
+        setError(''); // Reseta o erro
 
         // Foca automaticamente no primeiro input
         if (nProdutoRef.current) {
-            clearInputProduto();
             nProdutoRef.current.focus();
         }
     }
+
+
 
 
 
@@ -157,7 +167,19 @@ function LancamentoProdutos() {
         <div className="inputFieldNotes">
             <div className="inputsLancarNotas">
                 <div className="person">
-                    <InputAutocomplete
+                    <DropdownAutocomplete
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        ref={nProdutoRef}
+                        autocomplete
+                        change={handleValue}
+                        valor={produto}
+                        placeholder="Produto"
+                        size="inputMedium"
+                        clearInput={clear}
+                        typeAutocomplete="Produto"
+                    />
+                    {/* <InputAutocomplete
                         onFocus={handleFocus}
                         onBlur={handleBlur}
                         ref={nProdutoRef}
@@ -169,7 +191,7 @@ function LancamentoProdutos() {
                         size="inputMedium"
                         clearInput={clear}
                         typeAutocomplete="Produto"
-                    />
+                    /> */}
                 </div>
                 <Input
                     onFocus={handleFocus}

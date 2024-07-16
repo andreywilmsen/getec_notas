@@ -92,6 +92,7 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
                 placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
                 onChange={handleInputChange}
                 onFocus={handleInputFocus} // Show suggestions on focus
+                name={props.typeAutocomplete === 'Persons' ? 'produtor/atacadista' : 'produto'}
             />
             {isDropdownVisible && filteredSuggestions.length > 0 && (
                 <div className="dropdown-menu">
