@@ -34,21 +34,26 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
         setHighlightedIndex(-1);
 
         if (value.trim() === '') {
+            // Se o input estiver vazio, mostre todas as sugestões
             setFilteredSuggestions(suggestions.slice(0, 10));
+            setIsDropdownVisible(true); // Torna o dropdown visível
         } else {
             const filtered = suggestions.filter(suggestion =>
                 suggestion.toLowerCase().includes(value.toLowerCase())
             );
             setFilteredSuggestions(filtered.slice(0, 10));
+            setIsDropdownVisible(filtered.length > 0); // Mostra o dropdown se houver sugestões
         }
 
         props.change(event);
     };
 
+
     const handleSuggestionClick = (suggestion) => {
         setSelectedOption(suggestion);
         setFilteredSuggestions([]);
         setIsDropdownVisible(false);
+        // Update the input value and trigger change
         props.change({ target: { value: suggestion, placeholder: props.placeholder } });
     };
 
@@ -65,7 +70,8 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
     };
 
     const handleInputBlur = () => {
-        setIsDropdownVisible(false); // Fecha o dropdown ao perder o foco
+        // You can add a small timeout to allow the click event on the suggestion to register
+        setTimeout(() => setIsDropdownVisible(false), 100);
     };
 
     const handleKeyDown = (event) => {
@@ -104,7 +110,7 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
                 placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
-                onBlur={handleInputBlur} // Fecha o dropdown ao perder o foco
+                onBlur={handleInputBlur}
                 onKeyDown={handleKeyDown}
                 name={props.typeAutocomplete === 'Persons' ? 'produtor/atacadista' : 'produto'}
                 autoComplete="off"
