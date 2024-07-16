@@ -1,27 +1,26 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setClear } from '../actions/clearAction';
 import '../styles/Input.css';
 import '../styles/Autocomplete.css';
 
-const InputAutocomplete = forwardRef((props, ref) => {
+const InputDropdownAutocomplete = forwardRef((props, ref) => {
     const dispatch = useDispatch();
     const [suggestions, setSuggestions] = useState([]);
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const clear = useSelector((state) => state.clear);
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         const loadSuggestions = () => {
-            let suggestionsStore = localStorage.getItem(props.typeAutocomplete === 'Persons' ? 'Persons' : 'Produtos');
+            const suggestionsStore = localStorage.getItem(props.typeAutocomplete === 'Persons' ? 'Persons' : 'Produtos');
             if (suggestionsStore) {
                 const parsedSuggestions = JSON.parse(suggestionsStore);
                 const nameSuggestions = parsedSuggestions.map(item => props.typeAutocomplete === 'Persons' ? item.nome : item.produto);
                 setSuggestions(nameSuggestions);
                 setFilteredSuggestions(nameSuggestions.slice(0, 10));
-            } else {
-                console.log('Item não encontrado no localStorage');
             }
         };
 
@@ -31,7 +30,6 @@ const InputAutocomplete = forwardRef((props, ref) => {
     const handleInputChange = (event) => {
         const value = event.target.value;
         setSelectedOption(value);
-        setIsDropdownVisible(true); // Abre o dropdown ao digitar
 
         if (value.trim() === '') {
             setFilteredSuggestions(suggestions.slice(0, 10));
@@ -42,53 +40,24 @@ const InputAutocomplete = forwardRef((props, ref) => {
             setFilteredSuggestions(filtered.slice(0, 10));
         }
 
+        // Notify parent component of the change
         props.change(event);
     };
 
-    // InputAutocomplete.js
     const handleSuggestionClick = (suggestion) => {
-        const persons = JSON.parse(localStorage.getItem('Persons'));
-        const personFinded = persons.find((person) => person.nome === suggestion);
-    
-        // Se encontrar a pessoa, atualiza a matrícula
-        if (personFinded) {
-            props.setDisabledValue(personFinded.matricula);
-        }
-    
-        // Atualiza o estado do input com o nome da sugestão selecionada
         setSelectedOption(suggestion);
+        setFilteredSuggestions([]); // Fecha o dropdown após a seleção
+        setIsDropdownVisible(false);
     
-        // Cria um evento simulado para o componente pai
-        const event = {
+        // Enviar o valor selecionado para o componente pai
+        props.change({
             target: {
                 value: suggestion,
-                name: props.name // Certifique-se de que 'name' está sendo passado corretamente
-            }
-        };
-    
-        // Chama a função de mudança do componente pai
-        props.change(event);
-    
-        // Mover o foco para o input de cidade
-        const cityInput = document.querySelector('input[name="cidade"]');
-        if (cityInput) {
-            cityInput.focus();
-        }
-    
-        // Limpa as sugestões
-        setFilteredSuggestions([]);
-        setIsDropdownVisible(false);
+                placeholder: props.placeholder,
+            },
+        });
     };
     
-
-    const handleInputFocus = () => {
-        setIsDropdownVisible(true); // Abre o dropdown ao focar
-    };
-
-    const handleBlur = () => {
-        // Fecha o dropdown ao sair do input
-        setTimeout(() => setIsDropdownVisible(false), 100); // Usar timeout para evitar fechamento imediato
-    };
 
     useEffect(() => {
         if (clear) {
@@ -97,29 +66,48 @@ const InputAutocomplete = forwardRef((props, ref) => {
         }
     }, [clear, dispatch]);
 
+    const handleInputFocus = () => {
+        setIsDropdownVisible(true);
+    };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsDropdownVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className="autocomplete-container">
+        <div className="dropdown-container" ref={dropdownRef}>
             <input
                 ref={ref}
                 className={`inputGeneral ${props.size}`}
-                name="produto"
                 value={selectedOption}
                 placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
                 onChange={handleInputChange}
-                onFocus={handleInputFocus}
-                onBlur={handleBlur}
+                onFocus={handleInputFocus} // Show suggestions on focus
             />
             {isDropdownVisible && filteredSuggestions.length > 0 && (
-                <ul className="suggestions-dropdown">
+                <div className="dropdown-menu">
                     {filteredSuggestions.map((suggestion, index) => (
-                        <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                        <div
+                            key={index}
+                            className="dropdown-item"
+                            onClick={() => handleSuggestionClick(suggestion)}
+                        >
                             {suggestion}
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );
 });
 
-export default InputAutocomplete;
+export default InputDropdownAutocomplete;

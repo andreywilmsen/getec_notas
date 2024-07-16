@@ -43,13 +43,6 @@ const InputAutocomplete = forwardRef((props, ref) => {
         props.change(event);
     };
 
-    const handleBlur = () => {
-        // Verifica se a opção selecionada está entre as sugestões filtradas
-        if (!filteredSuggestions.includes(selectedOption)) {
-            setSelectedOption(''); // Limpa o campo se a entrada não estiver nas sugestões
-        }
-    };
-
     useEffect(() => {
         if (clear) {
             setSelectedOption('');
@@ -69,7 +62,6 @@ const InputAutocomplete = forwardRef((props, ref) => {
                 value={selectedOption}
                 placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
                 onChange={handleInputChange}
-                onBlur={props.onBlur}
             />
             <datalist id="options">
                 {filteredSuggestions.map((sugestao, index) => (

@@ -37,6 +37,9 @@ function LancamentoPersons(props) {
     // State para gerenciar a variavel de mostrar campo de produtores, e campo de notas
     const showNoteFields = useSelector((state) => state.generic);
 
+    const suggestions = JSON.parse(localStorage.getItem('Persons')) || []; // Obter sugestões de 'Persons'
+
+
     useEffect(() => {
         AuthService(navigate, location, dispatch);
     }, [navigate, location, dispatch]);
@@ -54,6 +57,7 @@ function LancamentoPersons(props) {
                 setMatriculaNotes(event.target.value);
                 break;
             case 'Produtor / Atacadista':
+                console.log('Entrou no produtor/atacadista')
                 setPersonNotes(event.target.value);
                 break;
             case 'Cidade':
@@ -67,9 +71,15 @@ function LancamentoPersons(props) {
     // Função para enviar os valores dos inputs dos produtores para o reducer dos produtores, para ser consumido no componente LancamentoProdutos
     function handleFields() {
         // Verifica se algum dos campos está vazio
-        if (!dataNote || !nfNote || !matriculaNote || !personNote || !cidadeNote) {
+        if (!dataNote || !nfNote || !personNote || !cidadeNote) {
             alert('Por favor, preencha todos os dados para prosseguir.');
             setError('Por favor, preencha todos os dados para prosseguir.');
+            return;
+        }
+
+        if (!suggestions.some(s => s.nome.toLowerCase() === personNote.toLowerCase())) {
+            alert('Por favor, selecione um produtor válido.');
+            setError('Por favor, selecione um produtor válido.');
             return;
         }
 
@@ -88,42 +98,28 @@ function LancamentoPersons(props) {
         dispatch(showNoteFieldsAction(!showNoteFields));
     }
 
-
-    // Função criada para incluir a matricula do produtor / atacadista ao selecionar o nome dele.
-    const handleBlur = (event) => {
-        // Verifica se o próximo elemento focado é outro input antes de realizar as operações
-        if (event.relatedTarget && event.relatedTarget.nodeName === 'INPUT') {
-            let personFinally = JSON.parse(localStorage.getItem('Persons'));
-
-            // Encontrar o produto pelo nome (suponho que o produto seja identificado pelo nome)
-            const personFinded = personFinally.find((person) => person.nome === personNote);
-            if (personFinded) {
-                setMatriculaNotes(personFinded.matricula);
-            }
-        }
-    };
-
-    const setDisabledValue = (matricula) => {
-        setMatriculaNotes(matricula); // Atualiza o estado da matrícula
-    };
-
     return (
         <div className="inputFieldNotes">
             <Input inputType="date" change={handleValue} valor={dataNote} placeholder="Data" size="inputMedium" />
             <Input change={handleValue} valor={nfNote} placeholder="N° Nota Fiscal" size="inputMedium" />
-            <div className="person">
-                <InputAutocomplete
-                    onBlur={handleBlur}
-                    autocomplete
-                    change={handleValue}
-                    valor={personNote}
-                    name="person"
-                    size="inputMedium"
-                    typeAutocomplete="Persons"
-                />
-                <Input disabled change={handleValue} valor={matriculaNote} placeholder="Matricula" size="inputMedium" />
-            </div>
             <Input change={handleValue} valor={cidadeNote} placeholder="Cidade" name="cidade" size="inputMedium" />
+            {/* <InputAutocomplete
+                autocomplete
+                change={handleValue}
+                valor={personNote}
+                name="person"
+                size="inputMedium"
+                typeAutocomplete="Persons"
+            /> */}
+            <DropdownAutocomplete
+                autocomplete
+                change={handleValue}
+                valor={personNote}
+                name="person"
+                size="inputMedium"
+                typeAutocomplete="Persons"
+                placeholder="Produtor / Atacadista"
+            />
             {/* {error && <p className="error-message">{error}</p>} */}
             <Button click={handleFields} buttonType="buttonSuccess" name="Avançar" />
         </div>
