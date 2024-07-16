@@ -47,7 +47,6 @@ function LancamentoProdutos() {
 
     // Função para armazenar os valores dos inputs nas suas respectivas variáveis
     function handleValue(event) {
-        console.log(event.target.name, event.target.value); // Adicione este log
         switch (event.target.placeholder) {
             case 'Produto':
                 setProduto(event.target.value);
@@ -213,10 +212,10 @@ function LancamentoProdutos() {
                         <strong>Nota fiscal:</strong> {note.nfNote}
                     </label>
                     <label>
-                        <strong>Produtor / Atacadista:</strong> {note.personNote}
+                        <strong>Procedência:</strong> {note.cidadeNote}
                     </label>
                     <label>
-                        <strong>Cidade:</strong> {note.cidadeNote}
+                        <strong>Produtor / Atacadista:</strong> {note.personNote}
                     </label>
                 </div>
                 <div className="Table">

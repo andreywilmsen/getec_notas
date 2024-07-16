@@ -16,22 +16,31 @@ const productsService = {
         return { status: success, msg: "Produto de teste excluido com sucesso!" };
     },
     registerService: async (req, res) => {
-        let codigo = req.body.codigo;
-        let nome = req.body.nome;
-        let und = req.body.und;
-        let peso = req.body.peso;
+        let id = req.body.codigo;
+        let produto = req.body.produto;
+        let kg = req.body.kg
+        let cx = req.body.cx
+        let cxt = req.body.cxt
+        let dz = req.body.dz
+        let eng = req.body.eng
+        let mol = req.body.mol
+        let scl = req.body.scl
+        let saco = req.body.saco
+        let bdj = req.body.bdj
+        let und = req.body.und
+        let outros = req.body.outros
 
-        if (codigo === "" || nome === "" || und === "" || peso === "") {
+        if (id === "" || produto === "" || kg === "" || cx === "" || cxt === "" || dz === "" || eng === "" || mol === "" || scl === "" || saco === "" || bdj === "" || und === "" || outros === "") {
             return { success: false, isEmptyFields: true, msg: "Por favor, preencha todos os dados para o cadastramento!" };
         }
 
-        let findedProduct = await Products.findOne({ where: { codigo, nome, und, peso } });
+        let findedProduct = await Products.findOne({ where: { id, produto, kg, cx, cxt, dz, eng, mol, scl, saco, bdj, und, outros } });
 
         if (findedProduct !== null)
             return { success: false, isFinded: true, msg: "Produto já cadastrado!" };
 
         try {
-            let result = await Products.create({ codigo, nome, und, peso });
+            let result = await Products.create({ id, produto, kg, cx, cxt, dz, eng, mol, scl, saco, bdj, und, outros });
 
             if (!result) return { success: false, msg: "Erro no cadastramento do produto!" };
 
@@ -42,23 +51,44 @@ const productsService = {
     },
     editService: async (req, res) => {
 
-        let searchCodigo = req.body.codigo;
-        let productFinded = await Products.findOne({ where: { codigo: searchCodigo } });
+        let searchCodigo = req.body.id;
+        let productFinded = await Products.findOne({ where: { id: searchCodigo } });
 
         if (!productFinded) return { success: false, isFinded: false, msg: "Usuário não encontrado!" };
 
-        let codigo = req.body.codigo;
-        let nome = req.body.nome;
-        let und = req.body.und;
-        let peso = req.body.peso;
+        let id = req.body.codigo;
+        let produto = req.body.produto;
+        let kg = req.body.kg
+        let cx = req.body.cx
+        let cxt = req.body.cxt
+        let dz = req.body.dz
+        let eng = req.body.eng
+        let mol = req.body.mol
+        let scl = req.body.scl
+        let saco = req.body.saco
+        let bdj = req.body.bdj
+        let und = req.body.und
+        let outros = req.body.outros
 
-        if (codigo === "" || nome === "" || und === "" || peso === "") return { success: false, isEmptyFields: true, msg: "Por favor, preencha todos os dados para a edição!" };
+        if (id === "" || produto === "" || kg === "" || cx === "" || cxt === "" || dz === "" || eng === "" || mol === "" || scl === "" || saco === "" || bdj === "" || und === "" || outros === "") {
+            return { success: false, isEmptyFields: true, msg: "Por favor, preencha todos os dados para o cadastramento!" };
+        }
+
 
         try {
-            productFinded.codigo = codigo;
-            productFinded.nome = nome;
+            productFinded.id = id;
+            productFinded.produto = produto;
+            productFinded.kg = kg;
+            productFinded.cx = cx;
+            productFinded.cxt = cxt;
+            productFinded.dz = dz;
+            productFinded.eng = eng;
+            productFinded.mol = mol;
+            productFinded.scl = scl;
+            productFinded.saco = saco;
+            productFinded.bdj = bdj;
             productFinded.und = und;
-            productFinded.peso = peso;
+            productFinded.outros = outros;
 
             let responseProducts = await productFinded.save();
 

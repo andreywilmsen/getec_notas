@@ -54,7 +54,7 @@ function LancamentoPersons(props) {
             case 'Produtor / Atacadista':
                 setPersonNotes(event.target.value);
                 break;
-            case 'Cidade':
+            case 'Procedência':
                 setCidadeNotes(event.target.value);
                 break;
             default:
