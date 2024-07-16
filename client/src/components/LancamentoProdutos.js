@@ -130,6 +130,8 @@ function LancamentoProdutos() {
         setQuantidade(''); // Limpa o campo da quantidade
         setError(''); // Reseta o erro
 
+        clearInputProduto()
+
         // Foca automaticamente no primeiro input
         if (nProdutoRef.current) {
             nProdutoRef.current.focus();
@@ -160,7 +162,6 @@ function LancamentoProdutos() {
     // Função para limpar o input Produto quando uma opção for selecionada no autocomplete
     function clearInputProduto() {
         dispatch(setClear(true));
-        console.log(clear);
     }
 
     return (
