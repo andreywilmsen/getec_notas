@@ -41,15 +41,9 @@ const usuariosService = {
         let search = req.body.search;
 
         try {
-            if (searchMechanism === "nome") {
-                let result = await Usuarios.findAll({ where: { nome: { [Op.like]: `%${search}%` } } });
+            if (searchMechanism) {
+                let result = await Usuarios.findAll({ where: { matricula_nome: { [Op.like]: `%${search}%` } } });
                 if (result.length === 0) return { success: false, emptySearch: true, msg: "Não foram encontradas notas nesse período!" };
-
-                return { success: true, response: result, msg: "Busca efetuada com sucesso!" };
-            }
-            else if (searchMechanism === "matricula") {
-                let result = await Usuarios.findAll({ where: { matricula: { [Op.like]: `%${search}%` } } });
-                if (result.length === 0) return { success: false, emptySearch: true, msg: "Não foram encontrados produtores / atacadistas!" };
 
                 return { success: true, response: result, msg: "Busca efetuada com sucesso!" };
             } else {

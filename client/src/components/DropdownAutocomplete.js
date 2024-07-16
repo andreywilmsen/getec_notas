@@ -19,7 +19,7 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
             const suggestionsStore = localStorage.getItem(props.typeAutocomplete === 'Persons' ? 'Persons' : 'Produtos');
             if (suggestionsStore) {
                 const parsedSuggestions = JSON.parse(suggestionsStore);
-                const nameSuggestions = parsedSuggestions.map(item => props.typeAutocomplete === 'Persons' ? item.nome : item.produto);
+                const nameSuggestions = parsedSuggestions.map(item => props.typeAutocomplete === 'Persons' ? item.matricula_nome : item.produto);
                 setSuggestions(nameSuggestions);
                 setFilteredSuggestions(nameSuggestions.slice(0, 10));
             }

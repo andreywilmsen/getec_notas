@@ -71,7 +71,7 @@ function LancamentoPersons(props) {
             return;
         }
 
-        if (!suggestions.some(s => s.nome.toLowerCase() === personNote.toLowerCase())) {
+        if (!suggestions.some(s => s.matricula_nome.toLowerCase() === personNote.toLowerCase())) {
             alert('Por favor, selecione um produtor válido.');
             setError('Por favor, selecione um produtor válido.');
             return;
