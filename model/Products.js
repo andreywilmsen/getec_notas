@@ -12,31 +12,31 @@ const Produto = db.define('divtec_pesos_produtos', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    quilogramas: {
+    kg: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    caixa: {
+    cx: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    caixeta: {
+    cxt: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    duzia: {
+    dz: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    engradado: {
+    eng: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    molho: {
+    mol: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    sacola: {
+    scl: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
@@ -44,11 +44,11 @@ const Produto = db.define('divtec_pesos_produtos', {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    bandeja: {
+    bdj: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    unidade: {
+    und: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },

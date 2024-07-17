@@ -77,12 +77,16 @@ function LancamentoProdutos() {
 
     // Função para armazenar os valores dos inputs nas suas respectivas variáveis
     function handleValue(event) {
+
+        // IF PARA CASO SEJA UM SELECT COM OPTIONS, QUE PEGUE O VALOR DO OPTIONS CAPTADO E DEFINE PARA UNIDADE
+
+        console.log('Campo:', event.target.placeholder, 'Valor:', event.target.value);
+        if (event.target.placeholder !== 'Produto' && event.target.placeholder !== 'Quantidade') {
+            setUnidade(event.target.value.toUpperCase());
+        }
         switch (event.target.placeholder) {
             case 'Produto':
                 setProduto(event.target.value);
-                break;
-            case 'Unidade':
-                setUnidade(event.target.value);
                 break;
             case 'Quantidade':
                 setQuantidade(event.target.value);
@@ -91,6 +95,7 @@ function LancamentoProdutos() {
                 break;
         }
     }
+
 
     // Handler para atualizar o estado do input focado
     const handleFocus = (event) => {
@@ -184,29 +189,15 @@ function LancamentoProdutos() {
                         clearInput={clear}
                         typeAutocomplete="Produto"
                     />
-                    {/* <InputAutocomplete
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
-                        ref={nProdutoRef}
-                        autocomplete
-                        change={handleValue}
-                        valor={produto}
-                        name="produto"
-                        placeholder="Produto"
-                        size="inputMedium"
-                        clearInput={clear}
-                        typeAutocomplete="Produto"
-                    /> */}
                 </div>
                 <Input
                     inputOptions
                     options={selectOptions}
-                    change={handleValue} // Chama a mesma função para lidar com mudanças
+                    change={handleValue} // Verifique se isso chama a função corretamente
                     placeholder="Unidade"
                     size="inputMedium"
-                    valor={unidade} // Ligação correta com a variável unidade
+                    valor={unidade} // Estado da unidade deve ser vinculado aqui
                 />
-
                 <Input
                     onFocus={handleFocus}
                     change={handleValue}
@@ -217,7 +208,6 @@ function LancamentoProdutos() {
                 />
                 <Button click={addProduct} buttonType="buttonSuccess" name="+" />
             </div>
-            {/* {error && <p className="error-message">{error}</p>} */}
             <div className="listProducts">
                 <div className="extractList">
                     <label>

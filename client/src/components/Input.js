@@ -61,18 +61,20 @@ const Input = forwardRef((props, ref) => {
         ) : (props.inputOptions ? (
             <select
                 ref={ref}
-                onChange={handleInputChange} // Usa a mesma função de mudança
-                value={selectedOption} // Usa o estado local
+                onChange={handleInputChange}
+                value={selectedOption} // Isso deve ser o estado local do select
                 name={props.name}
                 className={'inputGeneral ' + props.size}
+                placeholder="Unidade"
             >
-                <option value="" disabled>{props.placeholder}</option>
+                <option placeholder="Unidade" value="" disabled>{props.placeholder}</option>
                 {Object.entries(props.options || {}).map(([key]) => (
                     <option key={key} value={key}>
-                        {key.toUpperCase()} {/* Exibe o nome da chave */}
+                        {key.toUpperCase()}
                     </option>
                 ))}
             </select>
+
         ) : (
             <input
                 ref={ref}
