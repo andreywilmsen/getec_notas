@@ -14,7 +14,7 @@ import Modal from '../components/Modal';
 
 // Actions para reducer
 import { setClear } from '../actions/clearAction';
-import { showNoteFieldsAction } from '../actions/genericAction'; // Importe a ação corretamente
+import { showNoteFieldsAction } from '../actions/genericAction';
 import DropdownAutocomplete from './DropdownAutocomplete';
 
 function LancamentoProdutos() {
@@ -22,82 +22,61 @@ function LancamentoProdutos() {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    // Variáveis com valores dos inputs dos produtos
     const [produto, setProduto] = useState('');
     const [unidade, setUnidade] = useState('');
     const [peso, setPeso] = useState('');
     const [quantidade, setQuantidade] = useState('');
     const [finalNote, setFinalNote] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [selectOptions, setSelectOptions] = useState()
+    const [selectOptions, setSelectOptions] = useState();
     const [error, setError] = useState('');
-    // Estado para controlar o input focado atualmente
     const [focusedInput, setFocusedInput] = useState(null);
-
-    // Referencia para voltar ao input inicial ao clicar em adicionar produto
     const nProdutoRef = useRef(null);
 
-    // Valores dos states de nota fiscal que contém os valores dos persons (produtores/atacadistas), state para alterar entre os fields que vão ser mostrados no front-end (persons/products), e state para limpar o campo do autocomplete quando adicionar produto;
     const note = useSelector((state) => state.note);
     const clear = useSelector((state) => state.generic);
     const showNoteFields = useSelector((state) => state.generic);
 
-    // Autenticação se usuário está logado
     useEffect(() => {
         AuthService(navigate, location, dispatch);
     }, [navigate, location, dispatch]);
 
-
     const buscarProdutoNoLocalStorage = (nomeProduto) => {
         const produtosStorage = localStorage.getItem('Produtos');
-        if (!produtosStorage) return null; // Retorna null se não houver produtos
-
+        if (!produtosStorage) return null;
         const produtos = JSON.parse(produtosStorage);
-        return produtos.find(prod => prod.produto === nomeProduto) || null; // Retorna o produto encontrado ou null
+        return produtos.find(prod => prod.produto === nomeProduto) || null;
     };
 
     const gerarObjetoComValoresMaioresQueZero = (data) => {
-        const { id, ...resto } = data; // Remove o 'id'
+        const { id, ...resto } = data;
         return Object.entries(resto).reduce((acc, [key, value]) => {
-            if (value > 0) acc[key] = value.toString(); // Adiciona se maior que 0
+            if (value > 0) acc[key] = value.toString();
             return acc;
         }, {});
     };
 
     useEffect(() => {
-        const produtoEncontrado = buscarProdutoNoLocalStorage(produto); // 'produto' é o nome que você procura
+        const produtoEncontrado = buscarProdutoNoLocalStorage(produto);
         if (produtoEncontrado) {
             const novoObjeto = gerarObjetoComValoresMaioresQueZero(produtoEncontrado);
-            console.log(novoObjeto);
             setSelectOptions(novoObjeto);
-
-        } else {
-            console.log('Produto não encontrado no localStorage.');
         }
     }, [produto]);
 
-    // Função para armazenar os valores dos inputs nas suas respectivas variáveis
     function handleValue(event) {
-        console.log('Campo:', event.target.placeholder, 'Valor:', event.target.value);
-
         if (event.target.placeholder !== 'Produto' && event.target.placeholder !== 'Quantidade') {
             const selectedUnit = event.target.value;
             setUnidade(event.target.value.toUpperCase());
-            console.log('SELECTEDOPTIONS:', selectedUnit);
-
-            // Verifica se selectOptions está definido e não está vazio
             if (selectOptions && Object.keys(selectOptions).length > 0) {
                 const unitWeight = selectOptions[selectedUnit];
                 if (unitWeight) {
-                    setPeso(unitWeight); // Define o peso baseado na unidade
-                    console.log('PESO:', unitWeight);
+                    setPeso(unitWeight);
                 } else {
-                    console.log('Unidade não encontrada em selectOptions.');
-                    setPeso(''); // Reseta o peso se a unidade não estiver em selectOptions
+                    setPeso('');
                 }
             } else {
-                console.log('selectOptions está vazio ou indefinido.');
-                setPeso(''); // Reseta o peso se selectOptions não estiver válido
+                setPeso('');
             }
         }
 
@@ -113,70 +92,69 @@ function LancamentoProdutos() {
         }
     }
 
-
-
-
-    // Handler para atualizar o estado do input focado
     const handleFocus = (event) => {
         setFocusedInput(event.target.name);
     };
-    // Função de adicionar o Produto
+
     function addProduct() {
-        // Verifica se todos os campos do novo produto estão preenchidos
-        console.log(produto, unidade, quantidade)
         if (!produto || !unidade || !quantidade) {
             alert('Por favor, preencha todos os campos do produto antes de adicionar.');
             return;
         }
 
-        // Verifica se todos os campos da nota estão preenchidos
         if (!note.dataNote || !note.nfNote || !note.personNote || !note.cidadeNote) {
             alert('Por favor, preencha todos os campos da nota antes de adicionar um produto.');
             return;
         }
 
-        // Verifica se o valor do input é compatível com as sugestões de produtos
         const produtosFromStorage = localStorage.getItem('Produtos');
         if (produtosFromStorage) {
             const produtos = JSON.parse(produtosFromStorage);
             const nomesProdutos = produtos.map((prod) => prod.produto);
-
-            // Verifica se o produto digitado está na lista de produtos válidos
             if (!nomesProdutos.includes(produto)) {
                 alert('Por favor, selecione um produto válido da lista.');
-                setError('Por favor, selecione um produto válido da lista.');
+                setError('Produto inválido.');
                 return;
             }
         } else {
             alert('Nenhum produto encontrado. Verifique a lista de produtos.');
-            setError('Nenhum produto encontrado. Verifique a lista de produtos.');
+            setError('Nenhum produto encontrado.');
             return;
         }
 
-        // Se passou na validação, adiciona o produto à nota final
-        const product = { produto, unidade, quantidade };
-        setFinalNote(prevFinalNote => [...prevFinalNote, product]);
+        const product = {
+            data: note.dataNote,
+            numeroNotaFiscal: note.nfNote,
+            destino: note.personNote,
+            procedencia: note.cidadeNote,
+            produto,
+            unidade,
+            unidade_peso: peso,
+            quantidade,
+            volume: quantidade * peso,
+        };
 
-        // Limpar os valores dos inputs
-        setProduto(''); // Limpa o campo do produto
-        setUnidade(''); // Limpa o campo da unidade
-        setQuantidade(''); // Limpa o campo da quantidade
-        setError(''); // Reseta o erro
+        setFinalNote(prevFinalNote => {
+            const updatedFinalNote = [...prevFinalNote, product];
+            console.log(updatedFinalNote); // Log após a atualização
+            return updatedFinalNote;
+        });
 
-        clearInputProduto()
+        setProduto('');
+        setUnidade('');
+        setQuantidade('');
+        setError('');
+        clearInputProduto();
 
-        // Foca automaticamente no primeiro input
         if (nProdutoRef.current) {
             nProdutoRef.current.focus();
         }
     }
 
-    // Função para enviar os valores dos inputs dos produtores para o reducer dos produtores, para ser consumido no componente LancamentoProdutos
     function handleFields() {
         dispatch(showNoteFieldsAction(!showNoteFields));
     }
 
-    // Funções do modal
     function handleConcludeNote() {
         setShowModal(true);
     }
@@ -188,7 +166,6 @@ function LancamentoProdutos() {
         setShowModal(false);
     }
 
-    // Função para limpar o input Produto quando uma opção for selecionada no autocomplete
     function clearInputProduto() {
         dispatch(setClear(true));
     }
@@ -212,10 +189,10 @@ function LancamentoProdutos() {
                 <Input
                     inputOptions
                     options={selectOptions}
-                    change={handleValue} // Verifique se isso chama a função corretamente
+                    change={handleValue}
                     placeholder="Unidade"
                     size="inputMedium"
-                    valor={unidade} // Estado da unidade deve ser vinculado aqui
+                    valor={unidade}
                 />
                 <Input
                     onFocus={handleFocus}
