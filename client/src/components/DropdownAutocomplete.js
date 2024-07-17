@@ -34,26 +34,23 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
         setHighlightedIndex(-1);
 
         if (value.trim() === '') {
-            // Se o input estiver vazio, mostre todas as sugestões
             setFilteredSuggestions(suggestions.slice(0, 10));
-            setIsDropdownVisible(true); // Torna o dropdown visível
+            setIsDropdownVisible(false); // Hide dropdown if input is empty
         } else {
             const filtered = suggestions.filter(suggestion =>
                 suggestion.toLowerCase().includes(value.toLowerCase())
             );
             setFilteredSuggestions(filtered.slice(0, 10));
-            setIsDropdownVisible(filtered.length > 0); // Mostra o dropdown se houver sugestões
+            setIsDropdownVisible(filtered.length > 0); // Show dropdown if there are suggestions
         }
 
         props.change(event);
     };
 
-
     const handleSuggestionClick = (suggestion) => {
         setSelectedOption(suggestion);
         setFilteredSuggestions([]);
         setIsDropdownVisible(false);
-        // Update the input value and trigger change
         props.change({ target: { value: suggestion, placeholder: props.placeholder } });
     };
 
@@ -65,12 +62,8 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
         }
     }, [clear, dispatch]);
 
-    const handleInputFocus = () => {
-        setIsDropdownVisible(true);
-    };
-
     const handleInputBlur = () => {
-        // You can add a small timeout to allow the click event on the suggestion to register
+        // Timeout to allow suggestion click to register
         setTimeout(() => setIsDropdownVisible(false), 100);
     };
 
@@ -109,7 +102,6 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
                 value={selectedOption}
                 placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
                 onChange={handleInputChange}
-                onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
                 onKeyDown={handleKeyDown}
                 name={props.typeAutocomplete === 'Persons' ? 'produtor/atacadista' : 'produto'}
