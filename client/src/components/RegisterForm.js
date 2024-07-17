@@ -43,7 +43,7 @@ function RegisterForm(props) {
             confirmPassword: confirmPassword
         }
         // Faz um fetch para a url de registro de usuario
-        await axios.post('http://localhost:8080/login/register', data).then(res => {
+        await axios.post('http://192.168.0.134:8080/login/register', data).then(res => {
             // Limpa os inputs após requisição
             setName("")
             setPassword("")

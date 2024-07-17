@@ -2,16 +2,14 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setClear } from '../actions/clearAction';
 import '../styles/Input.css';
-import '../styles/Autocomplete.css'; // Certifique-se de importar o arquivo CSS para os estilos
+import '../styles/Autocomplete.css';
 
 const Input = forwardRef((props, ref) => {
     const dispatch = useDispatch();
-    const [selectedOption, setSelectedOption] = useState(props.valor || ''); // Inicializa com o valor recebido
+    const [selectedOption, setSelectedOption] = useState(props.valor || '');
 
-    // State para verificar se deve ou não limpar o input autocomplete
     const clear = useSelector((state) => state.clear);
 
-    // Limpa o input de sugestões quando o state clear for true
     useEffect(() => {
         if (clear) {
             setSelectedOption('');
@@ -19,19 +17,23 @@ const Input = forwardRef((props, ref) => {
         }
     }, [clear, dispatch]);
 
-    // Sincroniza o estado local com o valor passado via props
     useEffect(() => {
         setSelectedOption(props.valor);
     }, [props.valor]);
 
-    // Função para lidar com mudanças no input
     const handleInputChange = (event) => {
         const value = event.target.value;
-        setSelectedOption(value); // Atualiza o estado local
-        props.change(event); // Chama a função de mudança do pai
+        setSelectedOption(value);
+        props.change(event);
     };
 
-    // Renderização do componente
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            // Ao pressionar Enter, chama a função de mudança
+            props.change(event);
+        }
+    };
+
     return (
         props.span ? (
             <>
@@ -39,7 +41,8 @@ const Input = forwardRef((props, ref) => {
                 <input
                     ref={ref}
                     onChange={handleInputChange}
-                    value={selectedOption} // Usa o estado local
+                    onKeyDown={handleKeyDown}
+                    value={selectedOption}
                     placeholder={props.placeholder}
                     name={props.name}
                     type={props.inputType}
@@ -51,7 +54,7 @@ const Input = forwardRef((props, ref) => {
             <input
                 disabled
                 ref={ref}
-                value={selectedOption} // Usa o estado local
+                value={selectedOption}
                 placeholder={props.placeholder}
                 name={props.name}
                 type={props.inputType}
@@ -62,24 +65,24 @@ const Input = forwardRef((props, ref) => {
             <select
                 ref={ref}
                 onChange={handleInputChange}
-                value={selectedOption} // Isso deve ser o estado local do select
+                onKeyDown={handleKeyDown}
+                value={selectedOption}
                 name={props.name}
                 className={'inputGeneral ' + props.size}
                 placeholder="Unidade"
             >
-                <option placeholder="Unidade" value="" disabled>{props.placeholder}</option>
+                <option value="" disabled>{props.placeholder}</option>
                 {Object.entries(props.options || {}).map(([key]) => (
                     <option key={key} value={key}>
                         {key.toUpperCase()}
                     </option>
                 ))}
             </select>
-
         ) : (
             <input
                 ref={ref}
                 onChange={handleInputChange}
-                value={selectedOption} // Usa o estado local
+                value={selectedOption}
                 placeholder={props.placeholder}
                 name={props.name}
                 type={props.inputType}

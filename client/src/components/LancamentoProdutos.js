@@ -140,7 +140,6 @@ function LancamentoProdutos() {
 
         setFinalNote(prevFinalNote => {
             const updatedFinalNote = [...prevFinalNote, product];
-            console.log(updatedFinalNote); // Log após a atualização
             return updatedFinalNote;
         });
 
@@ -170,9 +169,9 @@ function LancamentoProdutos() {
             console.log('Nenhum produto na nota.');
             return;
         }
-
+    
         const requiredFields = ['numeroNotaFiscal', 'destino', 'procedencia', 'unidade', 'unidade_peso', 'quantidade'];
-
+    
         for (let noteData of finalNote) {
             for (let field of requiredFields) {
                 if (!noteData[field]) {
@@ -181,17 +180,33 @@ function LancamentoProdutos() {
                     return;
                 }
             }
-
+    
             try {
-                await axios.post('http://localhost:8080/register_note', noteData);
-                console.log(`Nota concluída para ${noteData.numeroNotaFiscal}`);
+                await axios.post('http://192.168.0.134:8080/register_note', noteData);
             } catch (err) {
                 console.error('Erro na requisição:', err.response ? err.response.data : err.message);
+                return; // Se ocorrer um erro, interrompa a execução
             }
         }
-
-        setShowModal(false);
+    
+        // Mensagem de sucesso
+        alert('Nota concluída com sucesso!');
+    
+        // Limpar os campos
+        setFinalNote([]);
+        setProduto('');
+        setUnidade('');
+        setQuantidade('');
+        
+        // Alterar o estado de showNoteFields para o contrário
+        dispatch(showNoteFieldsAction(!showNoteFields));
+    
+        // Redirecionar para "lancamento persons"
+        navigate('/lancamento-persons'); // Substitua pela rota correta
+    
+        // setShowModal(false);
     }
+    
 
 
     function clearInputProduto() {

@@ -8,7 +8,7 @@ async function AuthService(navigate, location, dispatch) {
         // Recupera o token do local Storage
         let token = localStorage.getItem('token');
         // Faz um fetch para a API de autenticação
-        const authRes = await axios.post("http://localhost:8080/auth", null, {
+        const authRes = await axios.post("http://192.168.0.134:8080/auth", null, {
             headers: { 'authorization-token': token }
         });
         // Caso success, permanece no pathname atual (endereço atual do site)

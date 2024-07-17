@@ -48,7 +48,7 @@ function LoginForm() {
         };
         try {
             // Faz o post para a url de login
-            const res = await axios.post('http://localhost:8080/login', data);
+            const res = await axios.post('http://192.168.0.134:8080/login', data);
             const token = res.data.token;
             const name = res.data.name
             console.log(res)
@@ -58,7 +58,7 @@ function LoginForm() {
             setNome("");
             setPassword("");
             // Faz o get para a url de autenticação
-            const authRes = await axios.post("http://localhost:8080/auth", null, {
+            const authRes = await axios.post("http://192.168.0.134:8080/auth", null, {
                 headers: { 'authorization-token': token }
             });
 
