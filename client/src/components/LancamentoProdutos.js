@@ -3,6 +3,7 @@ import '../styles/AdminPanel.css';
 import '../styles/LancamentoProdutos.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 // Autenticação de login
 import AuthService from '../services/authService';
@@ -122,6 +123,8 @@ function LancamentoProdutos() {
             return;
         }
 
+        let nome_usuario_sistema = localStorage.getItem("name");
+
         const product = {
             data: note.dataNote,
             numeroNotaFiscal: note.nfNote,
@@ -132,6 +135,7 @@ function LancamentoProdutos() {
             unidade_peso: peso,
             quantidade,
             volume: quantidade * peso,
+            nome_usuario_sistema
         };
 
         setFinalNote(prevFinalNote => {
@@ -161,14 +165,40 @@ function LancamentoProdutos() {
     function handleCloseModal() {
         setShowModal(false);
     }
-    function handleConfirmConcludeNote() {
-        console.log('Nota concluída!');
+    async function handleConfirmConcludeNote() {
+        if (finalNote.length === 0) {
+            console.log('Nenhum produto na nota.');
+            return;
+        }
+
+        const requiredFields = ['numeroNotaFiscal', 'destino', 'procedencia', 'unidade', 'unidade_peso', 'quantidade'];
+
+        for (let noteData of finalNote) {
+            for (let field of requiredFields) {
+                if (!noteData[field]) {
+                    console.error(`Campo ${field} não pode ser nulo ou vazio.`);
+                    alert(`Por favor, preencha o campo: ${field}`);
+                    return;
+                }
+            }
+
+            try {
+                await axios.post('http://localhost:8080/register_note', noteData);
+                console.log(`Nota concluída para ${noteData.numeroNotaFiscal}`);
+            } catch (err) {
+                console.error('Erro na requisição:', err.response ? err.response.data : err.message);
+            }
+        }
+
         setShowModal(false);
     }
+
 
     function clearInputProduto() {
         dispatch(setClear(true));
     }
+
+
 
     return (
         <div className="inputFieldNotes">

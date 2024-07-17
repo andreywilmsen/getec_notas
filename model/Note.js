@@ -9,7 +9,7 @@ module.exports = db.define("divtec_notasfiscais", {
         allowNull: false,
     },
     data: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
         allowNull: false,
     },
     numeroNotaFiscal: {
@@ -33,22 +33,23 @@ module.exports = db.define("divtec_notasfiscais", {
         allowNull: false,
     },
     unidade_peso: {
-        type: Sequelize.STRING,
+        type: Sequelize.FLOAT,
         allowNull: false,
     },
     quantidade: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    volume: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    nome_usuario_sistema: {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
-    tableName: "divtec_notasfiscais", // Nome da tabela no banco de dados
-    freezeTableName: true, // Impede que o Sequelize modifique o nome da tabela
-    timestamps: false, // Se não houver colunas createdAt e updatedAt 
+    volume: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+    },
+    nome_usuario_sistema: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+}, {
+    tableName: "divtec_notasfiscais",
+    freezeTableName: true,
+    timestamps: false
 });
