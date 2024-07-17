@@ -25,6 +25,7 @@ function LancamentoProdutos() {
     // Variáveis com valores dos inputs dos produtos
     const [produto, setProduto] = useState('');
     const [unidade, setUnidade] = useState('');
+    const [peso, setPeso] = useState('');
     const [quantidade, setQuantidade] = useState('');
     const [finalNote, setFinalNote] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -77,13 +78,29 @@ function LancamentoProdutos() {
 
     // Função para armazenar os valores dos inputs nas suas respectivas variáveis
     function handleValue(event) {
-
-        // IF PARA CASO SEJA UM SELECT COM OPTIONS, QUE PEGUE O VALOR DO OPTIONS CAPTADO E DEFINE PARA UNIDADE
-
         console.log('Campo:', event.target.placeholder, 'Valor:', event.target.value);
+
         if (event.target.placeholder !== 'Produto' && event.target.placeholder !== 'Quantidade') {
+            const selectedUnit = event.target.value;
             setUnidade(event.target.value.toUpperCase());
+            console.log('SELECTEDOPTIONS:', selectedUnit);
+
+            // Verifica se selectOptions está definido e não está vazio
+            if (selectOptions && Object.keys(selectOptions).length > 0) {
+                const unitWeight = selectOptions[selectedUnit];
+                if (unitWeight) {
+                    setPeso(unitWeight); // Define o peso baseado na unidade
+                    console.log('PESO:', unitWeight);
+                } else {
+                    console.log('Unidade não encontrada em selectOptions.');
+                    setPeso(''); // Reseta o peso se a unidade não estiver em selectOptions
+                }
+            } else {
+                console.log('selectOptions está vazio ou indefinido.');
+                setPeso(''); // Reseta o peso se selectOptions não estiver válido
+            }
         }
+
         switch (event.target.placeholder) {
             case 'Produto':
                 setProduto(event.target.value);
@@ -95,6 +112,8 @@ function LancamentoProdutos() {
                 break;
         }
     }
+
+
 
 
     // Handler para atualizar o estado do input focado
