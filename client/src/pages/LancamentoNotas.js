@@ -31,6 +31,8 @@ function LancamentoNotas() {
                 localStorage.setItem("Produtos", JSON.stringify(responseProducts.data.products))
                 const responsePersons = await axios.post('http://192.168.0.134:8080/get_usuarios');
                 localStorage.setItem("Persons", JSON.stringify(responsePersons.data.search.response))
+                const responseCity = await axios.post('http://192.168.0.134:8080/get_city');
+                localStorage.setItem("City", JSON.stringify(responseCity.data.cidade))
             } catch (error) {
                 console.log(error)
             }

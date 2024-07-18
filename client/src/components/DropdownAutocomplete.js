@@ -1,10 +1,9 @@
 import React, { useState, useEffect, forwardRef, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setClear } from '../actions/clearAction';
-import '../styles/Input.css';
 import '../styles/Autocomplete.css';
 
-const InputDropdownAutocomplete = forwardRef((props, ref) => {
+const DropdownAutocomplete = forwardRef((props, ref) => {
     const dispatch = useDispatch();
     const [suggestions, setSuggestions] = useState([]);
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
@@ -16,10 +15,22 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
 
     useEffect(() => {
         const loadSuggestions = () => {
-            const suggestionsStore = localStorage.getItem(props.typeAutocomplete === 'Persons' ? 'Persons' : 'Produtos');
+            let suggestionsStore;
+            if (props.typeAutocomplete === 'Persons') {
+                suggestionsStore = localStorage.getItem('Persons');
+            } else if (props.typeAutocomplete === 'Produto') {
+                suggestionsStore = localStorage.getItem('Produtos');
+            } else if (props.typeAutocomplete === 'Cidade') {
+                suggestionsStore = localStorage.getItem('City');
+            }
+
             if (suggestionsStore) {
                 const parsedSuggestions = JSON.parse(suggestionsStore);
-                const nameSuggestions = parsedSuggestions.map(item => props.typeAutocomplete === 'Persons' ? item.matricula_nome : item.produto);
+                const nameSuggestions = parsedSuggestions.map(item =>
+                    props.typeAutocomplete === 'Persons' ? item.matricula_nome :
+                        props.typeAutocomplete === 'Produto' ? item.produto :
+                            item.cidade
+                );
                 setSuggestions(nameSuggestions);
                 setFilteredSuggestions(nameSuggestions.slice(0, 4));
             }
@@ -35,13 +46,13 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
 
         if (value.trim() === '') {
             setFilteredSuggestions(suggestions.slice(0, 10));
-            setIsDropdownVisible(false); // Hide dropdown if input is empty
+            setIsDropdownVisible(false);
         } else {
             const filtered = suggestions.filter(suggestion =>
                 suggestion.toLowerCase().includes(value.toLowerCase())
             );
             setFilteredSuggestions(filtered.slice(0, 10));
-            setIsDropdownVisible(filtered.length > 0); // Show dropdown if there are suggestions
+            setIsDropdownVisible(filtered.length > 0);
         }
 
         props.change(event);
@@ -62,11 +73,6 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
         }
     }, [clear, dispatch]);
 
-    const handleInputBlur = () => {
-        // Timeout to allow suggestion click to register
-        setTimeout(() => setIsDropdownVisible(false), 100);
-    };
-
     const handleKeyDown = (event) => {
         if (event.key === 'ArrowDown') {
             event.preventDefault();
@@ -81,30 +87,18 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
         }
     };
 
-    const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-            setIsDropdownVisible(false);
-        }
-    };
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
     return (
         <div className="dropdown-container" ref={dropdownRef}>
             <input
                 ref={ref}
                 className={`inputGeneral ${props.size}`}
                 value={selectedOption}
-                placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' : 'Produto'}
+                placeholder={props.typeAutocomplete === 'Persons' ? 'Produtor / Atacadista' :
+                    props.typeAutocomplete === 'Cidade' ? 'Procedência' : 'Produto'}
                 onChange={handleInputChange}
-                onBlur={handleInputBlur}
                 onKeyDown={handleKeyDown}
-                name={props.typeAutocomplete === 'Persons' ? 'produtor/atacadista' : 'produto'}
+                name={props.typeAutocomplete === 'Persons' ? 'produtor/atacadista' :
+                    props.typeAutocomplete === 'Cidade' ? 'cidade' : 'produto'}
                 autoComplete="off"
             />
             {isDropdownVisible && filteredSuggestions.length > 0 && (
@@ -112,7 +106,7 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
                     {filteredSuggestions.map((suggestion, index) => (
                         <div
                             key={index}
-                            className={`dropdown-item ${highlightedIndex === index ? 'highlighted' : ''}`}
+                            className={`dropdown-item ${index === highlightedIndex ? 'highlighted' : ''}`}
                             onClick={() => handleSuggestionClick(suggestion)}
                         >
                             {suggestion}
@@ -124,4 +118,4 @@ const InputDropdownAutocomplete = forwardRef((props, ref) => {
     );
 });
 
-export default InputDropdownAutocomplete;
+export default DropdownAutocomplete;

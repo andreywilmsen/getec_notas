@@ -27,17 +27,15 @@ function LancamentoPersons(props) {
     const [personNote, setPersonNotes] = useState('');
     const [cidadeNote, setCidadeNotes] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true); // State to track loading
-
+    const [loading, setLoading] = useState(true);
     const showNoteFields = useSelector((state) => state.generic);
-    const suggestions = JSON.parse(localStorage.getItem('Persons')) || []; // Get suggestions from local storage
+    const suggestions = JSON.parse(localStorage.getItem('Persons')) || [];
 
     useEffect(() => {
         AuthService(navigate, location, dispatch);
     }, [navigate, location, dispatch]);
 
     useEffect(() => {
-        // Simulate loading data; replace with actual data fetching logic
         if (suggestions.length > 0) {
             setLoading(false);
         }
@@ -81,14 +79,23 @@ function LancamentoPersons(props) {
     }
 
     if (loading) {
-        return <div>Loading...</div>; // Or a spinner component
+        return <div>Loading...</div>;
     }
 
     return (
         <div className="inputFieldNotes">
             <Input inputType="date" change={handleValue} valor={dataNote} placeholder="Data" size="inputMedium" />
             <Input change={handleValue} valor={nfNote} placeholder="N° Nota Fiscal" size="inputMedium" />
-            <Input change={handleValue} valor={cidadeNote} placeholder="Procedência" name="cidade" size="inputMedium" />
+            <DropdownAutocomplete
+                autocomplete
+                change={handleValue}
+                valor={cidadeNote}
+                name="cidade"
+                size="inputMedium"
+                typeAutocomplete="Cidade"
+                placeholder="Procedência"
+            />
+            {/* <Input change={handleValue} valor={cidadeNote} placeholder="Procedência" name="cidade" size="inputMedium" /> */}
             <DropdownAutocomplete
                 autocomplete
                 change={handleValue}
