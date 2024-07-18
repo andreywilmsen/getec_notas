@@ -143,9 +143,12 @@ function LancamentoProdutos() {
             return updatedFinalNote;
         });
 
+        // Limpar os campos e o estado do selectOptions
         setProduto('');
         setUnidade('');
         setQuantidade('');
+        setSelectOptions(null); // Limpar o estado do selectOptions
+
         setError('');
         clearInputProduto();
 
@@ -169,9 +172,9 @@ function LancamentoProdutos() {
             console.log('Nenhum produto na nota.');
             return;
         }
-    
+
         const requiredFields = ['numeroNotaFiscal', 'destino', 'procedencia', 'unidade', 'unidade_peso', 'quantidade'];
-    
+
         for (let noteData of finalNote) {
             for (let field of requiredFields) {
                 if (!noteData[field]) {
@@ -180,7 +183,7 @@ function LancamentoProdutos() {
                     return;
                 }
             }
-    
+
             try {
                 await axios.post('http://192.168.0.134:8080/register_note', noteData);
             } catch (err) {
@@ -188,25 +191,25 @@ function LancamentoProdutos() {
                 return; // Se ocorrer um erro, interrompa a execução
             }
         }
-    
+
         // Mensagem de sucesso
         alert('Nota concluída com sucesso!');
-    
+
         // Limpar os campos
         setFinalNote([]);
         setProduto('');
         setUnidade('');
         setQuantidade('');
-        
+
         // Alterar o estado de showNoteFields para o contrário
         dispatch(showNoteFieldsAction(!showNoteFields));
-    
+
         // Redirecionar para "lancamento persons"
         navigate('/lancamento-persons'); // Substitua pela rota correta
-    
+
         // setShowModal(false);
     }
-    
+
 
 
     function clearInputProduto() {
@@ -230,15 +233,15 @@ function LancamentoProdutos() {
                         clearInput={clear}
                         typeAutocomplete="Produto"
                     />
-                </div>
                 <Input
                     inputOptions
                     options={selectOptions}
                     change={handleValue}
                     placeholder="Unidade"
-                    size="inputMedium"
+                    size="inputSmall"
                     valor={unidade}
                 />
+                </div>
                 <Input
                     onFocus={handleFocus}
                     change={handleValue}

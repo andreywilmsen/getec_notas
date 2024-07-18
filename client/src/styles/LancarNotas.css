@@ -36,3 +36,11 @@
     flex-direction: column;
     flex-wrap: wrap;
 }
+
+@media (max-width: 400px) {
+    .person select {
+        font-size: 18px !important;
+        width: 250px !important;
+        height: 40px !important;
+    }
+}

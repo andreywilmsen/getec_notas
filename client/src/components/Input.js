@@ -18,8 +18,12 @@ const Input = forwardRef((props, ref) => {
     }, [clear, dispatch]);
 
     useEffect(() => {
-        setSelectedOption(props.valor);
-    }, [props.valor]);
+        // Set selectedOption to the first option in props.options when it changes
+        if (props.options && Object.keys(props.options).length > 0 && !selectedOption) {
+            setSelectedOption(Object.keys(props.options)[0]);
+            props.change({ target: { value: Object.keys(props.options)[0] } });
+        }
+    }, [props.options, selectedOption, props.change]); // Include props.change in dependencies to prevent unnecessary re-renders
 
     const handleInputChange = (event) => {
         const value = event.target.value;
@@ -29,15 +33,30 @@ const Input = forwardRef((props, ref) => {
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            // Ao pressionar Enter, chama a função de mudança
             props.change(event);
         }
     };
 
     return (
-        props.span ? (
-            <>
-                <span className="spanInput">{props.span}</span>
+        <>
+            {props.span && <span className="spanInput">{props.span}</span>}
+            {props.inputOptions ? (
+                <select
+                    ref={ref}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    name={props.name}
+                    className={'inputGeneral ' + props.size}
+                    value={selectedOption}
+                >
+                    <option value="" disabled>{props.placeholder}</option>
+                    {Object.entries(props.options || {}).map(([key]) => (
+                        <option key={key} value={key}>
+                            {key.toUpperCase()}
+                        </option>
+                    ))}
+                </select>
+            ) : (
                 <input
                     ref={ref}
                     onChange={handleInputChange}
@@ -49,47 +68,9 @@ const Input = forwardRef((props, ref) => {
                     className={'inputGeneral ' + props.size}
                     autoComplete="off"
                 />
-            </>
-        ) : (props.disabled ? (
-            <input
-                disabled
-                ref={ref}
-                value={selectedOption}
-                placeholder={props.placeholder}
-                name={props.name}
-                type={props.inputType}
-                className={'inputGeneral ' + props.size}
-                autoComplete="off"
-            />
-        ) : (props.inputOptions ? (
-            <select
-                ref={ref}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                value={selectedOption}
-                name={props.name}
-                className={'inputGeneral ' + props.size}
-                placeholder="Unidade"
-            >
-                <option value="" disabled>{props.placeholder}</option>
-                {Object.entries(props.options || {}).map(([key]) => (
-                    <option key={key} value={key}>
-                        {key.toUpperCase()}
-                    </option>
-                ))}
-            </select>
-        ) : (
-            <input
-                ref={ref}
-                onChange={handleInputChange}
-                value={selectedOption}
-                placeholder={props.placeholder}
-                name={props.name}
-                type={props.inputType}
-                className={'inputGeneral ' + props.size}
-                autoComplete="off"
-            />
-        ))));
+            )}
+        </>
+    );
 });
 
 export default Input;
