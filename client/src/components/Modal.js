@@ -16,7 +16,7 @@ const Modal = ({ show, onClose, onConfirm, title, children, loading }) => {
                 <div className="modal-body">{children}</div>
                 {!loading && (
                     <div className="modal-footer">
-                        <Button click={onClose} buttonType="buttonLogout" name="Cancelar" />
+                        <Button click={onClose} buttonType="buttonCancel" name="Cancelar" />
                         <Button click={onConfirm} buttonType="buttonSuccess" name="Confirmar" />
                     </div>
                 )}
