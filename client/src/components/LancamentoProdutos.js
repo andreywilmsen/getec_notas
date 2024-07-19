@@ -66,7 +66,7 @@ function LancamentoProdutos() {
     }, [produto]);
 
     function handleValue(event) {
-        if (event.target.placeholder !== 'Produto' && event.target.placeholder !== 'Quantidade') {
+        if (event.target.placeholder !== 'Produto' && event.target.placeholder !== 'Quantidade' && event.target.placeholder !== 'Peso') {
             const selectedUnit = event.target.value;
             setUnidade(event.target.value.toUpperCase());
             if (selectOptions && Object.keys(selectOptions).length > 0) {
@@ -87,6 +87,9 @@ function LancamentoProdutos() {
                 break;
             case 'Quantidade':
                 setQuantidade(event.target.value);
+                break;
+            case 'Peso':
+                setPeso(event.target.value);
                 break;
             default:
                 break;
@@ -146,6 +149,7 @@ function LancamentoProdutos() {
         // Limpar os campos e o estado do selectOptions
         setProduto('');
         setUnidade('');
+        setPeso('');
         setQuantidade('');
         setSelectOptions(null); // Limpar o estado do selectOptions
 
@@ -233,15 +237,24 @@ function LancamentoProdutos() {
                         clearInput={clear}
                         typeAutocomplete="Produto"
                     />
-                <Input
-                    inputOptions
-                    options={selectOptions}
-                    change={handleValue}
-                    placeholder="Unidade"
-                    size="inputSmall"
-                    valor={unidade}
-                />
+                    <Input
+                        inputOptions
+                        options={selectOptions}
+                        change={handleValue}  // Ensure change prop is passed correctly here
+                        placeholder="Unidade"
+                        size="inputSmall"
+                        valor={unidade}
+                    />
                 </div>
+                {unidade === "PESO" && (
+                    <Input
+                        onFocus={handleFocus}
+                        change={handleValue}
+                        valor={quantidade}
+                        name="peso"
+                        placeholder="Peso"
+                        size="inputMedium"
+                    />)}
                 <Input
                     onFocus={handleFocus}
                     change={handleValue}

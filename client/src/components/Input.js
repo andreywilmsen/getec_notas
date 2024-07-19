@@ -22,6 +22,7 @@ const Input = forwardRef((props, ref) => {
         if (props.options && Object.keys(props.options).length > 0 && !selectedOption) {
             setSelectedOption(Object.keys(props.options)[0]);
             props.change({ target: { value: Object.keys(props.options)[0] } });
+            console.log(Object.keys(props.options).lengt)
         }
     }, [props.options, selectedOption, props.change]); // Include props.change in dependencies to prevent unnecessary re-renders
 
@@ -55,6 +56,9 @@ const Input = forwardRef((props, ref) => {
                             {key.toUpperCase()}
                         </option>
                     ))}
+                    {props.options && Object.keys(props.options).length > 1 && (
+                        <option value="Peso">PESO</option>
+                    )}
                 </select>
             ) : (
                 <input

@@ -32,7 +32,7 @@ const DropdownAutocomplete = forwardRef((props, ref) => {
                             item.cidade
                 );
                 setSuggestions(nameSuggestions);
-                setFilteredSuggestions(nameSuggestions.slice(0, 4));
+                setFilteredSuggestions(nameSuggestions.slice(0, 50));
             }
         };
 
@@ -45,13 +45,13 @@ const DropdownAutocomplete = forwardRef((props, ref) => {
         setHighlightedIndex(-1);
 
         if (value.trim() === '') {
-            setFilteredSuggestions(suggestions.slice(0, 10));
+            setFilteredSuggestions(suggestions.slice(0, 50));
             setIsDropdownVisible(false);
         } else {
             const filtered = suggestions.filter(suggestion =>
                 suggestion.toLowerCase().includes(value.toLowerCase())
             );
-            setFilteredSuggestions(filtered.slice(0, 10));
+            setFilteredSuggestions(filtered.slice(0, 50));
             setIsDropdownVisible(filtered.length > 0);
         }
 
