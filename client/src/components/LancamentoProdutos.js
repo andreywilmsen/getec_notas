@@ -302,7 +302,7 @@ function LancamentoProdutos() {
                                 <th>PRODUTO</th>
                                 <th>UNIDADE</th>
                                 <th>QUANTIDADE</th>
-                                <th>AÇÃO</th> {/* Coluna para o botão de remover */}
+                                <th>REMOVER</th> {/* Coluna para o botão de remover */}
                             </tr>
                         </thead>
                         <tbody>

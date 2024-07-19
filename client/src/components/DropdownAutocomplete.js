@@ -64,6 +64,7 @@ const DropdownAutocomplete = forwardRef((props, ref) => {
         setIsDropdownVisible(false);
         props.change({ target: { value: suggestion, placeholder: props.placeholder } });
     };
+    
 
     useEffect(() => {
         if (clear) {
