@@ -11,7 +11,7 @@ import AuthService from '../services/authService';
 // Components
 import Input from '../components/Input';
 import Button from '../components/Button';
-import Modal from '../components/Modal'; // Certifique-se de importar o componente Modal corretamente
+import Modal from '../components/Modal';
 import { setClear } from '../actions/clearAction';
 import { showNoteFieldsAction } from '../actions/genericAction';
 import DropdownAutocomplete from './DropdownAutocomplete';
@@ -31,7 +31,7 @@ function LancamentoProdutos() {
     const [error, setError] = useState('');
     const [focusedInput, setFocusedInput] = useState(null);
     const nProdutoRef = useRef(null);
-    const [loading, setLoading] = useState(false); // Estado de carregamento
+    const [loading, setLoading] = useState(false);
 
     const note = useSelector((state) => state.note);
     const clear = useSelector((state) => state.generic);
@@ -50,9 +50,8 @@ function LancamentoProdutos() {
     }, [produto]);
 
     useEffect(() => {
-        // Verifica se o menu está aberto e se o foco saiu do input do menu
         if (focusedInput !== 'nProduto') {
-            dispatch(setClear(true)); // Fecha o menu
+            dispatch(setClear(true));
         }
     }, [focusedInput, dispatch]);
 
@@ -141,13 +140,11 @@ function LancamentoProdutos() {
             return updatedFinalNote;
         });
 
-        // Limpar os campos e o estado do selectOptions
         setProduto('');
         setUnidade('');
         setPeso('');
         setQuantidade('');
-        setSelectOptions(null); // Limpar o estado do selectOptions
-
+        setSelectOptions(null);
         setError('');
         clearInputProduto();
 
@@ -174,7 +171,7 @@ function LancamentoProdutos() {
             return;
         }
 
-        setLoading(true); // Iniciar o carregamento
+        setLoading(true);
 
         const requiredFields = ['numeroNotaFiscal', 'destino', 'procedencia', 'unidade', 'unidade_peso', 'quantidade'];
 
@@ -183,7 +180,7 @@ function LancamentoProdutos() {
                 if (!noteData[field]) {
                     console.error(`Campo ${field} não pode ser nulo ou vazio.`);
                     alert(`Por favor, preencha o campo: ${field}`);
-                    setLoading(false); // Parar o carregamento
+                    setLoading(false);
                     return;
                 }
             }
@@ -192,29 +189,23 @@ function LancamentoProdutos() {
                 await axios.post('http://192.168.0.134:8080/register_note', noteData);
             } catch (err) {
                 console.error('Erro na requisição:', err.response ? err.response.data : err.message);
-                setLoading(false); // Parar o carregamento
-                return; // Se ocorrer um erro, interrompa a execução
+                setLoading(false);
+                return;
             }
         }
 
-        setLoading(false); // Parar o carregamento
+        setLoading(false);
 
-        // Mensagem de sucesso
         alert('Nota concluída com sucesso!');
 
-        // Limpar os campos
         setFinalNote([]);
         setProduto('');
         setUnidade('');
         setQuantidade('');
 
-        // Alterar o estado de showNoteFields para o contrário
         dispatch(showNoteFieldsAction(!showNoteFields));
 
-        // Redirecionar para "lancamento persons"
-        navigate('/'); // Substitua pela rota correta
-
-        // setShowModal(false);
+        navigate('/'); 
     };
 
     const clearInputProduto = () => {
@@ -234,6 +225,14 @@ function LancamentoProdutos() {
             if (value > 0) acc[key] = value.toString();
             return acc;
         }, {});
+    };
+
+    const removerProduto = (index) => {
+        setFinalNote((prevFinalNote) => {
+            const updatedFinalNote = [...prevFinalNote];
+            updatedFinalNote.splice(index, 1);
+            return updatedFinalNote;
+        });
     };
 
     return (
@@ -303,6 +302,7 @@ function LancamentoProdutos() {
                                 <th>PRODUTO</th>
                                 <th>UNIDADE</th>
                                 <th>QUANTIDADE</th>
+                                <th>AÇÃO</th> {/* Coluna para o botão de remover */}
                             </tr>
                         </thead>
                         <tbody>
@@ -311,6 +311,13 @@ function LancamentoProdutos() {
                                     <td>{item.produto}</td>
                                     <td>{item.unidade}</td>
                                     <td>{item.quantidade}</td>
+                                    <td>
+                                        <Button
+                                            buttonType="buttonRemove"
+                                            name="X"
+                                            click={() => removerProduto(index)}
+                                        />
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -318,7 +325,7 @@ function LancamentoProdutos() {
                 </div>
             </div>
             <div className="buttonsLancamentoNotas">
-                <Button click={handleFields} buttonType="buttonLogout" name="Cancelar" />
+                <Button click={handleFields} buttonType="buttonCancel" name="Cancelar" />
                 <Button click={handleConcludeNote} buttonType="buttonSuccess" name="Concluir nota" />
             </div>
             <Modal
@@ -326,7 +333,7 @@ function LancamentoProdutos() {
                 onClose={handleCloseModal}
                 onConfirm={handleConfirmConcludeNote}
                 title="Confirmar Conclusão"
-                loading={loading} // Passar o estado de loading para o Modal
+                loading={loading}
             >
                 <p>Tem certeza que deseja concluir a nota?</p>
                 {loading && <p>Enviando nota... Aguarde.</p>}

@@ -20,9 +20,9 @@
 }
 
 .buttonLogout {
-    background: linear-gradient(to bottom, rgb(230, 88, 84) 0%, rgb(191, 56, 49) 100%);
+    background: linear-gradient(to bottom, rgb(84, 185, 215) 0%, rgb(42, 152, 182) 100%);
     color: white;
-    width: 150px; 
+    width: 150px;
     height: 40px;
     border: 1px solid rgb(189, 189, 189, 0.7);
     box-shadow: 0px 0px 10px 0px rgb(0, 0, 0, 0.1);
@@ -31,6 +31,40 @@
 }
 
 .buttonLogout:hover {
+    cursor: pointer;
+    transform: scale(1.03, 1.03);
+    transition: 0.4s;
+}
+
+.buttonCancel {
+    background: linear-gradient(to bottom, rgb(230, 88, 84) 0%, rgb(191, 56, 49) 100%);
+    color: white;
+    width: 150px;
+    height: 40px;
+    border: 1px solid rgb(189, 189, 189, 0.7);
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0, 0.1);
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.buttonCancel:hover {
+    cursor: pointer;
+    transform: scale(1.03, 1.03);
+    transition: 0.4s;
+}
+
+.buttonRemove {
+    background: linear-gradient(to bottom, rgb(128, 49, 46) 0%, rgb(126, 38, 34) 100%);
+    color: white;
+    width: 40px;
+    height: 20px;
+    border: 1px solid rgb(189, 189, 189, 0.7);
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0, 0.1);
+    border-radius: 5px;
+    font-weight: 400;
+}
+
+.buttonRemove:hover {
     cursor: pointer;
     transform: scale(1.03, 1.03);
     transition: 0.4s;
