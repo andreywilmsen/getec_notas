@@ -254,6 +254,7 @@ function LancamentoProdutos() {
                         name="peso"
                         placeholder="Peso"
                         size="inputMedium"
+                        inputType="number"
                     />)}
                 <Input
                     onFocus={handleFocus}
