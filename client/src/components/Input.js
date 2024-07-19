@@ -18,13 +18,11 @@ const Input = forwardRef((props, ref) => {
     }, [clear, dispatch]);
 
     useEffect(() => {
-        // Set selectedOption to the first option in props.options when it changes
         if (props.options && Object.keys(props.options).length > 0 && !selectedOption) {
             setSelectedOption(Object.keys(props.options)[0]);
             props.change({ target: { value: Object.keys(props.options)[0] } });
-            console.log(Object.keys(props.options).lengt)
         }
-    }, [props.options, selectedOption, props.change]); // Include props.change in dependencies to prevent unnecessary re-renders
+    }, [props.options, selectedOption, props.change]); 
 
     const handleInputChange = (event) => {
         const value = event.target.value;

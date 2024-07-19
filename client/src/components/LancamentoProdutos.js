@@ -11,9 +11,7 @@ import AuthService from '../services/authService';
 // Components
 import Input from '../components/Input';
 import Button from '../components/Button';
-import Modal from '../components/Modal';
-
-// Actions para reducer
+import Modal from '../components/Modal'; // Certifique-se de importar o componente Modal corretamente
 import { setClear } from '../actions/clearAction';
 import { showNoteFieldsAction } from '../actions/genericAction';
 import DropdownAutocomplete from './DropdownAutocomplete';
@@ -33,6 +31,7 @@ function LancamentoProdutos() {
     const [error, setError] = useState('');
     const [focusedInput, setFocusedInput] = useState(null);
     const nProdutoRef = useRef(null);
+    const [loading, setLoading] = useState(false); // Estado de carregamento
 
     const note = useSelector((state) => state.note);
     const clear = useSelector((state) => state.generic);
@@ -42,21 +41,6 @@ function LancamentoProdutos() {
         AuthService(navigate, location, dispatch);
     }, [navigate, location, dispatch]);
 
-    const buscarProdutoNoLocalStorage = (nomeProduto) => {
-        const produtosStorage = localStorage.getItem('Produtos');
-        if (!produtosStorage) return null;
-        const produtos = JSON.parse(produtosStorage);
-        return produtos.find(prod => prod.produto === nomeProduto) || null;
-    };
-
-    const gerarObjetoComValoresMaioresQueZero = (data) => {
-        const { id, ...resto } = data;
-        return Object.entries(resto).reduce((acc, [key, value]) => {
-            if (value > 0) acc[key] = value.toString();
-            return acc;
-        }, {});
-    };
-
     useEffect(() => {
         const produtoEncontrado = buscarProdutoNoLocalStorage(produto);
         if (produtoEncontrado) {
@@ -65,8 +49,19 @@ function LancamentoProdutos() {
         }
     }, [produto]);
 
-    function handleValue(event) {
-        if (event.target.placeholder !== 'Produto' && event.target.placeholder !== 'Quantidade' && event.target.placeholder !== 'Peso') {
+    useEffect(() => {
+        // Verifica se o menu está aberto e se o foco saiu do input do menu
+        if (focusedInput !== 'nProduto') {
+            dispatch(setClear(true)); // Fecha o menu
+        }
+    }, [focusedInput, dispatch]);
+
+    const handleValue = (event) => {
+        if (
+            event.target.placeholder !== 'Produto' &&
+            event.target.placeholder !== 'Quantidade' &&
+            event.target.placeholder !== 'Peso'
+        ) {
             const selectedUnit = event.target.value;
             setUnidade(event.target.value.toUpperCase());
             if (selectOptions && Object.keys(selectOptions).length > 0) {
@@ -94,13 +89,13 @@ function LancamentoProdutos() {
             default:
                 break;
         }
-    }
+    };
 
     const handleFocus = (event) => {
         setFocusedInput(event.target.name);
     };
 
-    function addProduct() {
+    const addProduct = () => {
         if (!produto || !unidade || !quantidade) {
             alert('Por favor, preencha todos os campos do produto antes de adicionar.');
             return;
@@ -126,7 +121,7 @@ function LancamentoProdutos() {
             return;
         }
 
-        let nome_usuario_sistema = localStorage.getItem("name");
+        let nome_usuario_sistema = localStorage.getItem('name');
 
         const product = {
             data: note.dataNote,
@@ -138,10 +133,10 @@ function LancamentoProdutos() {
             unidade_peso: peso,
             quantidade,
             volume: quantidade * peso,
-            nome_usuario_sistema
+            nome_usuario_sistema,
         };
 
-        setFinalNote(prevFinalNote => {
+        setFinalNote((prevFinalNote) => {
             const updatedFinalNote = [...prevFinalNote, product];
             return updatedFinalNote;
         });
@@ -159,23 +154,27 @@ function LancamentoProdutos() {
         if (nProdutoRef.current) {
             nProdutoRef.current.focus();
         }
-    }
+    };
 
-    function handleFields() {
+    const handleFields = () => {
         dispatch(showNoteFieldsAction(!showNoteFields));
-    }
+    };
 
-    function handleConcludeNote() {
+    const handleConcludeNote = () => {
         setShowModal(true);
-    }
-    function handleCloseModal() {
+    };
+
+    const handleCloseModal = () => {
         setShowModal(false);
-    }
-    async function handleConfirmConcludeNote() {
+    };
+
+    const handleConfirmConcludeNote = async () => {
         if (finalNote.length === 0) {
             console.log('Nenhum produto na nota.');
             return;
         }
+
+        setLoading(true); // Iniciar o carregamento
 
         const requiredFields = ['numeroNotaFiscal', 'destino', 'procedencia', 'unidade', 'unidade_peso', 'quantidade'];
 
@@ -184,6 +183,7 @@ function LancamentoProdutos() {
                 if (!noteData[field]) {
                     console.error(`Campo ${field} não pode ser nulo ou vazio.`);
                     alert(`Por favor, preencha o campo: ${field}`);
+                    setLoading(false); // Parar o carregamento
                     return;
                 }
             }
@@ -192,9 +192,12 @@ function LancamentoProdutos() {
                 await axios.post('http://192.168.0.134:8080/register_note', noteData);
             } catch (err) {
                 console.error('Erro na requisição:', err.response ? err.response.data : err.message);
+                setLoading(false); // Parar o carregamento
                 return; // Se ocorrer um erro, interrompa a execução
             }
         }
+
+        setLoading(false); // Parar o carregamento
 
         // Mensagem de sucesso
         alert('Nota concluída com sucesso!');
@@ -209,18 +212,29 @@ function LancamentoProdutos() {
         dispatch(showNoteFieldsAction(!showNoteFields));
 
         // Redirecionar para "lancamento persons"
-        navigate('/lancamento-persons'); // Substitua pela rota correta
+        navigate('/'); // Substitua pela rota correta
 
         // setShowModal(false);
-    }
+    };
 
-
-
-    function clearInputProduto() {
+    const clearInputProduto = () => {
         dispatch(setClear(true));
-    }
+    };
 
+    const buscarProdutoNoLocalStorage = (nomeProduto) => {
+        const produtosStorage = localStorage.getItem('Produtos');
+        if (!produtosStorage) return null;
+        const produtos = JSON.parse(produtosStorage);
+        return produtos.find((prod) => prod.produto === nomeProduto) || null;
+    };
 
+    const gerarObjetoComValoresMaioresQueZero = (data) => {
+        const { id, ...resto } = data;
+        return Object.entries(resto).reduce((acc, [key, value]) => {
+            if (value > 0) acc[key] = value.toString();
+            return acc;
+        }, {});
+    };
 
     return (
         <div className="inputFieldNotes">
@@ -240,13 +254,13 @@ function LancamentoProdutos() {
                     <Input
                         inputOptions
                         options={selectOptions}
-                        change={handleValue}  // Ensure change prop is passed correctly here
+                        change={handleValue}
                         placeholder="Unidade"
                         size="inputSmall"
                         valor={unidade}
                     />
                 </div>
-                {unidade === "PESO" && (
+                {unidade === 'PESO' && (
                     <Input
                         onFocus={handleFocus}
                         change={handleValue}
@@ -255,7 +269,8 @@ function LancamentoProdutos() {
                         placeholder="Peso"
                         size="inputMedium"
                         inputType="number"
-                    />)}
+                    />
+                )}
                 <Input
                     onFocus={handleFocus}
                     change={handleValue}
@@ -311,8 +326,10 @@ function LancamentoProdutos() {
                 onClose={handleCloseModal}
                 onConfirm={handleConfirmConcludeNote}
                 title="Confirmar Conclusão"
+                loading={loading} // Passar o estado de loading para o Modal
             >
                 <p>Tem certeza que deseja concluir a nota?</p>
+                {loading && <p>Enviando nota... Aguarde.</p>}
             </Modal>
         </div>
     );

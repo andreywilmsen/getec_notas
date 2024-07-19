@@ -22,7 +22,7 @@ function Header() {
     return (
         <header className="Header">
             <Logotipo image="logoceasabranco.png" />
-            <Menu links={[{ name: "Home", link: "" }, { name: "Lançar notas", link: "lancamentonotas" }, { name: "Relatórios", link: "relatorios" }]} />
+            <Menu links={[{ name: "Lançar notas", link: "" }]} />
             <div className="buttonHeader">
                 <Button click={dispatchLogout} buttonType="buttonLogout" name="Logout" />
             </div>

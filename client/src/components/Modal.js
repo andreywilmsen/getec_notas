@@ -4,21 +4,22 @@ import '../styles/Modal.css';
 
 import Button from '../components/Button';
 
-
-const Modal = ({ show, onClose, onConfirm, title, children }) => {
+const Modal = ({ show, onClose, onConfirm, title, children, loading }) => {
     if (!show) {
         return null;
     }
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <h2>{title}</h2>
                 <div className="modal-body">{children}</div>
-                <div className="modal-footer">
-                    <Button click={onClose} buttonType="buttonLogout" name="Cancelar" />
-                    <Button click={onConfirm} buttonType="buttonSuccess" name="Confirmar" />
-                </div>
+                {!loading && ( // Renderiza os botões apenas se não estiver em loading
+                    <div className="modal-footer">
+                        <Button click={onClose} buttonType="buttonLogout" name="Cancelar" />
+                        <Button click={onConfirm} buttonType="buttonSuccess" name="Confirmar" />
+                    </div>
+                )}
             </div>
         </div>
     );

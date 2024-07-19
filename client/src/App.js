@@ -34,8 +34,8 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<PrivateRoute element={<AdminPanel />} />} />
-            <Route path="/lancamentonotas" element={<PrivateRoute element={<LancamentoNotas />} />} />
+            {/* <Route path="/" element={<PrivateRoute element={<AdminPanel />} />} /> */}
+            <Route path="/" element={<PrivateRoute element={<LancamentoNotas />} />} />
           </Routes>
         </Router>
       </div>

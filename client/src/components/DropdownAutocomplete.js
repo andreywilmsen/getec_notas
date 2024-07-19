@@ -87,6 +87,18 @@ const DropdownAutocomplete = forwardRef((props, ref) => {
         }
     };
 
+    const handleBlur = () => {
+        // Adiciona um pequeno atraso para permitir que o clique no menu seja detectado
+        setTimeout(() => {
+            if (dropdownRef.current && !dropdownRef.current.contains(document.activeElement)) {
+                setIsDropdownVisible(false);
+                // dispatch(setClear(true));
+            }
+        }, 100);
+    };
+
+
+
     return (
         <div className="dropdown-container" ref={dropdownRef}>
             <input
@@ -97,6 +109,7 @@ const DropdownAutocomplete = forwardRef((props, ref) => {
                     props.typeAutocomplete === 'Cidade' ? 'Procedência' : 'Produto'}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
+                onBlur={handleBlur}
                 name={props.typeAutocomplete === 'Persons' ? 'produtor/atacadista' :
                     props.typeAutocomplete === 'Cidade' ? 'cidade' : 'produto'}
                 autoComplete="off"

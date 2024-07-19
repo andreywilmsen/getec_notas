@@ -27,19 +27,15 @@ function LancamentoPersons(props) {
     const [personNote, setPersonNotes] = useState('');
     const [cidadeNote, setCidadeNotes] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
     const showNoteFields = useSelector((state) => state.generic);
-    const suggestions = JSON.parse(localStorage.getItem('Persons')) || [];
+    const personsSuggestions = JSON.parse(localStorage.getItem('Persons')) || [];
+    const [citiesSuggestions, setCitiesSuggestions] = useState([]);
 
     useEffect(() => {
         AuthService(navigate, location, dispatch);
+        const citiesFromLocalStorage = JSON.parse(localStorage.getItem('City')) || [];
+        setCitiesSuggestions(citiesFromLocalStorage);
     }, [navigate, location, dispatch]);
-
-    useEffect(() => {
-        if (suggestions.length > 0) {
-            setLoading(false);
-        }
-    }, [suggestions]);
 
     function handleValue(event) {
         switch (event.target.placeholder) {
@@ -67,19 +63,23 @@ function LancamentoPersons(props) {
             return;
         }
 
-        if (!suggestions.some(s => s.matricula_nome.toLowerCase() === personNote.toLowerCase())) {
+        // Verifica se o produtor selecionado está na lista de sugestões de pessoas
+        if (!personsSuggestions.some(person => person.matricula_nome.toLowerCase() === personNote.toLowerCase())) {
             alert('Por favor, selecione um produtor válido.');
             setError('Por favor, selecione um produtor válido.');
+            return;
+        }
+
+        // Verifica se a cidade selecionada está na lista de sugestões de cidades
+        if (!citiesSuggestions.some(city => city.cidade.toLowerCase() === cidadeNote.toLowerCase())) {
+            alert('Por favor, selecione uma cidade válida.');
+            setError('Por favor, selecione uma cidade válida.');
             return;
         }
 
         const noteData = { dataNote, nfNote, personNote, cidadeNote };
         dispatch(NoteAction(noteData));
         dispatch(showNoteFieldsAction(!showNoteFields));
-    }
-
-    if (loading) {
-        return <div>Loading...</div>;
     }
 
     return (
@@ -95,7 +95,6 @@ function LancamentoPersons(props) {
                 typeAutocomplete="Cidade"
                 placeholder="Procedência"
             />
-            {/* <Input change={handleValue} valor={cidadeNote} placeholder="Procedência" name="cidade" size="inputMedium" /> */}
             <DropdownAutocomplete
                 autocomplete
                 change={handleValue}
