@@ -59,6 +59,7 @@ const Input = forwardRef((props, ref) => {
                     {props.options && Object.keys(props.options).length > 1 && (
                         <option value="Peso">PESO</option>
                     )}
+                    {/*  */}
                 </select>
             ) : (
                 <input
