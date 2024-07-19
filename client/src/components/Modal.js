@@ -10,11 +10,11 @@ const Modal = ({ show, onClose, onConfirm, title, children, loading }) => {
     }
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-overlay">
+            <div className="modal-content">
                 <h2>{title}</h2>
                 <div className="modal-body">{children}</div>
-                {!loading && ( // Renderiza os botões apenas se não estiver em loading
+                {!loading && (
                     <div className="modal-footer">
                         <Button click={onClose} buttonType="buttonLogout" name="Cancelar" />
                         <Button click={onConfirm} buttonType="buttonSuccess" name="Confirmar" />

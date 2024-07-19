@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/AdminPanel.css';
 import '../styles/LancarNotas.css';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 // Autenticação de login
-
 import AuthService from '../services/authService';
 
 // Componentes
@@ -19,27 +18,50 @@ function LancamentoNotas() {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    // State para gerenciar a variavel de mostrar campo de produtores, e campo de notas
+    const [loading, setLoading] = useState(true); // Estado de carregamento
+
+    // State para gerenciar a variável de mostrar campo de produtores e campo de notas
     const showNoteFields = useSelector((state) => state.generic);
 
     useEffect(() => {
-        AuthService(navigate, location, dispatch);
-
-        const getProducts = async () => {
+        async function fetchData() {
             try {
                 const responseProducts = await axios.post('http://192.168.0.134:8080/get_products');
-                localStorage.setItem("Produtos", JSON.stringify(responseProducts.data.products))
+                localStorage.setItem("Produtos", JSON.stringify(responseProducts.data.products));
+                
                 const responsePersons = await axios.post('http://192.168.0.134:8080/get_usuarios');
-                localStorage.setItem("Persons", JSON.stringify(responsePersons.data.search.response))
+                localStorage.setItem("Persons", JSON.stringify(responsePersons.data.search.response));
+                
                 const responseCity = await axios.post('http://192.168.0.134:8080/get_city');
-                localStorage.setItem("City", JSON.stringify(responseCity.data.cidade))
+                localStorage.setItem("City", JSON.stringify(responseCity.data.cidade));
+                
+                setLoading(false); // Após carregar, marca como não carregando
             } catch (error) {
-                console.log(error)
+                console.log(error);
+                setLoading(false); // Em caso de erro, também marca como não carregando
             }
-        };
+        }
 
-        getProducts();
-    }, []);
+        // Executa fetchData() apenas uma vez, passando um array vazio de dependências
+        if (loading) {
+            fetchData();
+        }
+
+        AuthService(navigate, location, dispatch);
+    }, []); // Array vazio para executar apenas uma vez
+
+    if (loading) {
+        return <div className="AdminPanel">
+            <Header />
+            <div className="contentDashboard">
+                <div className="LancarNotas">
+                    <h1>Lançar Notas</h1>
+                    <hr />
+                    <p>Carregando...</p>
+                </div>
+            </div>
+        </div>;
+    }
 
     return (
         <div className="AdminPanel">
@@ -50,7 +72,9 @@ function LancamentoNotas() {
                     <hr />
                     {!showNoteFields ? (
                         <PersonsFields />
-                    ) : (<NotesFields />)}
+                    ) : (
+                        <NotesFields />
+                    )}
                 </div>
             </div>
         </div>
